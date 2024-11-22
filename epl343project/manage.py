@@ -1,5 +1,6 @@
 #!Mitilis was here
 #!/usr/bin/env python
+#gamw ton mitso
 """Django's command-line utility for administrative tasks."""
 import os
 import sys
