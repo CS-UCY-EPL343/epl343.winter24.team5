@@ -129,6 +129,19 @@ table {
     margin-left: auto;
 }
 
+.nav-link {
+    display: block;
+    padding: var(--bs-nav-link-padding-y) var(--bs-nav-link-padding-x);
+    font-size: var(--bs-nav-link-font-size);
+    font-weight: var(--bs-nav-link-font-weight);
+    color: var(--bs-nav-link-color);
+    text-decoration: none;
+    background: 0 0;
+    text-align: left;
+    border: 0;
+    transition: color .15s ease-in-out, background-color .15s ease-in-out, border-color .15s ease-in-out;
+}
+
 /* Footer */
 footer {
     text-align: center;
@@ -418,4 +431,15 @@ th, td {
 
 .button-container button:hover {
     background-color: #555;
+}
+
+.d-md-block{
+    height: 100%;
+    display: block !important;
+    width: 10%;
+}
+
+.col-md-3 {
+    width: 12%;
+    height: 1000;
 }
