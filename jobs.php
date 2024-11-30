@@ -1,5 +1,6 @@
 <?php
 require_once 'navbar.php';
+require_once 'db_functions.php';
 //require_once 'session_check.php';
 
 if (session_status() === PHP_SESSION_NONE) {
@@ -15,15 +16,19 @@ if (session_status() === PHP_SESSION_NONE) {
 
 // Fetch jobs from the database
 // Assuming you have a database connection established
-//require_once 'db_connection.php';
+
 
 // $jobs = [];
 // try {
-//     $stmt = $db->query("SELECT job_title, description, requirements, salary FROM jobs");
+//     $stmt = $db->query("SELECT job_id, creator_id, job_name, job_description, creation_date FROM jobs");
 //     $jobs = $stmt->fetchAll(PDO::FETCH_ASSOC);
 // } catch (PDOException $e) {
 //     echo "Error: " . $e->getMessage();
 // }
+
+$jobs = [];
+$jobs = getJobListings();
+
 ?>
 
 <!DOCTYPE html>
@@ -46,31 +51,38 @@ if (session_status() === PHP_SESSION_NONE) {
             <table class="job-listing-table">
                 <thead>
                     <tr>
-                        <th>Job Title</th>
-                        <th>Description</th>
-                        <th>Requirements</th>
-                        <th>Salary</th>
+                        <th>Job ID</th>
+                        <th>Creator ID</th>
+                        <th>Job Name</th>
+                        <th>Job Description</th>
+                        <th>Creation Date</th>
+                        <th>Execute</th>
+                        <th>Configure</th>
                     </tr>
                 </thead>
                 <tbody>
                     <?php if (!empty($jobs)): ?>
                         <?php foreach ($jobs as $job): ?>
                             <tr>
-                                <td><?php echo htmlspecialchars($job['job_title']); ?></td>
-                                <td><?php echo htmlspecialchars($job['description']); ?></td>
-                                <td><?php echo htmlspecialchars($job['requirements']); ?></td>
-                                <td><?php echo htmlspecialchars($job['salary']); ?></td>
+                                <td><?php echo htmlspecialchars($job['Job_ID']); ?></td>
+                                <td><?php echo htmlspecialchars($job['Creator_ID']); ?></td>
+                                <td><?php echo htmlspecialchars($job['Job_Name']); ?></td>
+                                <td><?php echo htmlspecialchars($job['Job_Description']); ?></td>
+                                <td><?php echo htmlspecialchars($job['Creation_Date']); ?></td>
+                                <td><button type="button">Run</button></td>
+                                <td><button type="button">Configure</button></td>
                             </tr>
                         <?php endforeach; ?>
                     <?php else: ?>
                         <tr>
-                            <td colspan="4">No job postings available.</td>
+                            <td colspan="7">No job postings available.</td>
                         </tr>
                     <?php endif; ?>
                 </tbody>
             </table>
         </div>
     </div>
+
 
     <!-- Footer -->
     <?php require_once 'footer.php'; ?>

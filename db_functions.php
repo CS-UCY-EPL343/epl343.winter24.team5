@@ -1,6 +1,7 @@
 <?php
 
-function getDatabaseConnection() {
+function getDatabaseConnection()
+{
     try {
         $config = include 'config.php';
         $conn = new PDO("sqlsrv:Server={$config['serverName']};Database={$config['dbName']}", $config['userName'], $config['password']);
@@ -79,14 +80,14 @@ function getUserRoles()
 }
 
 
-function userLogin($username,$password)
+function userLogin($username, $password)
 {
-    try{
+    try {
         $conn = getDatabaseConnection();
-        
+
         // Prepare the SQL to call the stored procedure with a parameter
         $stmt = $conn->prepare("EXEC UserLogin @Username = :username, @Password=:password");
-        
+
         // Bind the input parameter to the stored procedure
         $stmt->bindParam(':username', $username, PDO::PARAM_STR);
         $stmt->bindParam(':password', $password, PDO::PARAM_STR);
@@ -100,7 +101,7 @@ function userLogin($username,$password)
         return $result['User_Role'] ?? null; // Return the role or null if not found
 
 
-    }catch (PDOException $e) {
+    } catch (PDOException $e) {
         handleSqlError($e);
     }
 }
@@ -110,7 +111,7 @@ function getUserId($username)
 {
     try {
         $conn = getDatabaseConnection();
-        
+
         // Prepare the SQL to call the stored procedure with a parameter
         $stmt = $conn->prepare("EXEC GetUserId @username = :username");
 
@@ -132,21 +133,34 @@ function getUserId($username)
 
 function getPendingApprovals()
 {
-    try{
-    $conn =getDatabaseConnection();
-    $stmt = $conn->prepare("EXEC GetPendingApprovals");
-    $stmt->execute();
+    try {
+        $conn = getDatabaseConnection();
+        $stmt = $conn->prepare("EXEC GetPendingApprovals");
+        $stmt->execute();
 
-    // Fetch the result
-    $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        // Fetch the result
+        $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-    return $result;
-}catch (PDOException $e) {
-    handleSqlError($e);
+        return $result;
+    } catch (PDOException $e) {
+        handleSqlError($e);
+    }
 }
+
+function getJobListings()
+{
+    try {
+        $conn = getDatabaseConnection();
+        $stmt = $conn->prepare("EXEC GetJobListings");
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    } catch (PDOException $e) {
+        handleSqlError($e);
+    }
 }
 
-function handleSqlError(PDOException $e) {
+function handleSqlError(PDOException $e)
+{
     if (session_status() === PHP_SESSION_NONE) {
         session_start();
     }
@@ -179,6 +193,3 @@ function handleSqlError(PDOException $e) {
     header('Location: error.php');
     exit();
 }
-
-
-?>
