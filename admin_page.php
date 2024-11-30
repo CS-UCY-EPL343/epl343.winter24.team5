@@ -15,32 +15,8 @@ require_once 'navbar.php';
     <title>Admin Dashboard</title>
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <style>
-        .poll-card {
-            width: calc(33.333% - 20px); /* Three cards per row with a little space between */
-            height: 300px; /* Slightly longer cards */
-            margin-bottom: 20px; /* Space between rows */
-            flex-shrink: 0; /* Ensure consistent sizing */
-        }
-        .poll-card .card-body {
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            height: 100%;
-        }
-        .poll-votes {
-            font-size: 0.9rem;
-            color: #6c757d;
-        }
-        .poll-container {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 20px; /* Space between cards */
-        }
-        .navbar .users-link {
-            margin-right: auto;
-        }
-    </style>
+    <link rel="stylesheet" href="styles.css">
+
 </head>
 <body>
 
