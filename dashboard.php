@@ -15,29 +15,8 @@ require_once 'navbar.php';
     <title>User Dashboard</title>
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <style>
-        .poll-card {
-            width: calc(33.333% - 20px); /* Three cards per row with a little space between */
-            height: 300px; /* Slightly longer cards */
-            margin-bottom: 20px; /* Space between rows */
-            flex-shrink: 0; /* Ensure consistent sizing */
-        }
-        .poll-card .card-body {
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            height: 100%;
-        }
-        .poll-votes {
-            font-size: 0.9rem;
-            color: #6c757d;
-        }
-        .poll-container {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 20px; /* Space between cards */
-        }
-    </style>
+    <link rel="stylesheet" href="styles.css">
+    
 </head>
 <body>
     <div class="container-fluid">
@@ -101,6 +80,14 @@ require_once 'navbar.php';
                             <p class="card-text">This is a description for the third poll.</p>
                             <p class="poll-votes">Votes: Yes 75% | No 25%</p>
                             <a href="pollpage.php?poll_id=3" class="btn btn-primary mt-auto">View</a>
+                        </div>
+                    </div>
+                    <div class="card poll-card">
+                        <div class="card-body">
+                            <h5 class="card-title">Poll Title 4</h5>
+                            <p class="card-text">This is a description for the fourth poll.</p>
+                            <p class="poll-votes">Votes: Yes 55% | No 45%</p>
+                            <a href="pollpage.php?poll_id=4" class="btn btn-primary mt-auto">View</a>
                         </div>
                     </div>
                 </div>

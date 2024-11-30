@@ -159,6 +159,25 @@ function getJobListings()
     }
 }
 
+function approveOrRejectUser($userId, $approvalStatus) {
+    try {
+        $conn = getDatabaseConnection(); // Assuming this is your database connection function
+
+        $stmt = $conn->prepare("
+            EXEC [dbo].[ApproveOrRejectUser] 
+            @User_ID = :user_id, 
+            @Approval_Status = :approval_status
+        ");
+        $stmt->bindParam(':user_id', $userId, PDO::PARAM_INT);
+        $stmt->bindParam(':approval_status', $approvalStatus, PDO::PARAM_STR);
+
+        $stmt->execute();
+        return true; // Indicate success
+    } catch (PDOException $e) {
+        handleSqlError($e);
+    }
+}
+
 function handleSqlError(PDOException $e)
 {
     if (session_status() === PHP_SESSION_NONE) {
