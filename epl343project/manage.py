@@ -4,7 +4,7 @@
 import os
 import sys
 #  Hello there mate!!!
-
+# Hello guys...Loukia was here!
 def main():
     """Run adm\sdinistrative tasks."""
     os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'epl343project.settings')
