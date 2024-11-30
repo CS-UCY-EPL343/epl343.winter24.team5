@@ -42,10 +42,21 @@ html, body {
 
 /* Center the content box in the middle */
 .content {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100%; /* Ensures full vertical centering */
+    padding: 2em 2em 2em;
+    margin: 0 auto;
+    background-color: #e0e0e0;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    text-align: center;
+} 
+
+/* Table Styles */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+    background-color: white;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 .content1 {
     display: flex;
@@ -116,6 +127,19 @@ html, body {
 }
 .navbar .auth {
     margin-left: auto;
+}
+
+.nav-link {
+    display: block;
+    padding: var(--bs-nav-link-padding-y) var(--bs-nav-link-padding-x);
+    font-size: var(--bs-nav-link-font-size);
+    font-weight: var(--bs-nav-link-font-weight);
+    color: var(--bs-nav-link-color);
+    text-decoration: none;
+    background: 0 0;
+    text-align: left;
+    border: 0;
+    transition: color .15s ease-in-out, background-color .15s ease-in-out, border-color .15s ease-in-out;
 }
 
 /* Footer */
@@ -379,4 +403,93 @@ p1 {
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
+}
+
+/* Wrapper for job page content */
+.job-wrapper {
+    display: flex;
+    align-items: flex-start; /* Align items at the top */
+    justify-content: center;
+    min-height: 84.1vh; /* Ensure the wrapper fills the viewport height */
+}
+
+/* Main content box for job listings */
+.job-content-box {
+    background-color: white;
+    padding: 2em;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    width: 90%; /* Cover more screen width */
+    margin-top: 0; /* Remove extra space above the content box */
+    text-align: center;
+}
+
+/* Job listings table with updated border color */
+.job-listing-table {
+    width: 100%;
+    margin: 0;
+    border-collapse: collapse;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.job-listing-table th, .job-listing-table td {
+    padding: 1em;
+    border: 1px solid #444; /* Darker border for better contrast */
+    text-align: left;
+}
+
+.job-listing-table th {
+    background-color: #050b45;
+    color: white;
+    border-bottom: 3px solid #444; /* Add a thicker border under the header for separation */
+}
+
+.job-listing-table tr:nth-child(even) {
+    background-color: #f2f2f2;
+}
+th, td {
+    border: 1px solid #ddd;
+    background-color: #f2f2f2;
+    text-align: center; /* Center align text in the column headers */
+    padding: 10px;
+}
+
+.button-container {
+    text-align: center;
+    display: grid;
+    width:"100%";
+    justify-content: center;
+}
+
+.button-container button {
+    background-color: #007BFF;
+    color: white;
+    padding: 0.7em 1.5em;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1em;
+}
+
+.button-container button:hover {
+    background-color: #555;
+}
+
+.d-md-block{
+    height: 100%;
+    display: block !important;
+    width: 10%;
+}
+
+.col-md-3 {
+    width: 12%;
+    height: 1000;
+}
+
+tr:nth-child(even) {
+    background-color: #e0e0e0;
+}
+
+tr:hover {
+    background-color: #f1f1f1;
 }
