@@ -1,5 +1,4 @@
 <?php
-require_once 'db.php'; // Include your database connection
 require_once 'db_functions.php'; // Include additional database functions
 require_once 'navbar.php';
 
