@@ -1,5 +1,4 @@
 <?php
-require_once 'db.php'; // Include your database connection
 require_once 'db_functions.php'; // Include additional database functions
 require_once 'navbar.php';
 
@@ -119,7 +118,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             </select>
 
             <label for="date_of_birth">Date of Birth:</label>
-            <input type="date" id="date_of_birth" name="date_of_birth" placeholder="dd/mm/yyyy">
+            <input type="date" id="date_of_birth" name="date_of_birth" required>
+
  
 
             <label for="address">Address:</label>
