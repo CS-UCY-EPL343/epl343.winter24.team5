@@ -4,14 +4,10 @@ if (session_status() === PHP_SESSION_NONE) {
 }
 // Determine the homepage link dynamically based on the user's role
 if (isset($_SESSION['role'])) {
-    if ($_SESSION['role'] === 'Φορέας Υλοποίησης') {
-        $homePage = 'root_page.php';
-    } elseif ($_SESSION['role'] === 'Αιτητής/Χρήστης') {
+    if ($_SESSION['role'] === 'User') {
         $homePage = 'user_page.php';
-    } elseif ($_SESSION['role'] === 'Αντιπρόσωπος Αυτοκινήτων') {
-        $homePage = 'car_dealer_page.php';
-    } elseif ($_SESSION['role'] === 'Λειτουργός Τµήµατος Οδικών Μεταφορών') {
-        $homePage = 'TOM_page.php';
+    } elseif ($_SESSION['role'] === 'Admin') {
+        $homePage = 'admin_page.php';
     } else {
         $homePage = 'index.php'; // Default for unknown roles
     }
@@ -23,14 +19,7 @@ if (isset($_SESSION['role'])) {
 <div class="navbar">
     <!-- Brand that redirects based on user's home page -->
     <div class="brand">
-        <a href="<?= $homePage ?>">EV Manager</a>
-    </div>
-
-    <!-- Common navigation links -->
-    <div class="nav-links-left">
-        <a href="about.php">About</a>
-        <a href="grant_categories.php">Grant Categories</a>
-        <a href="faq.php">FAQ</a>
+        <a href="<?= $homePage ?>">ACL System</a>
     </div>
 
     <!-- Authentication link -->

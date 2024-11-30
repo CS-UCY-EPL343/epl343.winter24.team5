@@ -24,20 +24,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $_SESSION['role'] = $role;
 
     // Redirect based on role
-    if ($role === 'Φορέας Υλοποίησης') {
-        header("Location: root_page.php");
+    if ($role === 'Admin') {
+        header("Location: admin_page.php");
         exit();
-    } else if ($role === 'Αιτητής/Χρήστης') {
+    } else if ($role === 'User') {
         header("Location: user_page.php");
         exit();
-    } else if($role === 'Αντιπρόσωπος Αυτοκινήτων') {
-        header("Location: car_dealer_page.php");
-        exit();
-    }
-    else if($role === 'Λειτουργός Τµήµατος Οδικών Μεταφορών') {
-        header("Location: Tom_page.php");
-        exit();
-    }
+    } 
 }
 ?>
 

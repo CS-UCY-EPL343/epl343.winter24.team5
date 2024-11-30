@@ -1,17 +1,20 @@
 /* General styles */    
 html, body {
-    height: 100%; /* Ensure the body takes the full height of the viewport */
+    height: 50%; /* Ensure the body takes the full height of the viewport */
     margin: 0;
     padding: 0;
     font-family: Arial, sans-serif;
-    background-color: #e0e0e0;
+    background-color: #b6c9f8;
+    text-align: center;
+    color: #333;
 }
 
 /* Wrapper for page content */
 .wrapper1 {
     display: flex;
-    flex-direction: column;
-    min-height: 100vh; /* Ensure the wrapper fills the viewport height */
+    align-items: center;
+    justify-content: center;
+    min-height: 84.1vh; /* Ensure the wrapper fills the viewport height */
 }
 
 /* Main content area */
@@ -22,7 +25,6 @@ html, body {
 .hero1 {
     text-align: center;
     padding: 1.5em;
-    background-color: #e0e0e0; /* Light background */
     color: #333;
 }
 
@@ -35,6 +37,15 @@ html, body {
     font-size: 1.2em;
     max-width: 800px;
     margin: 0 auto;
+    color: #555; /* Optional: add a subtle color */
+}
+
+/* Center the content box in the middle */
+.content {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%; /* Ensures full vertical centering */
 }
 
 .content1 {
@@ -50,7 +61,7 @@ html, body {
     padding: 1.5em;
     border-radius: 10px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    width: 300px;
+    width: 600px;
     margin-top: 2%;
     text-align: center;
 }
@@ -65,23 +76,14 @@ html, body {
     color: #555;
 }
 
-/* General Body Styles */
-body {
-    font-family: Arial, sans-serif;
-    margin: 0;
-    padding: 0;
-    background-color: #e0e0e0;
-    color: #333;
-}
-
 /* Navigation bar styles */
 .navbar {
-    background-color: #333;
-    color: white;
+    background-color: #050b45;
+    color: #92bbfa;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 0.5em 1em;
+    padding: 0.7em;
 }
 
 .navbar .brand {
@@ -118,10 +120,18 @@ body {
 
 .navbar .nav-links-left a:hover,
 .navbar .auth a:hover {
-    background-color: #555;
+    background-color: #2d5591;
 }
 
 .navbar .auth {
     margin-left: auto;
 }
 
+/* Footer */
+footer {
+    text-align: center;
+    padding: 1em;
+    background-color: #050b45;
+    color: white;
+    flex-shrink: 0; /* Ensures the footer doesn't shrink */
+}
