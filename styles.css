@@ -42,10 +42,21 @@ html, body {
 
 /* Center the content box in the middle */
 .content {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100%; /* Ensures full vertical centering */
+    padding: 2em 2em 2em;
+    margin: 0 auto;
+    background-color: #e0e0e0;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    text-align: center;
+} 
+
+/* Table Styles */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+    background-color: white;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 .content1 {
     display: flex;
@@ -337,4 +348,32 @@ input[type="date"] {
     padding: 10px;
     font-size: 16px;
     width: 100%; /* Align with other inputs */
+}
+
+th, td {
+    border: 1px solid #ddd;
+    background-color: #f2f2f2;
+    text-align: center; /* Center align text in the column headers */
+    padding: 10px;
+}
+
+.button-container {
+    text-align: center;
+    display: grid;
+    width:"100%";
+    justify-content: center;
+}
+
+.button-container button {
+    background-color: #333;
+    color: white;
+    padding: 0.7em 1.5em;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1em;
+}
+
+.button-container button:hover {
+    background-color: #555;
 }
