@@ -4,10 +4,11 @@ html, body {
     margin: 0;
     padding: 0;
     font-family: Arial, sans-serif;
-    background-color: #b6c9f8;
+    background-color: #d7e0f7;
     text-align: center;
     color: #333;
 }
+
 
 /* Wrapper for page content */
 .wrapper1 {
@@ -17,28 +18,27 @@ html, body {
     min-height: 84.1vh; /* Ensure the wrapper fills the viewport height */
 }
 
+
 /* Main content area */
 .main-content1 {
     flex: 1; /* Push the footer to the bottom */
 }
-
 .hero1 {
     text-align: center;
     padding: 1.5em;
     color: #333;
 }
-
 .hero1 h1 {
     font-size: 2.5em;
     margin-bottom: 0.5em;
 }
-
 .hero1 p {
     font-size: 1.2em;
     max-width: 800px;
     margin: 0 auto;
     color: #555; /* Optional: add a subtle color */
 }
+
 
 /* Center the content box in the middle */
 .content {
@@ -47,7 +47,6 @@ html, body {
     align-items: center;
     height: 100%; /* Ensures full vertical centering */
 }
-
 .content1 {
     display: flex;
     flex-wrap: wrap;
@@ -55,7 +54,6 @@ html, body {
     gap: 1.5em;
     margin-bottom: 2%;
 }
-
 .content-box1 {
     background-color: white;
     padding: 1.5em;
@@ -65,50 +63,45 @@ html, body {
     margin-top: 2%;
     text-align: center;
 }
-
 .content-box1 h2 {
     margin-bottom: 0.5em;
 }
-
 .content-box1 p {
     font-size: 1em;
     line-height: 1.5;
     color: #555;
 }
 
+
 /* Navigation bar styles */
 .navbar {
-    background-color: #050b45;
+    background-color: #020625;
     color: #92bbfa;
     display: flex;
     justify-content: space-between;
     align-items: center;
     padding: 0.7em;
 }
-
 .navbar .brand {
     font-size: 1.5em;
     font-weight: bold;
 }
-
 .navbar .brand a {
+    margin-left: 0.5em;
     color: white;
     text-decoration: none;
     font-size: 1em;
     font-weight: bold;
 }
-
 .navbar .brand a:hover {
     color: inherit;
     text-decoration: none;
 }
-
 .navbar .nav-links-left {
     display: flex;
     gap: 1em;
     margin-left: 2em;
 }
-
 .navbar .nav-links-left a,
 .navbar .auth a {
     color: white;
@@ -117,12 +110,10 @@ html, body {
     border-radius: 5px;
     transition: background-color 0.3s;
 }
-
 .navbar .nav-links-left a:hover,
 .navbar .auth a:hover {
     background-color: #2d5591;
 }
-
 .navbar .auth {
     margin-left: auto;
 }
@@ -131,7 +122,7 @@ html, body {
 footer {
     text-align: center;
     padding: 1em;
-    background-color: #050b45;
+    background-color: #020625;
     color: white;
     flex-shrink: 0; /* Ensures the footer doesn't shrink */
 }
@@ -160,6 +151,194 @@ footer {
 .navbar .users-link {
     margin-right: auto;
 }
+
+
+/* Login Container */
+.login-container {
+    margin: 0 auto;
+    margin-top: 100px; /* Offset for fixed navbar */
+    width: 300px;
+    background-color: white;
+    padding: 2em;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    text-align: center;
+}
+.login-container h2 {
+    margin-bottom: 1em;
+}
+.login-container label {
+    display: block;
+    margin-bottom: 0.5em;
+    text-align: left;
+}
+.login-container input {
+    width: 100%;
+    padding: 0.5em;
+    margin-bottom: 0.5em;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+.login-container input:focus {
+    outline: none;
+    border: 1px solid #007BFF;
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+}
+.login-container button {
+    width: 100%;
+    padding: 0.5em;
+    background-color: #020625;
+    color: white;
+    border: none;
+    margin-top: 5%;
+    border-radius: 5px;
+    font-size: 1em;
+    cursor: pointer;
+}
+.login-container button:hover {
+    background-color: #2d5591;
+}
+
+
+/* Account Creation */
+.create-account {
+    margin-top: 1em;
+}
+.create-account a {
+    color: #333;
+    text-decoration: none;
+}
+.create-account a:hover {
+    text-decoration: underline;
+}
+
+
+/* error.php */
+/* Error Container */
+.error-container {
+    max-width: 400px;
+    margin: 100px auto;
+    padding: 20px;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    text-align: center;
+}
+.error-container h2 {
+    font-size: 2em;
+    margin-bottom: 10px;
+    color: #020625;
+}
+.error-container .error-message {
+    font-size: 1.2em;
+    color: #333;
+    margin-bottom: 20px;
+}
+.error-container .button-container button {
+    background-color: #020625;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1em;
+    transition: background-color 0.3s;
+}
+.error-container .button-container button:hover {
+    background-color: #2d5591;
+}
+
+
+/* create_account.php */
+.container {
+    background-color: #ffffff;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    width: 400px;
+    margin: 0 auto; /* Start rectangle just below the start of the page */
+    margin-top: 30px;
+    margin-bottom: 30px;
+}
+h2 {
+    text-align: center;
+    margin-bottom: 20px;
+}
+label {
+    text-align: left;
+    display: block;
+    margin: 10px 0 5px;
+}
+input, select {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-sizing: border-box;
+    background-color: #fff; /* Default input background */
+}
+input:valid, select:valid {
+    background-color: #e8f0fe; /* Light gray when valid */
+}
+input:focus, select:focus {
+    border-color: #007bff;
+    outline: none;
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+}
+button {
+    width: 100%;
+    padding: 10px;
+    background-color: #020625;
+    color: #ffffff;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+}
+button:hover {
+    background-color: #2d5591
+}
+p1 {
+    color: red;
+    text-align: center;
+}
+.date-picker {
+    display: flex;
+    align-items: center;
+}
+input[type="date"] {
+    padding: 5px;
+    font-size: 16px;
+    width: 150px;
+}
+/* General alignment for labels and inputs */
+.container label {
+    display: block;
+    margin-bottom: 5px;
+    text-align: left;
+}
+.container input, .container select {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-sizing: border-box;
+}
+.container input:focus, .container select:focus {
+    border-color: #007bff;
+    outline: none;
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+}
+.container input[type="date"] {
+    padding: 10px;
+    font-size: 16px;
+    width: 100%; /* Align with other inputs */
+}
+
 
 /* Wrapper for job page content */
 .job-wrapper {
