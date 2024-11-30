@@ -1,55 +1,124 @@
 <?php
-require_once 'session_check.php'; // Include session management and navbar
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
 
-
+// Include the navbar
+require_once 'navbar.php';
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Voting Setup</title>
-    <link rel="stylesheet" href="styles.css"> <!-- External CSS -->
+    <title>Admin Dashboard</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .poll-card {
+            width: calc(33.333% - 20px); /* Three cards per row with a little space between */
+            height: 300px; /* Slightly longer cards */
+            margin-bottom: 20px; /* Space between rows */
+            flex-shrink: 0; /* Ensure consistent sizing */
+        }
+        .poll-card .card-body {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            height: 100%;
+        }
+        .poll-votes {
+            font-size: 0.9rem;
+            color: #6c757d;
+        }
+        .poll-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px; /* Space between cards */
+        }
+        .navbar .users-link {
+            margin-right: auto;
+        }
+    </style>
 </head>
 <body>
-    <div class="container">
-        <h1>Admin Voting Setup</h1>
-        
-        <!-- Form to Create a New Voting Session -->
-        <form action="create-vote.php" method="POST">
-            <h2>Create New Voting Session</h2>
-            <label for="title">Title:</label>
-            <input type="text" id="title" name="title" required>
 
-            <label for="description">Description:</label>
-            <textarea id="description" name="description"></textarea>
+    <div class="container-fluid">
+        <div class="row">
+            <!-- Sidebar -->
+            <nav id="sidebarMenu" class="col-md-3 col-lg-2 d-md-block bg-light sidebar collapse">
+                <div class="position-sticky pt-3">
+                    <ul class="nav flex-column">
+                        <li class="nav-item">
+                            <a class="nav-link active" aria-current="page" href="#">
+                                <span data-feather="home"></span>
+                                Polls
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#reports">
+                                <span data-feather="bar-chart-2"></span>
+                                Reports
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#settings">
+                                <span data-feather="layers"></span>
+                                Settings
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
 
-            <label for="start_time">Start Time:</label>
-            <input type="datetime-local" id="start_time" name="start_time" required>
+            <!-- Main content -->
+            <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+                <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+                    <h1 class="h2">Polls</h1>
+                </div>
 
-            <label for="end_time">End Time:</label>
-            <input type="datetime-local" id="end_time" name="end_time" required>
-
-            <button type="submit">Create Voting Session</button>
-        </form>
-
-        <!-- List of Existing Voting Sessions -->
-        <h2>Existing Voting Sessions</h2>
-        <?php if ($sessions): ?>
-            <ul>
-                <?php foreach ($sessions as $session): ?>
-                    <li>
-                        <strong><?= htmlspecialchars($session['title']) ?></strong>
-                        <p><?= htmlspecialchars($session['description']) ?></p>
-                        <p><em>From:</em> <?= $session['start_time'] ?> <em>To:</em> <?= $session['end_time'] ?></p>
-                    </li>
-                <?php endforeach; ?>
-            </ul>
-        <?php else: ?>
-            <p>No voting sessions available.</p>
-        <?php endif; ?>
+                <!-- Poll List -->
+                <div class="poll-container">
+                    <!-- Poll 1 -->
+                    <div class="card poll-card">
+                        <div class="card-body">
+                            <h5 class="card-title">Poll Title 1</h5>
+                            <p class="card-text">Description of the poll goes here. It gives an overview of the poll's context.</p>
+                            <p class="poll-votes">Votes: Yes 20% | No 80%</p>
+                            <a href="pollpage.php?poll_id=1" class="btn btn-primary mt-auto">View</a>
+                            <a href="polleditpage.php?poll_id=1" class="btn btn-warning mt-2">Edit</a>
+                        </div>
+                    </div>
+                    <!-- Poll 2 -->
+                    <div class="card poll-card">
+                        <div class="card-body">
+                            <h5 class="card-title">Poll Title 2</h5>
+                            <p class="card-text">Another poll description, offering details about the poll's purpose.</p>
+                            <p class="poll-votes">Votes: Yes 60% | No 40%</p>
+                            <a href="pollpage.php?poll_id=2" class="btn btn-primary mt-auto">View</a>
+                            <a href="polleditpage.php?poll_id=2" class="btn btn-warning mt-2">Edit</a>
+                        </div>
+                    </div>
+                    <!-- Poll 3 -->
+                    <div class="card poll-card">
+                        <div class="card-body">
+                            <h5 class="card-title">Poll Title 3</h5>
+                            <p class="card-text">This is a description for the third poll.</p>
+                            <p class="poll-votes">Votes: Yes 75% | No 25%</p>
+                            <a href="pollpage.php?poll_id=3" class="btn btn-primary mt-auto">View</a>
+                            <a href="polleditpage.php?poll_id=3" class="btn btn-warning mt-2">Edit</a>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
     </div>
 
-    <?php include 'footer.php'; // Include footer ?>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://unpkg.com/feather-icons"></script>
+    <script>
+        feather.replace();
+    </script>
 </body>
 </html>
