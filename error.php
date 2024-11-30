@@ -17,11 +17,12 @@ unset($_SESSION['error_message']); // Clear the error message
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
+    <!-- Error Container -->
     <div class="error-container">
         <h2>Error</h2>
-        <p><?= htmlspecialchars($error_message) ?></p>
+        <p class="error-message"><?= htmlspecialchars($error_message) ?></p>
         <div class="button-container">
-        <button onclick="history.back()">Go Back</button>
+            <button onclick="history.back()">Go Back</button>
         </div>
     </div>
 </body>

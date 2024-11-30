@@ -19,7 +19,7 @@ if (isset($_SESSION['role'])) {
 <div class="navbar">
     <!-- Brand that redirects based on user's home page -->
     <div class="brand">
-        <a href="<?= $homePage ?>">ACL System</a>
+        <a href="<?= $homePage ?>">IT System</a>
     </div>
 
     <!-- Authentication link -->
