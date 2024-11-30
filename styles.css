@@ -1,6 +1,6 @@
 /* General styles */    
 html, body {
-    height: 50%; /* Ensure the body takes the full height of the viewport */
+    height: 100vh; /* Ensure the body takes the full height of the viewport */
     margin: 0;
     padding: 0;
     font-family: Arial, sans-serif;
@@ -309,11 +309,6 @@ p1 {
     display: flex;
     align-items: center;
 }
-input[type="date"] {
-    padding: 5px;
-    font-size: 16px;
-    width: 150px;
-}
 /* General alignment for labels and inputs */
 .container label {
     display: block;
@@ -321,7 +316,6 @@ input[type="date"] {
     text-align: left;
 }
 .container input, .container select {
-    width: 100%;
     padding: 10px;
     margin-bottom: 15px;
     border: 1px solid #ccc;
@@ -335,6 +329,54 @@ input[type="date"] {
 }
 .container input[type="date"] {
     padding: 10px;
-    font-size: 16px;
+    font-size: 15px;
+    color: #000;
     width: 100%; /* Align with other inputs */
+}
+
+
+/* pollpage.php */
+/* Custom styles for poll options */
+.poll-option-group {
+    display: flex;
+    justify-content: center; /* Align options horizontally in the center */
+    align-items: center; /* Vertically center the options */
+    gap: 20px; /* Space between Yes and No options */
+    margin: 20px 0; /* Add margin above and below the options */
+}
+
+.poll-option {
+    display: flex;
+    align-items: center;
+    gap: 10px; /* Space between radio button and label */
+}
+
+.custom-radio {
+    appearance: none; /* Remove default styling */
+    width: 20px;
+    height: 20px;
+    border: 2px solid #020625;
+    border-radius: 50%;
+    display: inline-block;
+    position: relative;
+    cursor: pointer;
+    outline: none;
+    transition: all 0.3s ease;
+}
+
+.custom-radio:checked {
+    background-color: #020625;
+    border-color: #020625;
+}
+
+.custom-radio:checked::after {
+    content: '';
+    width: 8px;
+    height: 8px;
+    background-color: white;
+    border-radius: 50%;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
 }
