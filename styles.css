@@ -1,0 +1,127 @@
+/* General styles */    
+html, body {
+    height: 100%; /* Ensure the body takes the full height of the viewport */
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+    background-color: #e0e0e0;
+}
+
+/* Wrapper for page content */
+.wrapper1 {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh; /* Ensure the wrapper fills the viewport height */
+}
+
+/* Main content area */
+.main-content1 {
+    flex: 1; /* Push the footer to the bottom */
+}
+
+.hero1 {
+    text-align: center;
+    padding: 1.5em;
+    background-color: #e0e0e0; /* Light background */
+    color: #333;
+}
+
+.hero1 h1 {
+    font-size: 2.5em;
+    margin-bottom: 0.5em;
+}
+
+.hero1 p {
+    font-size: 1.2em;
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.content1 {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 1.5em;
+    margin-bottom: 2%;
+}
+
+.content-box1 {
+    background-color: white;
+    padding: 1.5em;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    width: 300px;
+    margin-top: 2%;
+    text-align: center;
+}
+
+.content-box1 h2 {
+    margin-bottom: 0.5em;
+}
+
+.content-box1 p {
+    font-size: 1em;
+    line-height: 1.5;
+    color: #555;
+}
+
+/* General Body Styles */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #e0e0e0;
+    color: #333;
+}
+
+/* Navigation bar styles */
+.navbar {
+    background-color: #333;
+    color: white;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.5em 1em;
+}
+
+.navbar .brand {
+    font-size: 1.5em;
+    font-weight: bold;
+}
+
+.navbar .brand a {
+    color: white;
+    text-decoration: none;
+    font-size: 1em;
+    font-weight: bold;
+}
+
+.navbar .brand a:hover {
+    color: inherit;
+    text-decoration: none;
+}
+
+.navbar .nav-links-left {
+    display: flex;
+    gap: 1em;
+    margin-left: 2em;
+}
+
+.navbar .nav-links-left a,
+.navbar .auth a {
+    color: white;
+    text-decoration: none;
+    padding: 0.5em 1em;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+}
+
+.navbar .nav-links-left a:hover,
+.navbar .auth a:hover {
+    background-color: #555;
+}
+
+.navbar .auth {
+    margin-left: auto;
+}
+
