@@ -130,6 +130,21 @@ function getUserId($username)
     }
 }
 
+function getPendingApprovals()
+{
+    try{
+    $conn =getDatabaseConnection();
+    $stmt = $conn->prepare("EXEC GetPendingApprovals");
+    $stmt->execute();
+
+    // Fetch the result
+    $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+    return $result;
+}catch (PDOException $e) {
+    handleSqlError($e);
+}
+}
 
 function handleSqlError(PDOException $e) {
     if (session_status() === PHP_SESSION_NONE) {
