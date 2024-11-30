@@ -40,7 +40,6 @@ require_once 'navbar.php';
     </style>
 </head>
 <body>
-    <!-- Navbar dynamically included -->
     <div class="container-fluid">
         <div class="row">
             <!-- Sidebar -->
