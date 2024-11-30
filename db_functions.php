@@ -1,5 +1,5 @@
 <?php
-require_once 'db.php'; // Include your database connection function
+// require_once 'db.php'; // Include your database connection function
 function getDatabaseConnection() {
     try {
         $config = include 'config.php';
