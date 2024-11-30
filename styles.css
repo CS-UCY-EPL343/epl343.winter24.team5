@@ -350,6 +350,48 @@ input[type="date"] {
     width: 100%; /* Align with other inputs */
 }
 
+/* Wrapper for job page content */
+.job-wrapper {
+    display: flex;
+    align-items: flex-start; /* Align items at the top */
+    justify-content: center;
+    min-height: 84.1vh; /* Ensure the wrapper fills the viewport height */
+}
+
+/* Main content box for job listings */
+.job-content-box {
+    background-color: white;
+    padding: 2em;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    width: 90%; /* Cover more screen width */
+    margin-top: 0; /* Remove extra space above the content box */
+    text-align: center;
+}
+
+/* Job listings table with updated border color */
+.job-listing-table {
+    width: 100%;
+    margin: 0;
+    border-collapse: collapse;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.job-listing-table th, .job-listing-table td {
+    padding: 1em;
+    border: 1px solid #444; /* Darker border for better contrast */
+    text-align: left;
+}
+
+.job-listing-table th {
+    background-color: #050b45;
+    color: white;
+    border-bottom: 3px solid #444; /* Add a thicker border under the header for separation */
+}
+
+.job-listing-table tr:nth-child(even) {
+    background-color: #f2f2f2;
+}
 th, td {
     border: 1px solid #ddd;
     background-color: #f2f2f2;
