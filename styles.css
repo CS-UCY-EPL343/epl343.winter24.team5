@@ -407,7 +407,7 @@ th, td {
 }
 
 .button-container button {
-    background-color: #333;
+    background-color: #007BFF;
     color: white;
     padding: 0.7em 1.5em;
     border: none;
@@ -418,4 +418,12 @@ th, td {
 
 .button-container button:hover {
     background-color: #555;
+}
+
+tr:nth-child(even) {
+    background-color: #e0e0e0;
+}
+
+tr:hover {
+    background-color: #f1f1f1;
 }
