@@ -8,9 +8,17 @@ if (!isset($_SESSION['role']) || $_SESSION['role'] !== 'User') {
     exit();
 }
 
-// Get the poll ID from the GET parameter or session
+// Check if User_ID exists in the session
+if (!isset($_SESSION['user_id'])) {
+    header("Location: index.php"); // Redirect if User_ID is not set in the session
+    exit();
+}
+
+$voterId = $_SESSION['user_id']; // Retrieve the User_ID from the session
+
+// Get the poll ID from the GET parameter
 if (!isset($_GET['poll_id']) || !is_numeric($_GET['poll_id'])) {
-    header("Location: select_poll.php"); // Redirect to poll selection page if poll ID is missing
+    header("Location: dashboard.php"); // Redirect to dashboard if poll ID is missing
     exit();
 }
 
@@ -20,7 +28,7 @@ $pollId = intval($_GET['poll_id']); // Get the selected poll ID
 try {
     $poll = getPoll($pollId); // Fetch poll details using the function
     if (!$poll) {
-        header("Location: select_poll.php"); // Redirect if poll not found
+        header("Location: dashboard.php"); // Redirect if poll not found
         exit();
     }
 } catch (PDOException $e) {
@@ -28,6 +36,25 @@ try {
     $poll = null;
 }
 
+// Handle form submission
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    if (isset($_POST['vote']) && ($_POST['vote'] === 'yes' || $_POST['vote'] === 'no')) {
+        $decision = ($_POST['vote'] === 'yes') ? 1 : 0; // Convert 'yes' or 'no' to 1 or 0
+
+        try {
+            if (addVote($voterId, $pollId, $decision)) {
+                header("Location: dashboard.php?vote=success"); // Redirect to dashboard on success
+                exit();
+            } else {
+                $error = "Failed to record your vote. Please try again.";
+            }
+        } catch (Exception $e) {
+            $error = $e->getMessage();
+        }
+    } else {
+        $error = "Invalid vote selection.";
+    }
+}
 ?>
 
 <!DOCTYPE html>
@@ -62,7 +89,7 @@ try {
             </div>
 
             <!-- Voting Form -->
-            <form action="submit_vote.php" method="POST">
+            <form method="POST">
                 <div class="poll-option-group">
                     <div class="poll-option">
                         <input class="custom-radio" type="radio" name="vote" id="voteYes" value="yes" required>
@@ -73,19 +100,12 @@ try {
                         <label for="voteNo">No</label>
                     </div>
                 </div>
-                <input type="hidden" name="poll_id" value="<?= htmlspecialchars($poll['Poll_ID']) ?>">
                 <button type="submit" class="btn-submit">Submit Vote</button>
             </form>
         <?php else: ?>
             <p>Poll not found.</p>
         <?php endif; ?>
     </div>
-
-    <script>
-        function confirmVote() {
-            alert('Your vote has been submitted!');
-        }
-    </script>
 
     <?php require_once 'footer.php'; ?>
 </body>

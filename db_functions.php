@@ -235,18 +235,23 @@ function getAllUsers() {
         handleSqlError($e); // Pass to handleSqlError for detailed logging
     }
 }
-
 function getUserPolls($userId) {
     try {
-        $pdo = getDatabaseConnection(); // Ensure this function connects to your database
+        $pdo = getDatabaseConnection();
         $stmt = $pdo->prepare("EXEC GetUserPolls :UserID");
         $stmt->bindParam(':UserID', $userId, PDO::PARAM_INT);
         $stmt->execute();
-        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+        $polls = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        
+        // Return an empty array if no polls are found
+        return $polls ?: [];
     } catch (PDOException $e) {
-        handleSqlError($e); // Pass to handleSqlError for detailed logging
+        handleSqlError($e);
+        return [];
     }
 }
+
 
 function getPoll($pollId) {
     try {
@@ -259,6 +264,22 @@ function getPoll($pollId) {
         handleSqlError($e); // Handle the SQL error appropriately
     }
 }
+
+function addVote($voterId, $pollId, $decision) {
+    try {
+        $pdo = getDatabaseConnection(); // Ensure this function connects to your database
+        $stmt = $pdo->prepare("EXEC AddVote :Voter_ID, :Poll_ID, :Decision");
+        $stmt->bindParam(':Voter_ID', $voterId, PDO::PARAM_INT);
+        $stmt->bindParam(':Poll_ID', $pollId, PDO::PARAM_INT);
+        $stmt->bindParam(':Decision', $decision, PDO::PARAM_BOOL);
+        $stmt->execute();
+        return true; // Return true on successful execution
+    } catch (PDOException $e) {
+        handleSqlError($e); // Handle the SQL error appropriately
+        return false; // Return false on failure
+    }
+}
+
 
 function handleSqlError(PDOException $e)
 {
