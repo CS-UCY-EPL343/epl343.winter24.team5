@@ -5,6 +5,23 @@ if (session_status() === PHP_SESSION_NONE) {
 
 // Include the navbar
 require_once 'navbar.php';
+require_once 'session_check.php';
+require_once 'db_functions.php';
+
+if (!isset($_SESSION['role']) || $_SESSION['role'] !== 'User') {
+    header("Location: index.php");
+    exit();
+}
+
+$userID = $_SESSION['user_id'];
+
+try{
+
+    $polls = getUserPolls($userID);
+} catch( PDOException $e){
+    $error = handleSqlError($e);
+}
+
 ?>
 
 <!DOCTYPE html>
@@ -16,7 +33,6 @@ require_once 'navbar.php';
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
-    
 </head>
 <body>
     <div class="container-fluid">
@@ -55,41 +71,24 @@ require_once 'navbar.php';
 
                 <!-- Poll List -->
                 <div class="poll-container">
-                    <!-- Poll 1 -->
-                    <div class="card poll-card">
-                        <div class="card-body">
-                            <h5 class="card-title">Poll Title 1</h5>
-                            <p class="card-text">Description of the poll goes here. It gives an overview of the poll's context.</p>
-                            <p class="poll-votes">Votes: Yes 20% | No 80%</p>
-                            <a href="pollpage.php?poll_id=1" class="btn btn-primary mt-auto">View</a>
+                    <?php if (isset($error)): ?>
+                        <div class="alert alert-danger" role="alert">
+                            <?= htmlspecialchars($error) ?>
                         </div>
-                    </div>
-                    <!-- Poll 2 -->
-                    <div class="card poll-card">
-                        <div class="card-body">
-                            <h5 class="card-title">Poll Title 2</h5>
-                            <p class="card-text">Another poll description, offering details about the poll's purpose.</p>
-                            <p class="poll-votes">Votes: Yes 60% | No 40%</p>
-                            <a href="pollpage.php?poll_id=2" class="btn btn-primary mt-auto">View</a>
-                        </div>
-                    </div>
-                    <!-- Poll 3 -->
-                    <div class="card poll-card">
-                        <div class="card-body">
-                            <h5 class="card-title">Poll Title 3</h5>
-                            <p class="card-text">This is a description for the third poll.</p>
-                            <p class="poll-votes">Votes: Yes 75% | No 25%</p>
-                            <a href="pollpage.php?poll_id=3" class="btn btn-primary mt-auto">View</a>
-                        </div>
-                    </div>
-                    <div class="card poll-card">
-                        <div class="card-body">
-                            <h5 class="card-title">Poll Title 4</h5>
-                            <p class="card-text">This is a description for the fourth poll.</p>
-                            <p class="poll-votes">Votes: Yes 55% | No 45%</p>
-                            <a href="pollpage.php?poll_id=4" class="btn btn-primary mt-auto">View</a>
-                        </div>
-                    </div>
+                    <?php elseif (empty($polls)): ?>
+                        <p>No polls available for this user.</p>
+                    <?php else: ?>
+                        <?php foreach ($polls as $poll): ?>
+                            <div class="card poll-card mb-3">
+                                <div class="card-body">
+                                    <h5 class="card-title"><?= htmlspecialchars($poll['Title']) ?></h5>
+                                    <p class="card-text"><?= htmlspecialchars($poll['Description']) ?></p>
+                                    <p class="poll-votes">Votes: Yes <?= htmlspecialchars($poll['Votes_For']) ?> | No <?= htmlspecialchars($poll['Votes_Against']) ?></p>
+                                    <a href="pollpage.php?poll_id=<?= htmlspecialchars($poll['Poll_ID']) ?>" class="btn btn-primary mt-auto">View</a>
+                                </div>
+                            </div>
+                        <?php endforeach; ?>
+                    <?php endif; ?>
                 </div>
             </main>
         </div>
