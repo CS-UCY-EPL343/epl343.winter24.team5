@@ -274,6 +274,32 @@ function getPoll($pollId) {
     }
 }
 
+function getPollTitleById($pollId)
+{
+    try {
+        $pdo = getDatabaseConnection(); // Ensure this function connects to your database
+        
+        // Use the correct stored procedure call
+        $stmt = $pdo->prepare("EXEC getPollTitleByID @Poll_ID = :PollID");
+        
+        // Bind the parameter using the correct name
+        $stmt->bindParam(':PollID', $pollId, PDO::PARAM_INT);
+        
+        // Execute the stored procedure
+        $stmt->execute();
+        
+        // Fetch the result
+        $result = $stmt->fetch(PDO::FETCH_ASSOC);
+        
+        // Return the poll title or null if not found
+        return $result['Title'] ?? null;
+    } catch (PDOException $e) {
+        handleSqlError($e); // Handle the SQL error appropriately
+    }
+}
+
+
+
 function handleSqlError(PDOException $e)
 {
     if (session_status() === PHP_SESSION_NONE) {
@@ -328,7 +354,7 @@ function sendPollInvitationEmail($recipientEmail, $recipientName, $pollTitle)
         $mail->Port = 587;
 
         // Ρυθμίσεις αποστολέα και παραλήπτη
-        $mail->setFrom('mitilineos123@gmail.com', 'Lil Indian');
+        $mail->setFrom('mitilineos123@gmail.com', 'System');
         $mail->addAddress($recipientEmail, $recipientName);
 
         // Περιεχόμενο email
@@ -348,39 +374,4 @@ function sendPollInvitationEmail($recipientEmail, $recipientName, $pollTitle)
     }
 }
 
-/**
- * Λήψη και αποστολή email σε χρήστη για δημοσκόπηση
- */
-function notifyUserForPoll($voterId, $pollId)
-{
-    try {
-        $conn = getDatabaseConnection();
-
-        // Λήψη πληροφοριών χρήστη και δημοσκόπησης
-        $stmt = $conn->prepare("
-            SELECT 
-                u.Email_Address, 
-                u.First_Name, 
-                p.Title 
-            FROM dbo.USER u
-            JOIN dbo.POLL p ON p.Poll_ID = :pollId
-            WHERE u.User_ID = :voterId
-        ");
-        $stmt->execute(['voterId' => $voterId, 'pollId' => $pollId]);
-        $userInfo = $stmt->fetch(PDO::FETCH_ASSOC);
-
-        if ($userInfo) {
-            $emailSent = sendPollInvitationEmail($userInfo['Email_Address'], $userInfo['First_Name'], $userInfo['Title']);
-            if ($emailSent) {
-                return "Email sent successfully to {$userInfo['First_Name']}!";
-            } else {
-                return "Failed to send email.";
-            }
-        } else {
-            return "User or Poll not found.";
-        }
-    } catch (PDOException $e) {
-        handleSqlError($e);
-    }
-}
 
