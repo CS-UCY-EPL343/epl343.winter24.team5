@@ -67,41 +67,43 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 </head>
 
 <body>
-    <div class="container">
+    <div class="wrapper1">
         <?php if (isset($error)): ?>
             <div class="alert alert-danger">
                 <?= htmlspecialchars($error) ?>
             </div>
         <?php elseif ($poll): ?>
-            <!-- Poll Title -->
-            <h2 class="mb-4"><?= htmlspecialchars($poll['Title']) ?></h2>
+            <div class="content-box1">
+                <!-- Poll Title -->
+                <h2 class="poll-title"><?= htmlspecialchars($poll['Title']) ?></h2>
 
-            <!-- Poll Description -->
-            <p class="mb-4">
-                <?= htmlspecialchars($poll['Description']) ?>
-            </p>
+                <!-- Poll Description -->
+                <p class="poll-description">
+                    <?= htmlspecialchars($poll['Description']) ?>
+                </p>
 
-            <!-- Poll Vote Results -->
-            <div class="mb-4">
-                <h5>Vote Results</h5>
-                <p><strong>Yes:</strong> <?= htmlspecialchars($poll['Votes_For']) ?> votes</p>
-                <p><strong>No:</strong> <?= htmlspecialchars($poll['Votes_Against']) ?> votes</p>
-            </div>
-
-            <!-- Voting Form -->
-            <form method="POST">
-                <div class="poll-option-group">
-                    <div class="poll-option">
-                        <input class="custom-radio" type="radio" name="vote" id="voteYes" value="yes" required>
-                        <label for="voteYes">Yes</label>
-                    </div>
-                    <div class="poll-option">
-                        <input class="custom-radio" type="radio" name="vote" id="voteNo" value="no" required>
-                        <label for="voteNo">No</label>
-                    </div>
+                <!-- Poll Vote Results -->
+                <div class="poll-results">
+                    <h5>Vote Results</h5>
+                    <p><strong>Yes:</strong> <?= htmlspecialchars($poll['Votes_For']) ?> votes</p>
+                    <p><strong>No:</strong> <?= htmlspecialchars($poll['Votes_Against']) ?> votes</p>
                 </div>
-                <button type="submit" class="btn-submit">Submit Vote</button>
-            </form>
+
+                <!-- Voting Form -->
+                <form method="POST">
+                    <div class="poll-option-group">
+                        <div class="poll-option">
+                            <input class="custom-radio" type="radio" name="vote" id="voteYes" value="yes" required>
+                            <label for="voteYes">Yes</label>
+                        </div>
+                        <div class="poll-option">
+                            <input class="custom-radio" type="radio" name="vote" id="voteNo" value="no" required>
+                            <label for="voteNo">No</label>
+                        </div>
+                    </div>
+                    <button type="button" class="btn-submit">Submit Vote</button>
+                </form>
+            </div>
         <?php else: ?>
             <p>Poll not found.</p>
         <?php endif; ?>

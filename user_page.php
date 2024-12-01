@@ -5,6 +5,22 @@ if (session_status() === PHP_SESSION_NONE) {
 
 // Include the navbar
 require_once 'navbar.php';
+require_once 'session_check.php';
+require_once 'db_functions.php';
+
+if (!isset($_SESSION['role']) || $_SESSION['role'] !== 'User') {
+    header("Location: index.php");
+    exit();
+}
+
+$userID = $_SESSION['user_id'];
+
+try{
+
+    $polls = getUserPolls($userID);
+} catch( PDOException $e){
+    $error = handleSqlError($e);
+}
 ?>
 
 <!DOCTYPE html>
@@ -15,6 +31,7 @@ require_once 'navbar.php';
     <title>User Dashboard</title>
     <link rel="stylesheet" href="styles.css">
 </head>
+
 <body>
     <div class="dashboard-container">
         <!-- Sidebar -->
@@ -33,31 +50,22 @@ require_once 'navbar.php';
                 <h1>Polls</h1>
             </div>
             <div class="poll-container">
-                <!-- Poll Card -->
-                <div class="poll-card1">
-                    <h3 class="poll-title">Poll Title 1</h3>
-                    <p class="poll-description">Description of the poll goes here. It gives an overview of the poll's context.</p>
-                    <p class="poll-votes">Votes: Yes 20% | No 80%</p>
-                    <a href="pollpage.php?poll_id=1" class="poll-button">View</a>
-                </div>
-                <div class="poll-card1">
-                    <h3 class="poll-title">Poll Title 2</h3>
-                    <p class="poll-description">Another poll description, offering details about the poll's purpose.</p>
-                    <p class="poll-votes">Votes: Yes 60% | No 40%</p>
-                    <a href="pollpage.php?poll_id=2" class="poll-button">View</a>
-                </div>
-                <div class="poll-card1">
-                    <h3 class="poll-title">Poll Title 3</h3>
-                    <p class="poll-description">This is a description for the third poll.</p>
-                    <p class="poll-votes">Votes: Yes 75% | No 25%</p>
-                    <a href="pollpage.php?poll_id=3" class="poll-button">View</a>
-                </div>
-                <div class="poll-card1">
-                    <h3 class="poll-title">Poll Title 4</h3>
-                    <p class="poll-description">This is a description for the fourth poll.</p>
-                    <p class="poll-votes">Votes: Yes 55% | No 45%</p>
-                    <a href="pollpage.php?poll_id=4" class="poll-button">View</a>
-                </div>
+                <?php if (isset($error)): ?>
+                    <div class="alert alert-danger" role="alert">
+                        <?= htmlspecialchars($error) ?>
+                    </div>
+                <?php elseif (empty($polls)): ?>
+                    <p>No polls available for this user.</p>
+                <?php else: ?>
+                    <?php foreach ($polls as $poll): ?>
+                        <div class="poll-card1">
+                                <h3 class="poll-title"><?= htmlspecialchars($poll['Title']) ?></h5>
+                                <p class="poll-description"><?= htmlspecialchars($poll['Description']) ?></p>
+                                <p class="poll-votes">Votes: Yes <?= htmlspecialchars($poll['Votes_For']) ?> | No <?= htmlspecialchars($poll['Votes_Against']) ?></p>
+                                <a href="pollpage.php?poll_id=<?= htmlspecialchars($poll['Poll_ID']) ?>" class="poll-button">View</a>
+                        </div>
+                    <?php endforeach; ?>
+                <?php endif; ?>
             </div>
         </main>
     </div>
