@@ -6,11 +6,8 @@ if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
 
-
-// Fetch jobs from the database
 $jobs = [];
 $jobs = getJobListings();
-
 ?>
 
 <!DOCTYPE html>
@@ -24,60 +21,13 @@ $jobs = getJobListings();
 </head>
 
 <body>
-    <!-- Main Content -->
-    <div class="hero1">
-        <h1>Job Listings</h1>
-    </div>
-    <div class="job-wrapper">
-        <div class="job-content-box">
-            <table class="job-listing-table">
-                <thead>
-                    <tr>
-                        <th>Job ID</th>
-                        <th>Creator ID</th>
-                        <th>Job Name</th>
-                        <th>Job Description</th>
-                        <th>Creation Date</th>
-                        <th>Execute</th>
-                        <th>Configure</th>
-                        <th>Status</th> <!-- New Status Column -->
-                    </tr>
-                </thead>
-                <tbody>
-                    <?php if (!empty($jobs)): ?>
-                        <?php foreach ($jobs as $job): ?>
-                            <tr>
-                                <td><?php echo htmlspecialchars($job['Job_ID']); ?></td>
-                                <td><?php echo htmlspecialchars($job['Creator_ID']); ?></td>
-                                <td><?php echo htmlspecialchars($job['Job_Name']); ?></td>
-                                <td><?php echo htmlspecialchars($job['Job_Description']); ?></td>
-                                <td><?php echo htmlspecialchars($job['Creation_Date']); ?></td>
-                                <td>
-                                    <button type="button" class="run-button" data-job-id="<?php echo $job['Job_ID']; ?>">Run</button>
-                                </td>
-                                <td>
-                                    <button class="configure-button" onclick="window.location.href='configuration.php?job_id=<?php echo $job['Job_ID']; ?>'">
-                                        Configure
-                                    </button>
-                                </td>
-                                <td class="status-column" id="status-<?php echo $job['Job_ID']; ?>">Pending</td> <!-- Status Column -->
-                            </tr>
-                        <?php endforeach; ?>
-                    <?php else: ?>
-                        <tr>
-                            <td colspan="8">No job postings available.</td>
-                        </tr>
-                    <?php endif; ?>
-                </tbody>
-            </table>
-        </div>
     <div class="dashboard-container">
         <!-- Sidebar -->
         <aside class="sidebar">
             <h3 class="sidebar-title">Admin Dashboard</h3>
             <ul class="sidebar-links">
                 <li><a href="create_poll.php">Create Poll</a></li>
-                <li><a href="admin_dashboard.php">Polls</a></li>
+                <li><a href="admin_view_polls.php">Polls</a></li>
                 <li><a href="pending_user_approvals.php">User Approvals</a></li>
                 <li><a href="#" class="active">Jobs</a></li>
                 <li><a href="#settings">Settings</a></li>
@@ -117,7 +67,9 @@ $jobs = getJobListings();
                                             <button type="button" class="run-button" data-job-id="<?= $job['Job_ID']; ?>">Run</button>
                                         </td>
                                         <td>
-                                            <button type="button">Configure</button>
+                                            <button class="configure-button" onclick="window.location.href='configuration.php?job_id=<?= $job['Job_ID']; ?>'">
+                                                Configure
+                                            </button>
                                         </td>
                                         <td class="status-column" id="status-<?= $job['Job_ID']; ?>">Pending</td>
                                     </tr>
@@ -156,11 +108,11 @@ $jobs = getJobListings();
                 if (isSuccessful) {
                     statusCell.textContent = "Success";
                     statusCell.classList.remove('status-failure');
-                    statusCell.classList.add('status-success');
+                    statusCell.classList.add('status-success'); // Apply green background
                 } else {
                     statusCell.textContent = "Failed";
                     statusCell.classList.remove('status-success');
-                    statusCell.classList.add('status-failure');
+                    statusCell.classList.add('status-failure'); // Apply red background
                 }
             });
         });
