@@ -234,6 +234,29 @@ function getAllUsers() {
     }
 }
 
+function getUserPolls($userId) {
+    try {
+        $pdo = getDatabaseConnection(); // Ensure this function connects to your database
+        $stmt = $pdo->prepare("EXEC GetUserPolls :UserID");
+        $stmt->bindParam(':UserID', $userId, PDO::PARAM_INT);
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    } catch (PDOException $e) {
+        handleSqlError($e); // Pass to handleSqlError for detailed logging
+    }
+}
+
+function getPoll($pollId) {
+    try {
+        $pdo = getDatabaseConnection(); // Ensure this function connects to your database
+        $stmt = $pdo->prepare("EXEC GetPoll :PollID");
+        $stmt->bindParam(':PollID', $pollId, PDO::PARAM_INT);
+        $stmt->execute();
+        return $stmt->fetch(PDO::FETCH_ASSOC); // Fetch a single poll as an associative array
+    } catch (PDOException $e) {
+        handleSqlError($e); // Handle the SQL error appropriately
+    }
+}
 
 function handleSqlError(PDOException $e)
 {
@@ -269,3 +292,4 @@ function handleSqlError(PDOException $e)
     header('Location: error.php');
     exit();
 }
+
