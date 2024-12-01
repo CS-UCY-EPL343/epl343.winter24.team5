@@ -8,6 +8,11 @@ if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
 
+if (!isset($_SESSION['user_id'])) {
+    header("Location: login.php"); // Redirect to login if not authenticated
+    exit();
+}
+
 $jobs = [];
 $jobs = getJobListings();
 ?>
@@ -65,9 +70,10 @@ $jobs = getJobListings();
                                         <td><?= htmlspecialchars($job['Creation_Date']); ?></td>
 
                                         <td>
-                                            <button class="configure-button" onclick="window.location.href='configuration.php?job_id=<?= $job['Job_ID']; ?>'">
-                                                Configure
-                                            </button>
+                                            <form method="POST" action="set_job_session.php" style="display:inline;">
+                                                <input type="hidden" name="job_id" value="<?php echo $job['Job_ID']; ?>">
+                                                <button type="submit" class="configure-button">Configure</button>
+                                            </form>
                                         </td>
                                     </tr>
                                 <?php endforeach; ?>

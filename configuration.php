@@ -8,32 +8,29 @@ if (session_status() === PHP_SESSION_NONE) {
 }
 
 $jobId = isset($_GET['job_id']) ? intval($_GET['job_id']) : null;
+$userId = isset($_GET['user_id']) ? intval($_GET['user_id']) : null;
 
-if (!$jobId) {
-    // Redirect back to the jobs page or show an error if Job_ID is missing
+
+if (!$jobId || !$userId) {
+    // Redirect back to jobs.php or show an error if either is missing
     header("Location: jobs.php");
-    exit("Job ID is required.");
+    exit("Job ID and User ID are required.");
 }
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    // Collect form data
-    $userId = $_POST['user_id'];
     $configName = $_POST['config_name'];
     $parameters = json_encode([
         'param1' => $_POST['param1'] ?? null,
         'param2' => $_POST['param2'] ?? null,
-    ]); // Convert parameters to JSON
+    ]);
     $scheduleTime = $_POST['schedule_time'] ?? null;
     $recurrence = $_POST['recurrence'] ?? null;
 
     try {
-        // Call the function from db_functions.php to insert the configuration
+        // Call the function with job_id and user_id
         $configId = createJobConfiguration($jobId, $userId, $configName, $parameters, $scheduleTime, $recurrence);
-
-        // Display success message
         echo "<script>alert('Configuration successfully created with ID: $configId');</script>";
     } catch (Exception $e) {
-        // Display error message
         echo "<script>alert('Error: " . $e->getMessage() . "');</script>";
     }
 }
