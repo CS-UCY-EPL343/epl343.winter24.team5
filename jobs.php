@@ -8,6 +8,17 @@ if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
 
+if (!isset($_SESSION['user_id'])) {
+    header("Location: login.php"); // Redirect to login if not authenticated
+    exit();
+}
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['job_id'])) {
+    $_SESSION['job_id'] = intval($_POST['job_id']);
+    header("Location: configuration.php"); // Redirect to configuration.php
+    exit();
+}
+
 $jobs = [];
 $jobs = getJobListings();
 ?>
@@ -28,7 +39,7 @@ $jobs = getJobListings();
         <aside class="sidebar">
             <h3 class="sidebar-title">Admin Dashboard</h3>
             <ul class="sidebar-links">
-            <li><a href="create_poll.php">Create Poll</a></li>
+                <li><a href="create_poll.php">Create Poll</a></li>
                 <li><a href="admin_page.php">Polls</a></li>
                 <li><a href="pending_user_approvals.php" class="active">User Approvals</a></li>
                 <li><a href="jobs.php">Jobs</a></li>
@@ -65,9 +76,10 @@ $jobs = getJobListings();
                                         <td><?= htmlspecialchars($job['Creation_Date']); ?></td>
 
                                         <td>
-                                            <button class="configure-button" onclick="window.location.href='configuration.php?job_id=<?= $job['Job_ID']; ?>'">
-                                                Configure
-                                            </button>
+                                            <form method="POST" action="set_job_session.php" style="display:inline;">
+                                                <input type="hidden" name="job_id" value="<?php echo $job['Job_ID']; ?>">
+                                                <button type="submit" class="configure-button">Configure</button>
+                                            </form>
                                         </td>
                                     </tr>
                                 <?php endforeach; ?>

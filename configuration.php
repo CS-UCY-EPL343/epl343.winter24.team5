@@ -7,33 +7,29 @@ if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
 
-$jobId = isset($_GET['job_id']) ? intval($_GET['job_id']) : null;
+$jobId = isset($_SESSION['job_id']) ? $_SESSION['job_id'] : null;
+$userId = isset($_SESSION['user_id']) ? $_SESSION['user_id'] : null;
 
-if (!$jobId) {
-    // Redirect back to the jobs page or show an error if Job_ID is missing
+if (!$jobId || !$userId) {
+    // Redirect back to jobs.php or show an error if either is missing
     header("Location: jobs.php");
-    exit("Job ID is required.");
+    exit("Job ID and User ID are required.");
 }
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    // Collect form data
-    $userId = $_POST['user_id'];
     $configName = $_POST['config_name'];
     $parameters = json_encode([
         'param1' => $_POST['param1'] ?? null,
         'param2' => $_POST['param2'] ?? null,
-    ]); // Convert parameters to JSON
+    ]);
     $scheduleTime = $_POST['schedule_time'] ?? null;
     $recurrence = $_POST['recurrence'] ?? null;
 
     try {
-        // Call the function from db_functions.php to insert the configuration
+        // Call the function with job_id and user_id
         $configId = createJobConfiguration($jobId, $userId, $configName, $parameters, $scheduleTime, $recurrence);
-
-        // Display success message
         echo "<script>alert('Configuration successfully created with ID: $configId');</script>";
     } catch (Exception $e) {
-        // Display error message
         echo "<script>alert('Error: " . $e->getMessage() . "');</script>";
     }
 }
@@ -56,7 +52,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <aside class="sidebar">
             <h3 class="sidebar-title">Admin Dashboard</h3>
             <ul class="sidebar-links">
-            <li><a href="create_poll.php">Create Poll</a></li>
+                <li><a href="create_poll.php">Create Poll</a></li>
                 <li><a href="admin_page.php">Polls</a></li>
                 <li><a href="pending_user_approvals.php" class="active">User Approvals</a></li>
                 <li><a href="jobs.php">Jobs</a></li>
@@ -70,10 +66,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <div class="config-box">
                     <h1>Procedure Configuration</h1>
                     <form action="configuration.php?job_id=<?php echo $jobId; ?>" method="POST">
-                        <!-- User ID Field -->
-                        <label for="user_id">User ID:</label>
-                        <input type="number" id="user_id" name="user_id" required>
-
+                  
                         <!-- Configuration Name -->
                         <label for="config_name">Configuration Name:</label>
                         <input type="text" id="config_name" name="config_name" required>
@@ -100,7 +93,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         </select>
 
                         <!-- Submit Button -->
-                        
+
                         <button class="configure-button">Submit Configuration</button>
                     </form>
                 </div>
