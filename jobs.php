@@ -1,6 +1,8 @@
 <?php
 require_once 'navbar.php';
 require_once 'db_functions.php';
+require_once 'session_check.php';
+
 
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
