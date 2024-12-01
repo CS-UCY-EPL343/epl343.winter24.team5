@@ -12,38 +12,49 @@ require_once "navbar.php";
 </head>
 
 <body>
-    <!-- Poll Container -->
-    <div class="container">
-        <h2 class="mb-4">Poll Title</h2>
-        <p class="mb-4">
-            Here is the detailed description of the poll. It explains the purpose of the poll and why it is important. You can vote on the poll below.
-        </p>
+    <!-- Main Wrapper -->
+    <div class="wrapper1">
+        <!-- Poll Container -->
+        <div class="content-box1">
+            <h2 class="poll-title">Poll Title</h2>
+            <p class="poll-description">
+                Here is the detailed description of the poll. It explains the purpose of the poll and why it is important. You can vote on the poll below.
+            </p>
 
-        <div class="mb-4">
-            <h5>Vote Results</h5>
-            <p><strong>Yes:</strong> 60% (120 votes)</p>
-            <p><strong>No:</strong> 40% (80 votes)</p>
-        </div>
-
-        <form>
-            <div class="poll-option-group">
-                <div class="poll-option">
-                    <input class="custom-radio" type="radio" name="vote" id="voteYes" value="yes" required>
-                    <label for="voteYes">Yes</label>
-                </div>
-                <div class="poll-option">
-                    <input class="custom-radio" type="radio" name="vote" id="voteNo" value="no" required>
-                    <label for="voteNo">No</label>
-                </div>
+            <div class="poll-results">
+                <h5>Vote Results</h5>
+                <p><strong>Yes:</strong> 60% (120 votes)</p>
+                <p><strong>No:</strong> 40% (80 votes)</p>
             </div>
-            <button type="button" class="btn-submit" onclick="confirmVote()">Submit Vote</button>
-        </form>
+
+            <form>
+                <div class="poll-option-group">
+                    <div class="poll-option">
+                        <input class="custom-radio" type="radio" name="vote" id="voteYes" value="yes" required>
+                        <label for="voteYes">Yes</label>
+                    </div>
+                    <div class="poll-option">
+                        <input class="custom-radio" type="radio" name="vote" id="voteNo" value="no" required>
+                        <label for="voteNo">No</label>
+                    </div>
+                </div>
+                <button type="button" class="btn-submit" onclick="confirmVote()">Submit Vote</button>
+            </form>
+        </div>
     </div>
 
     <script>
-        function confirmVote() {
+    function confirmVote() {
+        const yesOption = document.getElementById("voteYes");
+        const noOption = document.getElementById("voteNo");
+
+        // Check if either of the options is selected
+        if (yesOption.checked || noOption.checked) {
             alert('Your vote has been submitted!');
+        } else {
+            alert('Please select an option before submitting your vote!');
         }
+    }
     </script>
 
     <?php require_once 'footer.php'; ?>
