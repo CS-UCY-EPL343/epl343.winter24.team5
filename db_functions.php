@@ -1,7 +1,9 @@
 <?php
-    require __DIR__ . '/vendor/autoload.php';
-    use PHPMailer\PHPMailer\PHPMailer;
-    use PHPMailer\PHPMailer\Exception;
+
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\Exception;
+
+require 'vendor/autoload.php'; // Φόρτωση PHPMailer
 function getDatabaseConnection()
 {
     try {
@@ -161,7 +163,48 @@ function getJobListings()
     }
 }
 
-function approveOrRejectUser($userId, $approvalStatus) {
+function createJobConfiguration($jobId, $userId, $configName, $parameters = null, $scheduleTime = null, $recurrence = null)
+{
+    global $db; // Assuming `$db` is the PDO connection initialized in `db_functions.php`
+
+    try {
+        $sql = "
+            INSERT INTO [dbo].[JOB_CONFIGURATION] (
+                Job_ID,
+                User_ID,
+                Configuration_Name,
+                Parameters,
+                Schedule_Time,
+                Recurrence
+            ) VALUES (
+                :jobId,
+                :userId,
+                :configName,
+                :parameters,
+                :scheduleTime,
+                :recurrence
+            );
+        ";
+
+        $stmt = $db->prepare($sql);
+
+        $stmt->bindParam(':jobId', $jobId, PDO::PARAM_INT);
+        $stmt->bindParam(':userId', $userId, PDO::PARAM_INT);
+        $stmt->bindParam(':configName', $configName, PDO::PARAM_STR);
+        $stmt->bindParam(':parameters', $parameters, PDO::PARAM_STR);
+        $stmt->bindParam(':scheduleTime', $scheduleTime, PDO::PARAM_STR);
+        $stmt->bindParam(':recurrence', $recurrence, PDO::PARAM_STR);
+
+        $stmt->execute();
+
+        return $db->lastInsertId();
+    } catch (PDOException $e) {
+        handleSqlError($e);
+    }
+}
+
+function approveOrRejectUser($userId, $approvalStatus)
+{
     try {
         $conn = getDatabaseConnection(); // Assuming this is your database connection function
 
@@ -180,7 +223,8 @@ function approveOrRejectUser($userId, $approvalStatus) {
     }
 }
 
-function createPoll($creatorId, $title, $description, $expirationDate, $status) {
+function createPoll($creatorId, $title, $description, $expirationDate, $status)
+{
     try {
         $pdo = getDatabaseConnection(); // Replace with your DB connection function
         $stmt = $pdo->prepare("
@@ -202,7 +246,8 @@ function createPoll($creatorId, $title, $description, $expirationDate, $status) 
     }
 }
 
-function addUserToPoll($pollId, $userId) {
+function addUserToPoll($pollId, $userId)
+{
     try {
         $pdo = getDatabaseConnection(); // Replace with your DB connection function
         $stmt = $pdo->prepare("EXEC AddUserToPoll :Poll_ID, :User_ID");
@@ -214,7 +259,8 @@ function addUserToPoll($pollId, $userId) {
     }
 }
 
-function getAllPolls() {
+function getAllPolls()
+{
     try {
         $pdo = getDatabaseConnection();
         $stmt = $pdo->prepare("EXEC GetAllPolls");
@@ -225,7 +271,8 @@ function getAllPolls() {
     }
 }
 
-function getAllUsers($pollId) {
+function getAllUsers($pollId)
+{
     try {
         $pdo = getDatabaseConnection();
         $stmt = $pdo->prepare("EXEC GetAllUsers :Poll_ID");
@@ -237,7 +284,8 @@ function getAllUsers($pollId) {
     }
 }
 
-function getPollDetails($pollId) {
+function getPollDetails($pollId)
+{
     try {
         $pdo = getDatabaseConnection(); // Replace with your DB connection function
         $stmt = $pdo->prepare("EXEC GetPollDetails :Poll_ID");
@@ -250,7 +298,8 @@ function getPollDetails($pollId) {
 }
 
 
-function getUserPolls($userId) {
+function getUserPolls($userId)
+{
     try {
         $pdo = getDatabaseConnection();
         $stmt = $pdo->prepare("EXEC GetUserPolls :UserID");
@@ -258,7 +307,7 @@ function getUserPolls($userId) {
         $stmt->execute();
 
         $polls = $stmt->fetchAll(PDO::FETCH_ASSOC);
-        
+
         // Return an empty array if no polls are found
         return $polls ?: [];
     } catch (PDOException $e) {
@@ -268,7 +317,8 @@ function getUserPolls($userId) {
 }
 
 
-function getPoll($pollId) {
+function getPoll($pollId)
+{
     try {
         $pdo = getDatabaseConnection(); // Ensure this function connects to your database
         $stmt = $pdo->prepare("EXEC GetPoll :PollID");
@@ -279,7 +329,8 @@ function getPoll($pollId) {
         handleSqlError($e); // Handle the SQL error appropriately
     }
 }
-function addVote($voterId, $pollId, $decision) {
+function addVote($voterId, $pollId, $decision)
+{
     try {
         $pdo = getDatabaseConnection(); // Ensure this function connects to your database
         $stmt = $pdo->prepare("EXEC AddVote :Voter_ID, :Poll_ID, :Decision");
@@ -394,4 +445,38 @@ function sendPollInvitationEmail($recipientEmail, $recipientName, $pollTitle)
     }
 }
 
+/**
+ * Λήψη και αποστολή email σε χρήστη για δημοσκόπηση
+ */
+function notifyUserForPoll($voterId, $pollId)
+{
+    try {
+        $conn = getDatabaseConnection();
 
+        // Λήψη πληροφοριών χρήστη και δημοσκόπησης
+        $stmt = $conn->prepare("
+            SELECT 
+                u.Email_Address, 
+                u.First_Name, 
+                p.Title 
+            FROM dbo.USER u
+            JOIN dbo.POLL p ON p.Poll_ID = :pollId
+            WHERE u.User_ID = :voterId
+        ");
+        $stmt->execute(['voterId' => $voterId, 'pollId' => $pollId]);
+        $userInfo = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        if ($userInfo) {
+            $emailSent = sendPollInvitationEmail($userInfo['Email_Address'], $userInfo['First_Name'], $userInfo['Title']);
+            if ($emailSent) {
+                return "Email sent successfully to {$userInfo['First_Name']}!";
+            } else {
+                return "Failed to send email.";
+            }
+        } else {
+            return "User or Poll not found.";
+        }
+    } catch (PDOException $e) {
+        handleSqlError($e);
+    }
+}

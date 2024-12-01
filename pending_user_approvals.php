@@ -2,7 +2,8 @@
 require_once 'db_functions.php'; // Include your database functions
 require_once 'navbar.php'; // Include navbar
 require_once 'session_check.php';
-// Ensure only 'Φορέας Υλοποίησης' (Admin) can access this page
+
+// Ensure only 'Admin' can access this page
 if (!isset($_SESSION['role']) || $_SESSION['role'] !== 'Admin') {
     header("Location: index.php");
     exit();
@@ -35,71 +36,86 @@ $pendingApprovals = getPendingApprovals();
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <!-- Content Section -->
-    <div>
-        <h1>Pending Approvals</h1>
+    <div class="dashboard-container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <h3 class="sidebar-title">Admin Dashboard</h3>
+            <ul class="sidebar-links">
+                <li><a href="create_poll.php">Create Poll</a></li>
+                <li><a href="admin_page.php">Polls</a></li>
+                <li><a href="pending_user_approvals.php" class="active">User Approvals</a></li>
+                <li><a href="jobs.php">Jobs</a></li>
+                <li><a href="#settings">Settings</a></li>
+            </ul>
+        </aside>
 
-        <?php if (isset($error)): ?>
-            <p style="color: red;"><?= htmlspecialchars($error) ?></p>
-        <?php endif; ?>
-
-        <?php if (!empty($pendingApprovals)): ?>
-            <div class="center-div">
-                <table>
-                    <thead>
-                        <tr>
-                            <th>User ID</th>
-                            <th>Political ID</th>
-                            <th>First Name</th>
-                            <th>Last Name</th>
-                            <th>Username</th>
-                            <th>Email</th>
-                            <th>Mobile Phone</th>
-                            <th>User Role</th>
-                            <th>Gender</th>
-                            <th>Date of Birth</th>
-                            <th>Address</th>
-                            <th colspan="2">Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <?php foreach ($pendingApprovals as $approval): ?>
-                            <tr>
-                                <td><?= htmlspecialchars($approval['User_ID']) ?></td>
-                                <td><?= htmlspecialchars($approval['Political_ID']) ?></td>
-                                <td><?= htmlspecialchars($approval['First_Name']) ?></td>
-                                <td><?= htmlspecialchars($approval['Last_Name']) ?></td>
-                                <td><?= htmlspecialchars($approval['Username']) ?></td>
-                                <td><?= htmlspecialchars($approval['Email_Address']) ?></td>
-                                <td><?= htmlspecialchars($approval['Mobile_Phone']) ?></td>
-                                <td><?= htmlspecialchars($approval['User_Role_ID']) ?></td>
-                                <td><?= $approval['Gender'] ? 'Male' : 'Female' ?></td>
-                                <td><?= htmlspecialchars($approval['Date_of_Birth']) ?></td>
-                                <td><?= htmlspecialchars($approval['Address']) ?></td>
-                                <td>
-                                    <div class="button-container">
-                                        <form method="post" action="" style="display:inline;">
-                                            <input type="hidden" name="user_id" value="<?= htmlspecialchars($approval['User_ID']) ?>">
-                                            <button type="submit" name="action" value="approve" class="view-documents-btn">Approve</button>
-                                        </form>
-                                    </div>
-                                </td>
-                                <td>
-                                    <div class="button-container">
-                                        <form method="post" action="" style="display:inline;">
-                                            <input type="hidden" name="user_id" value="<?= htmlspecialchars($approval['User_ID']) ?>">
-                                            <button type="submit" name="action" value="reject" class="view-documents-btn">Reject</button>
-                                        </form>
-                                    </div>
-                                </td>
-                            </tr>
-                        <?php endforeach; ?>
-                    </tbody>
-                </table>
+        <!-- Main Content -->
+        <main class="dashboard-main">
+            <div class="dashboard-header">
+                <h1>Pending Approvals</h1>
             </div>
-        <?php else: ?>
-            <p>No pending approvals at the moment.</p>
-        <?php endif; ?>
+            <div class="approval-container">
+                <?php if (isset($error)): ?>
+                    <div class="alert alert-danger" role="alert">
+                        <?= htmlspecialchars($error) ?>
+                    </div>
+                <?php endif; ?>
+
+                <?php if (!empty($pendingApprovals)): ?>
+                    <div class="approval-table">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>User ID</th>
+                                    <th>Political ID</th>
+                                    <th>First Name</th>
+                                    <th>Last Name</th>
+                                    <th>Username</th>
+                                    <th>Email</th>
+                                    <th>Mobile Phone</th>
+                                    <th>User Role</th>
+                                    <th>Gender</th>
+                                    <th>Date of Birth</th>
+                                    <th>Address</th>
+                                    <th colspan="2">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <?php foreach ($pendingApprovals as $approval): ?>
+                                    <tr>
+                                        <td><?= htmlspecialchars($approval['User_ID']) ?></td>
+                                        <td><?= htmlspecialchars($approval['Political_ID']) ?></td>
+                                        <td><?= htmlspecialchars($approval['First_Name']) ?></td>
+                                        <td><?= htmlspecialchars($approval['Last_Name']) ?></td>
+                                        <td><?= htmlspecialchars($approval['Username']) ?></td>
+                                        <td><?= htmlspecialchars($approval['Email_Address']) ?></td>
+                                        <td><?= htmlspecialchars($approval['Mobile_Phone']) ?></td>
+                                        <td><?= htmlspecialchars($approval['User_Role_ID']) ?></td>
+                                        <td><?= $approval['Gender'] ? 'Male' : 'Female' ?></td>
+                                        <td><?= htmlspecialchars($approval['Date_of_Birth']) ?></td>
+                                        <td><?= htmlspecialchars($approval['Address']) ?></td>
+                                        <td>
+                                            <form method="post" action="" style="display:inline;">
+                                                <input type="hidden" name="user_id" value="<?= htmlspecialchars($approval['User_ID']) ?>">
+                                                <button type="submit" name="action" value="approve" class="poll-button">Approve</button>
+                                            </form>
+                                        </td>
+                                        <td>
+                                            <form method="post" action="" style="display:inline;">
+                                                <input type="hidden" name="user_id" value="<?= htmlspecialchars($approval['User_ID']) ?>">
+                                                <button type="submit" name="action" value="reject" class="poll-button-yellow">Reject</button>
+                                            </form>
+                                        </td>
+                                    </tr>
+                                <?php endforeach; ?>
+                            </tbody>
+                        </table>
+                    </div>
+                <?php else: ?>
+                    <p>No pending approvals at the moment.</p>
+                <?php endif; ?>
+            </div>
+        </main>
     </div>
 </body>
 </html>

@@ -37,10 +37,10 @@ try {
         <aside class="sidebar">
             <h3 class="sidebar-title">Admin Dashboard</h3>
             <ul class="sidebar-links">
-                <li><a href="create_poll.php">Create Poll</a></li>
-                <li><a href="#" class="active">Polls</a></li>
-                <li><a href="pending_user_approvals.php">User Approvals</a></li>
-                <li><a href="#reports">Reports</a></li>
+            <li><a href="create_poll.php">Create Poll</a></li>
+                <li><a href="admin_page.php">Polls</a></li>
+                <li><a href="pending_user_approvals.php" class="active">User Approvals</a></li>
+                <li><a href="jobs.php">Jobs</a></li>
                 <li><a href="#settings">Settings</a></li>
             </ul>
         </aside>
@@ -60,6 +60,7 @@ try {
                 <?php else: ?>
                     <?php foreach ($polls as $poll): ?>
                         <div class="poll-card1">
+                            
                             <h3 class="poll-title"><?= htmlspecialchars($poll['Title']) ?></h3>
                             <p class="poll-description"><?= htmlspecialchars($poll['Description']) ?></p>
                             <p class="poll-votes">Expiration: <?= htmlspecialchars($poll['Expiration_Date']) ?></p>
