@@ -1,10 +1,48 @@
 <?php
+
+
+// Include the navbar
+require_once 'navbar.php';
+require_once 'session_check.php';
+require_once 'db_functions.php';
+
+if (!isset($_SESSION['role']) || $_SESSION['role'] !== 'Admin') {
+    header("Location: index.php");
+    exit();
+}
+
+try {
+    // Call the GetAllPolls stored procedure
+    $polls = getAllPolls(); // Assuming getAllPolls() is defined in db_functions.php
+} catch (PDOException $e) {
+    $error = handleSqlError($e);
+}
+
+
+?>
+
+<?php
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
 
 // Include the navbar
 require_once 'navbar.php';
+require_once 'db_functions.php'; // Include database functions
+require_once 'session_check.php';
+
+if (!isset($_SESSION['role']) || $_SESSION['role'] !== 'Admin') {
+    header("Location: index.php");
+    exit();
+}
+
+try {
+    // Call the GetAllPolls stored procedure
+    $polls = getAllPolls(); // Assuming getAllPolls() is defined in db_functions.php
+} catch (PDOException $e) {
+    $error = handleSqlError($e);
+}
+
 ?>
 
 <!DOCTYPE html>
@@ -16,7 +54,6 @@ require_once 'navbar.php';
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
-
 </head>
 <body>
     <div class="container-fluid">
@@ -39,9 +76,9 @@ require_once 'navbar.php';
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="pending_user_approvals.php">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-person" viewBox="0 0 16 16">
-  <path d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6m2-3a2 2 0 1 1-4 0 2 2 0 0 1 4 0m4 8c0 1-1 1-1 1H3s-1 0-1-1 1-4 6-4 6 3 6 4m-1-.004c-.001-.246-.154-.986-.832-1.664C11.516 10.68 10.289 10 8 10s-3.516.68-4.168 1.332c-.678.678-.83 1.418-.832 1.664z"/>
-</svg>
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-person" viewBox="0 0 16 16">
+                                    <path d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6m2-3a2 2 0 1 1-4 0 2 2 0 0 1 4 0m4 8c0 1-1 1-1 1H3s-1 0-1-1 1-4 6-4 6 3 6 4m-1-.004c-.001-.246-.154-.986-.832-1.664C11.516 10.68 10.289 10 8 10s-3.516.68-4.168 1.332c-.678.678-.83 1.418-.832 1.664z"/>
+                                </svg>
                                 Users
                             </a>
                         </li>
@@ -69,36 +106,34 @@ require_once 'navbar.php';
 
                 <!-- Poll List -->
                 <div class="poll-container">
-                    <!-- Poll 1 -->
-                    <div class="card poll-card">
-                        <div class="card-body">
-                            <h5 class="card-title">Poll Title 1</h5>
-                            <p class="card-text">Description of the poll goes here. It gives an overview of the poll's context.</p>
-                            <p class="poll-votes">Votes: Yes 20% | No 80%</p>
-                            <a href="pollpage.php?poll_id=1" class="btn btn-primary mt-auto">View</a>
-                            <a href="polleditpage.php?poll_id=1" class="btn btn-warning mt-2">Edit</a>
+                    <?php if (isset($error)): ?>
+                        <div class="alert alert-danger" role="alert">
+                            <?= htmlspecialchars($error) ?>
                         </div>
-                    </div>
-                    <!-- Poll 2 -->
-                    <div class="card poll-card">
-                        <div class="card-body">
-                            <h5 class="card-title">Poll Title 2</h5>
-                            <p class="card-text">Another poll description, offering details about the poll's purpose.</p>
-                            <p class="poll-votes">Votes: Yes 60% | No 40%</p>
-                            <a href="pollpage.php?poll_id=2" class="btn btn-primary mt-auto">View</a>
-                            <a href="polleditpage.php?poll_id=2" class="btn btn-warning mt-2">Edit</a>
-                        </div>
-                    </div>
-                    <!-- Poll 3 -->
-                    <div class="card poll-card">
-                        <div class="card-body">
-                            <h5 class="card-title">Poll Title 3</h5>
-                            <p class="card-text">This is a description for the third poll.</p>
-                            <p class="poll-votes">Votes: Yes 75% | No 25%</p>
-                            <a href="pollpage.php?poll_id=3" class="btn btn-primary mt-auto">View</a>
-                            <a href="polleditpage.php?poll_id=3" class="btn btn-warning mt-2">Edit</a>
-                        </div>
-                    </div>
+                    <?php else: ?>
+                        <?php if (empty($polls)): ?>
+                            <p>No polls available.</p>
+                        <?php else: ?>
+                            <?php foreach ($polls as $poll): ?>
+                                <div class="card poll-card mb-3">
+                                    <div class="card-body">
+                                        <h5 class="card-title"><?= htmlspecialchars($poll['Title']) ?></h5>
+                                        <p class="card-text"><?= htmlspecialchars($poll['Description']) ?></p>
+                                        <p class="poll-votes">Expiration: <?= htmlspecialchars($poll['Expiration_Date']) ?></p>
+                                        <a href="pollpage.php?poll_id=<?= htmlspecialchars($poll['Poll_ID']) ?>" class="btn btn-primary mt-auto">View</a>
+                                        <a href="polleditpage.php?poll_id=<?= htmlspecialchars($poll['Poll_ID']) ?>" class="btn btn-warning mt-2">Edit</a>
+                                        <a href="add_users_to_poll.php?poll_id=<?= htmlspecialchars($poll['Poll_ID']) ?>" class="btn btn-info d-flex align-items-center">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-person-fill-add me-2" viewBox="0 0 16 16">
+                                                <path d="M12.5 16a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7m.5-5v1h1a.5.5 0 0 1 0 1h-1v1a.5.5 0 0 1-1 0v-1h-1a.5.5 0 0 1 0-1h1v-1a.5.5 0 0 1 1 0m-2-6a3 3 0 1 1-6 0 3 3 0 0 1 6 0"/>
+                                                <path d="M2 13c0 1 1 1 1 1h5.256A4.5 4.5 0 0 1 8 12.5a4.5 4.5 0 0 1 1.544-3.393Q8.844 9.002 8 9c-5 0-6 3-6 4"/>
+                                            </svg>
+                                            Add Users
+                                        </a>
+                                    </div>
+                                </div>
+                            <?php endforeach; ?>
+                        <?php endif; ?>
+                    <?php endif; ?>
                 </div>
             </main>
         </div>
