@@ -1,9 +1,23 @@
 <?php
 require_once 'navbar.php';
 require_once 'db_functions.php';
+require_once 'session_check.php';
+
 
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
+}
+
+if (!isset($_SESSION['user_id'])) {
+    header("Location: login.php"); // Redirect to login if not authenticated
+    exit();
+}
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['job_id'])) {
+    $_SESSION['job_id'] = intval($_POST['job_id']); // Store job_id in the session
+    // user_id is already stored in the session from login
+    header("Location: configuration.php"); // Redirect to configuration.php
+    exit();
 }
 
 $jobs = [];
@@ -27,9 +41,9 @@ $jobs = getJobListings();
             <h3 class="sidebar-title">Admin Dashboard</h3>
             <ul class="sidebar-links">
                 <li><a href="create_poll.php">Create Poll</a></li>
-                <li><a href="admin_view_polls.php">Polls</a></li>
-                <li><a href="pending_user_approvals.php">User Approvals</a></li>
-                <li><a href="#" class="active">Jobs</a></li>
+                <li><a href="admin_page.php">Polls</a></li>
+                <li><a href="pending_user_approvals.php" class="active">User Approvals</a></li>
+                <li><a href="jobs.php">Jobs</a></li>
                 <li><a href="#settings">Settings</a></li>
             </ul>
         </aside>
@@ -49,9 +63,7 @@ $jobs = getJobListings();
                                 <th>Job Name</th>
                                 <th>Job Description</th>
                                 <th>Creation Date</th>
-                                <th>Execute</th>
                                 <th>Configure</th>
-                                <th>Status</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -64,19 +76,17 @@ $jobs = getJobListings();
                                         <td><?= htmlspecialchars($job['Job_Description']); ?></td>
                                         <td><?= htmlspecialchars($job['Creation_Date']); ?></td>
                                         <td>
-                                            <button type="button" class="run-button" data-job-id="<?= $job['Job_ID']; ?>">Run</button>
+                                            <!-- Configure Button -->
+                                            <form method="POST" action="" style="display:inline;">
+                                                <input type="hidden" name="job_id" value="<?= $job['Job_ID']; ?>">
+                                                <button type="submit" class="configure-button">Configure</button>
+                                            </form>
                                         </td>
-                                        <td>
-                                            <button class="configure-button" onclick="window.location.href='configuration.php?job_id=<?= $job['Job_ID']; ?>'">
-                                                Configure
-                                            </button>
-                                        </td>
-                                        <td class="status-column" id="status-<?= $job['Job_ID']; ?>">Pending</td>
                                     </tr>
                                 <?php endforeach; ?>
                             <?php else: ?>
                                 <tr>
-                                    <td colspan="8">No job postings available.</td>
+                                    <td colspan="6">No job postings available.</td>
                                 </tr>
                             <?php endif; ?>
                         </tbody>
@@ -89,34 +99,6 @@ $jobs = getJobListings();
     <!-- Footer -->
     <?php require_once 'footer.php'; ?>
 
-    <script>
-        // Simulating a job running result (Replace this with actual server-side handling)
-        function runJob(jobId) {
-            // Simulate random success or failure
-            return Math.random() > 0.2; // 20% chance of failure
-        }
-
-        // Add event listeners to "Run" buttons
-        document.querySelectorAll('.run-button').forEach(button => {
-            button.addEventListener('click', function() {
-                const jobId = this.getAttribute('data-job-id');
-                const statusCell = document.getElementById(`status-${jobId}`);
-
-                // Simulate job running
-                const isSuccessful = runJob(jobId);
-
-                if (isSuccessful) {
-                    statusCell.textContent = "Success";
-                    statusCell.classList.remove('status-failure');
-                    statusCell.classList.add('status-success'); // Apply green background
-                } else {
-                    statusCell.textContent = "Failed";
-                    statusCell.classList.remove('status-success');
-                    statusCell.classList.add('status-failure'); // Apply red background
-                }
-            });
-        });
-    </script>
 </body>
 
 </html>

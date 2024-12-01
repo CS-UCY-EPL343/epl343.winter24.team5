@@ -578,7 +578,7 @@ tr:hover {
 position: absolute;
 top: 10px;
 right: 10px;
-background-color: #007bff;
+background-color: #000;
 color: white;
 border: none;
 width: 32px;
@@ -591,7 +591,7 @@ transition: background-color 0.3s ease;
 }
 
 .add-user-button:hover {
-background-color: #0056b3;
+background-color: #333;
 }
 
 
@@ -785,7 +785,7 @@ background-color: #0056b3;
 }
 
 .config-box button {
-    background-color: #007BFF; /* Blue button */
+    background-color: #000; /* Blue button */
     color: white;
     padding: 0.7em;
     border: none;
@@ -796,6 +796,51 @@ background-color: #0056b3;
 }
 
 .config-box button:hover {
-    background-color: #0056b3; /* Darker blue */
+    background-color: #333; /* Darker blue */
 }
 
+.form-container-large {
+    background-color: #ffffff;
+    margin: 2% auto;
+    padding: 3em;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    width: 80%; /* Cover more of the page */
+    max-width: 1200px;
+    text-align: center;
+}
+.form-container-large h1 {
+    font-size: 2.5em;
+    margin-bottom: 1em;
+    color: #020625;
+}
+.form-container-large .form-group {
+    margin-bottom: 1.5em;
+    text-align: left;
+}
+.form-container-large .form-group label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 0.5em;
+}
+.form-container-large .form-control {
+    width: 100%;
+    padding: 0.75em;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+.form-container-large .form-actions {
+    margin-top: 2em;
+}
+.form-container-large .form-actions button {
+    background-color: #020625;
+    color: white;
+    border: none;
+    padding: 0.75em 1.5em;
+    border-radius: 5px;
+    font-size: 1em;
+    cursor: pointer;
+}
+.form-container-large .form-actions button:hover {
+    background-color: #0056b3;
+}
