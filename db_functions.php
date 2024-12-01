@@ -329,7 +329,6 @@ function getPoll($pollId)
         handleSqlError($e); // Handle the SQL error appropriately
     }
 }
-
 function addVote($voterId, $pollId, $decision)
 {
     try {
@@ -343,6 +342,30 @@ function addVote($voterId, $pollId, $decision)
     } catch (PDOException $e) {
         handleSqlError($e); // Handle the SQL error appropriately
         return false; // Return false on failure
+    }
+}
+
+function getPollTitleById($pollId)
+{
+    try {
+        $pdo = getDatabaseConnection(); // Ensure this function connects to your database
+        
+        // Use the correct stored procedure call
+        $stmt = $pdo->prepare("EXEC getPollTitleByID @Poll_ID = :PollID");
+        
+        // Bind the parameter using the correct name
+        $stmt->bindParam(':PollID', $pollId, PDO::PARAM_INT);
+        
+        // Execute the stored procedure
+        $stmt->execute();
+        
+        // Fetch the result
+        $result = $stmt->fetch(PDO::FETCH_ASSOC);
+        
+        // Return the poll title or null if not found
+        return $result['Title'] ?? null;
+    } catch (PDOException $e) {
+        handleSqlError($e); // Handle the SQL error appropriately
     }
 }
 
@@ -401,7 +424,7 @@ function sendPollInvitationEmail($recipientEmail, $recipientName, $pollTitle)
         $mail->Port = 587;
 
         // Ρυθμίσεις αποστολέα και παραλήπτη
-        $mail->setFrom('mitilineos123@gmail.com', 'Lil Indian');
+        $mail->setFrom('mitilineos123@gmail.com', 'System');
         $mail->addAddress($recipientEmail, $recipientName);
 
         // Περιεχόμενο email
