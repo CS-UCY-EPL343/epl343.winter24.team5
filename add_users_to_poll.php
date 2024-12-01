@@ -22,6 +22,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['user_id'])) {
 
     try {
         if (addUserToPoll($pollId, $userId)) {
+            $polltitle=getPollTitleById($pollId);
+            sendPollInvitationEmail($users['Email_Address'],$user['First_Name'] . ' ' . $user['Last_Name'], $polltitle);
             $success = "User successfully added to the poll!";
         } else {
             $error = "Failed to add the user to the poll.";
@@ -30,6 +32,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['user_id'])) {
         $error = handleSqlError($e);
     }
 }
+
+
 
 // Fetch users for selection
 try {

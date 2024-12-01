@@ -659,3 +659,62 @@ background-color: #0056b3;
 .poll-button-yellow:hover {
     background-color: #92bbfa;
 }
+
+.config-container {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start; /* Align at the top */
+    height: auto; /* Adjust height dynamically */
+    margin: 2em auto; /* Add spacing around the container */
+    width: 90%; /* Ensure it fits within the wrapper */
+}
+
+.config-box {
+    background-color: #FFFFFF; /* White background for the box */
+    padding: 1.5em; /* Adjust padding */
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+    width: 50%; /* Match width with the other page's content box */
+    text-align: center; /* Center-align content inside the box */
+}
+
+.config-box h1 {
+    text-align: center;
+    color: #050B45; /* Navy blue */
+    margin-bottom: 1em;
+}
+
+.config-box form {
+    display: flex;
+    flex-direction: column;
+}
+
+.config-box label {
+    font-weight: bold;
+    margin-top: 1em;
+    text-align: left; /* Align labels to the left */
+}
+
+.config-box input,
+.config-box select {
+    padding: 0.5em;
+    font-size: 1em;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    margin-top: 0.5em;
+}
+
+.config-box button {
+    background-color: #007BFF; /* Blue button */
+    color: white;
+    padding: 0.7em;
+    border: none;
+    border-radius: 5px;
+    margin-top: 1.5em;
+    cursor: pointer;
+    font-size: 1em;
+}
+
+.config-box button:hover {
+    background-color: #0056b3; /* Darker blue */
+}

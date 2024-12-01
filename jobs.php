@@ -6,6 +6,7 @@ if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
 
+
 // Fetch jobs from the database
 $jobs = [];
 $jobs = getJobListings();
@@ -23,6 +24,53 @@ $jobs = getJobListings();
 </head>
 
 <body>
+    <!-- Main Content -->
+    <div class="hero1">
+        <h1>Job Listings</h1>
+    </div>
+    <div class="job-wrapper">
+        <div class="job-content-box">
+            <table class="job-listing-table">
+                <thead>
+                    <tr>
+                        <th>Job ID</th>
+                        <th>Creator ID</th>
+                        <th>Job Name</th>
+                        <th>Job Description</th>
+                        <th>Creation Date</th>
+                        <th>Execute</th>
+                        <th>Configure</th>
+                        <th>Status</th> <!-- New Status Column -->
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php if (!empty($jobs)): ?>
+                        <?php foreach ($jobs as $job): ?>
+                            <tr>
+                                <td><?php echo htmlspecialchars($job['Job_ID']); ?></td>
+                                <td><?php echo htmlspecialchars($job['Creator_ID']); ?></td>
+                                <td><?php echo htmlspecialchars($job['Job_Name']); ?></td>
+                                <td><?php echo htmlspecialchars($job['Job_Description']); ?></td>
+                                <td><?php echo htmlspecialchars($job['Creation_Date']); ?></td>
+                                <td>
+                                    <button type="button" class="run-button" data-job-id="<?php echo $job['Job_ID']; ?>">Run</button>
+                                </td>
+                                <td>
+                                    <button class="configure-button" onclick="window.location.href='configuration.php?job_id=<?php echo $job['Job_ID']; ?>'">
+                                        Configure
+                                    </button>
+                                </td>
+                                <td class="status-column" id="status-<?php echo $job['Job_ID']; ?>">Pending</td> <!-- Status Column -->
+                            </tr>
+                        <?php endforeach; ?>
+                    <?php else: ?>
+                        <tr>
+                            <td colspan="8">No job postings available.</td>
+                        </tr>
+                    <?php endif; ?>
+                </tbody>
+            </table>
+        </div>
     <div class="dashboard-container">
         <!-- Sidebar -->
         <aside class="sidebar">
