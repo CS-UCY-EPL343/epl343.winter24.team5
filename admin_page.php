@@ -39,7 +39,7 @@ try {
                 <li><a href="create_poll.php">Create Poll</a></li>
                 <li><a href="#" class="active">Polls</a></li>
                 <li><a href="pending_user_approvals.php">User Approvals</a></li>
-                <li><a href="#reports">Reports</a></li>
+                <li><a href="jobs.php">Jobs</a></li>
                 <li><a href="#settings">Settings</a></li>
             </ul>
         </aside>
