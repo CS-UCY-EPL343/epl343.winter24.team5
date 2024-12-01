@@ -643,3 +643,19 @@ background-color: #0056b3;
 .poll-button:hover {
     background-color: #2d5591;
 }
+
+.poll-button-yellow {
+    display: inline-block;
+    padding: 10px 15px;
+    font-size: 0.9em;
+    text-decoration: none;
+    border-radius: 5px;
+    text-align: center;
+    background-color: #5897f6;
+    color: #fff;
+    border: none;
+}
+
+.poll-button-yellow:hover {
+    background-color: #92bbfa;
+}
