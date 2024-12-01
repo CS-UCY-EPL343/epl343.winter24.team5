@@ -37,7 +37,7 @@ try {
         <aside class="sidebar">
             <h3 class="sidebar-title">Admin Dashboard</h3>
             <ul class="sidebar-links">
-            <li><a href="create_poll.php">Create Poll</a></li>
+                <li><a href="create_poll.php">Create Poll</a></li>
                 <li><a href="admin_page.php">Polls</a></li>
                 <li><a href="pending_user_approvals.php" class="active">User Approvals</a></li>
                 <li><a href="jobs.php">Jobs</a></li>
@@ -59,15 +59,17 @@ try {
                     <p>No polls available.</p>
                 <?php else: ?>
                     <?php foreach ($polls as $poll): ?>
-                        <div class="poll-card1">
-                            
+                        <div class="poll-card1" style="position: relative;">
+                            <!-- Add Users Button -->
+                            <a href="add_users_to_poll.php?poll_id=<?= htmlspecialchars($poll['Poll_ID']) ?>" 
+                               style="position: absolute; top: 10px; right: 10px; font-size: 1.5rem; color: black; cursor: pointer;" 
+                               title="Add Users to Poll">
+                                <i class="bi bi-person-fill-add"></i>
+                            </a>
                             <h3 class="poll-title"><?= htmlspecialchars($poll['Title']) ?></h3>
                             <p class="poll-description"><?= htmlspecialchars($poll['Description']) ?></p>
                             <p class="poll-votes">Expiration: <?= htmlspecialchars($poll['Expiration_Date']) ?></p>
                             <div class="poll-actions">
-                            <a href="add_users_to_poll.php?poll_id=<?= htmlspecialchars($poll['Poll_ID']) ?>">
-                                    <i class="bi bi-person-fill-add" style="font-size: 1.5rem; cursor: pointer;"></i>
-                                </a>
                                 <a href="admin_view_polls.php?poll_id=<?= htmlspecialchars($poll['Poll_ID']) ?>" class="poll-button">View</a>
                                 <a href="admin_view_polls.php?poll_id=<?= htmlspecialchars($poll['Poll_ID']) ?>" class="poll-button-yellow">Edit</a>
                             </div>
