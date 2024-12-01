@@ -18,7 +18,7 @@ $voterId = $_SESSION['user_id']; // Retrieve the User_ID from the session
 
 // Get the poll ID from the GET parameter
 if (!isset($_GET['poll_id']) || !is_numeric($_GET['poll_id'])) {
-    header("Location: dashboard.php"); // Redirect to dashboard if poll ID is missing
+    header("Location: user_page.php"); // Redirect to dashboard if poll ID is missing
     exit();
 }
 
@@ -28,7 +28,7 @@ $pollId = intval($_GET['poll_id']); // Get the selected poll ID
 try {
     $poll = getPoll($pollId); // Fetch poll details using the function
     if (!$poll) {
-        header("Location: dashboard.php"); // Redirect if poll not found
+        header("Location: user_page.php"); // Redirect if poll not found
         exit();
     }
 } catch (PDOException $e) {
@@ -43,7 +43,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         try {
             if (addVote($voterId, $pollId, $decision)) {
-                header("Location: dashboard.php?vote=success"); // Redirect to dashboard on success
+                header("Location: user_page.php?vote=success"); // Redirect to dashboard on success
                 exit();
             } else {
                 $error = "Failed to record your vote. Please try again.";
@@ -101,7 +101,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             <label for="voteNo">No</label>
                         </div>
                     </div>
-                    <button type="button" class="btn-submit">Submit Vote</button>
+                    <button type="submit" class="btn-submit">Submit Vote</button>
                 </form>
             </div>
         <?php else: ?>
