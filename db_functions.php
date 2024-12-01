@@ -200,6 +200,40 @@ function createPoll($creatorId, $title, $description, $expirationDate, $status) 
     }
 }
 
+function addUserToPoll($pollId, $userId) {
+    try {
+        $pdo = getDatabaseConnection(); // Replace with your DB connection function
+        $stmt = $pdo->prepare("EXEC AddUserToPoll :Poll_ID, :User_ID");
+        $stmt->bindParam(':Poll_ID', $pollId, PDO::PARAM_INT);
+        $stmt->bindParam(':User_ID', $userId, PDO::PARAM_INT);
+        return $stmt->execute();
+    } catch (PDOException $e) {
+        handleSqlError($e); // Pass to handleSqlError for detailed logging
+    }
+}
+
+function getAllPolls() {
+    try {
+        $pdo = getDatabaseConnection();
+        $stmt = $pdo->prepare("EXEC GetAllPolls");
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    } catch (PDOException $e) {
+        handleSqlError($e); // Pass to handleSqlError for detailed logging
+    }
+}
+
+function getAllUsers() {
+    try {
+        $pdo = getDatabaseConnection();
+        $stmt = $pdo->prepare("EXEC GetAllUsers");
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    } catch (PDOException $e) {
+        handleSqlError($e); // Pass to handleSqlError for detailed logging
+    }
+}
+
 
 function handleSqlError(PDOException $e)
 {
