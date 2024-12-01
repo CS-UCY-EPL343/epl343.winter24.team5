@@ -7,25 +7,6 @@ if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
 
-// Check if user is logged in and if they are an admin
-// if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'admin') {
-//     // Redirect to index page if not logged in or not an admin
-//     header("Location: index.php");
-//     exit();
-// }
-
-// Fetch jobs from the database
-// Assuming you have a database connection established
-
-
-// $jobs = [];
-// try {
-//     $stmt = $db->query("SELECT job_id, creator_id, job_name, job_description, creation_date FROM jobs");
-//     $jobs = $stmt->fetchAll(PDO::FETCH_ASSOC);
-// } catch (PDOException $e) {
-//     echo "Error: " . $e->getMessage();
-// }
-
 $jobs = [];
 $jobs = getJobListings();
 
@@ -74,7 +55,9 @@ $jobs = getJobListings();
                                     <button type="button" class="run-button" data-job-id="<?php echo $job['Job_ID']; ?>">Run</button>
                                 </td>
                                 <td>
-                                    <button type="button">Configure</button>
+                                    <button class="configure-button" onclick="window.location.href='configuration.php?job_id=<?php echo $job['Job_ID']; ?>'">
+                                        Configure
+                                    </button>
                                 </td>
                                 <td class="status-column" id="status-<?php echo $job['Job_ID']; ?>">Pending</td> <!-- Status Column -->
                             </tr>
