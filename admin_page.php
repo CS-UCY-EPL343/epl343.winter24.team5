@@ -1,27 +1,4 @@
 <?php
-
-
-// Include the navbar
-require_once 'navbar.php';
-require_once 'session_check.php';
-require_once 'db_functions.php';
-
-if (!isset($_SESSION['role']) || $_SESSION['role'] !== 'Admin') {
-    header("Location: index.php");
-    exit();
-}
-
-try {
-    // Call the GetAllPolls stored procedure
-    $polls = getAllPolls(); // Assuming getAllPolls() is defined in db_functions.php
-} catch (PDOException $e) {
-    $error = handleSqlError($e);
-}
-
-
-?>
-
-<?php
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
@@ -126,7 +103,7 @@ try {
                                         <h5 class="card-title"><?= htmlspecialchars($poll['Title']) ?></h5>
                                         <p class="card-text"><?= htmlspecialchars($poll['Description']) ?></p>
                                         <p class="poll-votes">Expiration: <?= htmlspecialchars($poll['Expiration_Date']) ?></p>
-                                        <a href="pollpage.php?poll_id=<?= htmlspecialchars($poll['Poll_ID']) ?>" class="btn btn-primary mt-auto">View</a>
+                                        <a href="admin_view_polls.php?poll_id=<?= htmlspecialchars($poll['Poll_ID']) ?>" class="btn btn-primary mt-auto">View</a>
                                         <a href="polleditpage.php?poll_id=<?= htmlspecialchars($poll['Poll_ID']) ?>" class="btn btn-warning mt-2">Edit</a>
                                     </div>
                                 </div>
