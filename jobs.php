@@ -52,7 +52,6 @@ $jobs = getJobListings();
                                 <th>Job Description</th>
                                 <th>Creation Date</th>
                                 <th>Configure</th>
-                                <th>Status</th>
                             </tr>
                         </thead>
                         <tbody>
