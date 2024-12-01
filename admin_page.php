@@ -1,27 +1,4 @@
 <?php
-
-
-// Include the navbar
-require_once 'navbar.php';
-require_once 'session_check.php';
-require_once 'db_functions.php';
-
-if (!isset($_SESSION['role']) || $_SESSION['role'] !== 'Admin') {
-    header("Location: index.php");
-    exit();
-}
-
-try {
-    // Call the GetAllPolls stored procedure
-    $polls = getAllPolls(); // Assuming getAllPolls() is defined in db_functions.php
-} catch (PDOException $e) {
-    $error = handleSqlError($e);
-}
-
-
-?>
-
-<?php
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
