@@ -50,43 +50,62 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 </head>
 
 <body>
-    <div class="config-container">
-        <div class="config-box">
-            <h1>Procedure Configuration</h1>
-            <form action="configuration.php?job_id=<?php echo $jobId; ?>" method="POST">
-                <!-- User ID Field -->
-                <label for="user_id">User ID:</label>
-                <input type="number" id="user_id" name="user_id" required>
+    <!-- Wrapper -->
+    <div class="dashboard-container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <h3 class="sidebar-title">Admin Dashboard</h3>
+            <ul class="sidebar-links">
+            <li><a href="create_poll.php">Create Poll</a></li>
+                <li><a href="admin_page.php">Polls</a></li>
+                <li><a href="pending_user_approvals.php" class="active">User Approvals</a></li>
+                <li><a href="jobs.php">Jobs</a></li>
+                <li><a href="#settings">Settings</a></li>
+            </ul>
+        </aside>
 
-                <!-- Configuration Name -->
-                <label for="config_name">Configuration Name:</label>
-                <input type="text" id="config_name" name="config_name" required>
+        <!-- Main Content -->
+        <main class="dashboard-main">
+            <div class="config-container">
+                <div class="config-box">
+                    <h1>Procedure Configuration</h1>
+                    <form action="configuration.php?job_id=<?php echo $jobId; ?>" method="POST">
+                        <!-- User ID Field -->
+                        <label for="user_id">User ID:</label>
+                        <input type="number" id="user_id" name="user_id" required>
 
-                <!-- Parameter 1 -->
-                <label for="param1">Parameter 1:</label>
-                <input type="text" id="param1" name="param1">
+                        <!-- Configuration Name -->
+                        <label for="config_name">Configuration Name:</label>
+                        <input type="text" id="config_name" name="config_name" required>
 
-                <!-- Parameter 2 -->
-                <label for="param2">Parameter 2:</label>
-                <input type="text" id="param2" name="param2">
+                        <!-- Parameter 1 -->
+                        <label for="param1">Parameter 1:</label>
+                        <input type="text" id="param1" name="param1">
 
-                <!-- Schedule Time -->
-                <label for="schedule_time">Schedule Time:</label>
-                <input type="datetime-local" id="schedule_time" name="schedule_time">
+                        <!-- Parameter 2 -->
+                        <label for="param2">Parameter 2:</label>
+                        <input type="text" id="param2" name="param2">
 
-                <!-- Recurrence -->
-                <label for="recurrence">Recurrence:</label>
-                <select id="recurrence" name="recurrence">
-                    <option value="">None</option>
-                    <option value="Daily">Daily</option>
-                    <option value="Weekly">Weekly</option>
-                    <option value="Monthly">Monthly</option>
-                </select>
+                        <!-- Schedule Time -->
+                        <label for="schedule_time">Schedule Time:</label>
+                        <input type="datetime-local" id="schedule_time" name="schedule_time">
 
-                <!-- Submit Button -->
-                <button type="submit">Submit Configuration</button>
-            </form>
-        </div>
+                        <!-- Recurrence -->
+                        <label for="recurrence">Recurrence:</label>
+                        <select id="recurrence" name="recurrence">
+                            <option value="">None</option>
+                            <option value="Daily">Daily</option>
+                            <option value="Weekly">Weekly</option>
+                            <option value="Monthly">Monthly</option>
+                        </select>
+
+                        <!-- Submit Button -->
+                        
+                        <button class="configure-button">Submit Configuration</button>
+                    </form>
+                </div>
+            </div>
+        </main>
     </div>
 
     <!-- Footer -->
