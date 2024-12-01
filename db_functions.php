@@ -1,7 +1,7 @@
 <?php
+    require __DIR__ . '/vendor/autoload.php';
     use PHPMailer\PHPMailer\PHPMailer;
     use PHPMailer\PHPMailer\Exception;
-    require 'vendor/autoload.php'; // Φόρτωση PHPMailer
 function getDatabaseConnection()
 {
     try {
@@ -298,25 +298,26 @@ function getPollTitleById($pollId)
 {
     try {
         $pdo = getDatabaseConnection(); // Ensure this function connects to your database
-        
+
         // Use the correct stored procedure call
-        $stmt = $pdo->prepare("EXEC getPollTitleByID @Poll_ID = :PollID");
-        
+        $stmt = $pdo->prepare("EXEC getPollTitleByID @PollID = :PollID");
+
         // Bind the parameter using the correct name
         $stmt->bindParam(':PollID', $pollId, PDO::PARAM_INT);
-        
+
         // Execute the stored procedure
         $stmt->execute();
-        
+
         // Fetch the result
         $result = $stmt->fetch(PDO::FETCH_ASSOC);
-        
+
         // Return the poll title or null if not found
         return $result['Title'] ?? null;
     } catch (PDOException $e) {
         handleSqlError($e); // Handle the SQL error appropriately
     }
 }
+
 
 
 function handleSqlError(PDOException $e)
