@@ -9,13 +9,12 @@ html, body {
     color: #333;
 }
 
-
 /* Wrapper for page content */
 .wrapper1 {
     display: flex;
     align-items: center;
     justify-content: center;
-    min-height: 84.1vh; /* Ensure the wrapper fills the viewport height */
+    min-height: 85vh; /* Ensure the wrapper fills the viewport height */
 }
 
 
@@ -164,6 +163,7 @@ footer {
     height: 100%;
 }
 .poll-votes {
+    margin-top: 20px;
     font-size: 0.9rem;
     color: #6c757d;
 }
@@ -277,6 +277,7 @@ footer {
 /* create_account.php */
 .container {
     background-color: #ffffff;
+    min-height: 85vh;
     padding: 20px;
     border-radius: 10px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
@@ -410,7 +411,7 @@ p1 {
     display: flex;
     align-items: flex-start; /* Align items at the top */
     justify-content: center;
-    min-height: 84.1vh; /* Ensure the wrapper fills the viewport height */
+    min-height: 85vh; /* Ensure the wrapper fills the viewport height */
 }
 
 /* Main content box for job listings */
