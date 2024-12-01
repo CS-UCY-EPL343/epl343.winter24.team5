@@ -411,7 +411,7 @@ p1 {
     display: flex;
     align-items: flex-start; /* Align items at the top */
     justify-content: center;
-    min-height: 85vh; /* Ensure the wrapper fills the viewport height */
+    min-height: 84.1vh; /* Ensure the wrapper fills the viewport height */
 }
 
 /* Main content box for job listings */
@@ -460,12 +460,6 @@ th, td {
     padding: 10px;
 }
 
-.button-container {
-    text-align: center;
-    display: grid;
-    width:"100%";
-    justify-content: center;
-}
 
 .button-container button {
     background-color: #007BFF;
@@ -525,17 +519,143 @@ background-color: #0056b3;
     position: relative;
 }
 
-.btn-back {
-    display: inline-block;
-    padding: 10px 20px;
-    background-color: #007bff;
-    color: white;
-    text-decoration: none;
-    border-radius: 5px;
-    font-size: 16px;
-    transition: background-color 0.3s ease;
+
+
+/* user_page.php */
+/* Dashboard Layout */
+/* Dashboard Layout */
+.dashboard-container {
+    display: flex;
+    min-height: 100vh;
+    background-color: #d7e0f7;
 }
 
-.btn-back:hover {
-    background-color: #0056b3;
+/* Sidebar */
+.sidebar {
+    width: 130px;
+    background-color: #020625;
+    color: white;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    position: sticky;
+    top: 0;
+    height: 100vh;
+}
+
+.sidebar-title {
+    margin-left: 3px;
+    font-size: 1.5em;
+    margin-bottom: 20px;
+    color: #92bbfa;
+}
+
+.sidebar-links {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    width: 100%;
+}
+
+.sidebar-links li {
+    margin-bottom: 10px;
+    width: 100%;
+}
+
+.sidebar-links a {
+    color: white;
+    text-decoration: none;
+    padding: 10px;
+    display: block;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+}
+
+.sidebar-links a:hover {
+    background-color: #2d5591;
+}
+
+/* Main Content */
+.dashboard-main {
+    flex: 1;
+    padding: 20px;
+}
+
+.dashboard-header {
+    margin-bottom: 20px;
+}
+
+.dashboard-header h1 {
+    font-size: 2em;
+    color: #333;
+}
+
+/* Poll Cards */
+.poll-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: space-between;
+}
+
+.poll-card1 {
+    background-color: white;
+    border-radius: 15px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    width: calc(50% - 50px); /* Two cards per row */
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    text-align: left;
+}
+
+.poll-title {
+    font-size: 1.5em;
+    color: #020625;
+    margin-bottom: 10px;
+}
+
+.poll-description {
+    font-size: 1em;
+    margin-bottom: 15px;
+    color: #555;
+}
+
+.poll-votes {
+    font-size: 0.9em;
+    color: #333;
+    margin-bottom: 15px;
+}
+
+.poll-button {
+    align-self: flex-start;
+    background-color: #020625;
+    color: white;
+    text-decoration: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    font-size: 1em;
+    transition: background-color 0.3s;
+}
+
+.poll-button:hover {
+    background-color: #2d5591;
+}
+
+.poll-button-yellow {
+    display: inline-block;
+    padding: 10px 15px;
+    font-size: 0.9em;
+    text-decoration: none;
+    border-radius: 5px;
+    text-align: center;
+    background-color: #5897f6;
+    color: #fff;
+    border: none;
+}
+
+.poll-button-yellow:hover {
+    background-color: #92bbfa;
 }

@@ -8,9 +8,17 @@ if (!isset($_SESSION['role']) || $_SESSION['role'] !== 'User') {
     exit();
 }
 
-// Get the poll ID from the GET parameter or session
+// Check if User_ID exists in the session
+if (!isset($_SESSION['user_id'])) {
+    header("Location: index.php"); // Redirect if User_ID is not set in the session
+    exit();
+}
+
+$voterId = $_SESSION['user_id']; // Retrieve the User_ID from the session
+
+// Get the poll ID from the GET parameter
 if (!isset($_GET['poll_id']) || !is_numeric($_GET['poll_id'])) {
-    header("Location: select_poll.php"); // Redirect to poll selection page if poll ID is missing
+    header("Location: user_page.php"); // Redirect to dashboard if poll ID is missing
     exit();
 }
 
@@ -20,7 +28,7 @@ $pollId = intval($_GET['poll_id']); // Get the selected poll ID
 try {
     $poll = getPoll($pollId); // Fetch poll details using the function
     if (!$poll) {
-        header("Location: select_poll.php"); // Redirect if poll not found
+        header("Location: user_page.php"); // Redirect if poll not found
         exit();
     }
 } catch (PDOException $e) {
@@ -28,6 +36,25 @@ try {
     $poll = null;
 }
 
+// Handle form submission
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    if (isset($_POST['vote']) && ($_POST['vote'] === 'yes' || $_POST['vote'] === 'no')) {
+        $decision = ($_POST['vote'] === 'yes') ? 1 : 0; // Convert 'yes' or 'no' to 1 or 0
+
+        try {
+            if (addVote($voterId, $pollId, $decision)) {
+                header("Location: user_page.php?vote=success"); // Redirect to dashboard on success
+                exit();
+            } else {
+                $error = "Failed to record your vote. Please try again.";
+            }
+        } catch (Exception $e) {
+            $error = $e->getMessage();
+        }
+    } else {
+        $error = "Invalid vote selection.";
+    }
+}
 ?>
 
 <!DOCTYPE html>
@@ -40,52 +67,47 @@ try {
 </head>
 
 <body>
-    <div class="container">
+    <div class="wrapper1">
         <?php if (isset($error)): ?>
             <div class="alert alert-danger">
                 <?= htmlspecialchars($error) ?>
             </div>
         <?php elseif ($poll): ?>
-            <!-- Poll Title -->
-            <h2 class="mb-4"><?= htmlspecialchars($poll['Title']) ?></h2>
+            <div class="content-box1">
+                <!-- Poll Title -->
+                <h2 class="poll-title"><?= htmlspecialchars($poll['Title']) ?></h2>
 
-            <!-- Poll Description -->
-            <p class="mb-4">
-                <?= htmlspecialchars($poll['Description']) ?>
-            </p>
+                <!-- Poll Description -->
+                <p class="poll-description">
+                    <?= htmlspecialchars($poll['Description']) ?>
+                </p>
 
-            <!-- Poll Vote Results -->
-            <div class="mb-4">
-                <h5>Vote Results</h5>
-                <p><strong>Yes:</strong> <?= htmlspecialchars($poll['Votes_For']) ?> votes</p>
-                <p><strong>No:</strong> <?= htmlspecialchars($poll['Votes_Against']) ?> votes</p>
-            </div>
-
-            <!-- Voting Form -->
-            <form action="submit_vote.php" method="POST">
-                <div class="poll-option-group">
-                    <div class="poll-option">
-                        <input class="custom-radio" type="radio" name="vote" id="voteYes" value="yes" required>
-                        <label for="voteYes">Yes</label>
-                    </div>
-                    <div class="poll-option">
-                        <input class="custom-radio" type="radio" name="vote" id="voteNo" value="no" required>
-                        <label for="voteNo">No</label>
-                    </div>
+                <!-- Poll Vote Results -->
+                <div class="poll-results">
+                    <h5>Vote Results</h5>
+                    <p><strong>Yes:</strong> <?= htmlspecialchars($poll['Votes_For']) ?> votes</p>
+                    <p><strong>No:</strong> <?= htmlspecialchars($poll['Votes_Against']) ?> votes</p>
                 </div>
-                <input type="hidden" name="poll_id" value="<?= htmlspecialchars($poll['Poll_ID']) ?>">
-                <button type="submit" class="btn-submit">Submit Vote</button>
-            </form>
+
+                <!-- Voting Form -->
+                <form method="POST">
+                    <div class="poll-option-group">
+                        <div class="poll-option">
+                            <input class="custom-radio" type="radio" name="vote" id="voteYes" value="yes" required>
+                            <label for="voteYes">Yes</label>
+                        </div>
+                        <div class="poll-option">
+                            <input class="custom-radio" type="radio" name="vote" id="voteNo" value="no" required>
+                            <label for="voteNo">No</label>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn-submit">Submit Vote</button>
+                </form>
+            </div>
         <?php else: ?>
             <p>Poll not found.</p>
         <?php endif; ?>
     </div>
-
-    <script>
-        function confirmVote() {
-            alert('Your vote has been submitted!');
-        }
-    </script>
 
     <?php require_once 'footer.php'; ?>
 </body>
