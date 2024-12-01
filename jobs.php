@@ -1,6 +1,8 @@
 <?php
 require_once 'navbar.php';
 require_once 'db_functions.php';
+require_once 'session_check.php';
+
 
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
@@ -49,9 +51,7 @@ $jobs = getJobListings();
                                 <th>Job Name</th>
                                 <th>Job Description</th>
                                 <th>Creation Date</th>
-                                <th>Execute</th>
                                 <th>Configure</th>
-                                <th>Status</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -63,15 +63,12 @@ $jobs = getJobListings();
                                         <td><?= htmlspecialchars($job['Job_Name']); ?></td>
                                         <td><?= htmlspecialchars($job['Job_Description']); ?></td>
                                         <td><?= htmlspecialchars($job['Creation_Date']); ?></td>
-                                        <td>
-                                            <button type="button" class="run-button" data-job-id="<?= $job['Job_ID']; ?>">Run</button>
-                                        </td>
+
                                         <td>
                                             <button class="configure-button" onclick="window.location.href='configuration.php?job_id=<?= $job['Job_ID']; ?>'">
                                                 Configure
                                             </button>
                                         </td>
-                                        <td class="status-column" id="status-<?= $job['Job_ID']; ?>">Pending</td>
                                     </tr>
                                 <?php endforeach; ?>
                             <?php else: ?>
@@ -89,34 +86,6 @@ $jobs = getJobListings();
     <!-- Footer -->
     <?php require_once 'footer.php'; ?>
 
-    <script>
-        // Simulating a job running result (Replace this with actual server-side handling)
-        function runJob(jobId) {
-            // Simulate random success or failure
-            return Math.random() > 0.2; // 20% chance of failure
-        }
-
-        // Add event listeners to "Run" buttons
-        document.querySelectorAll('.run-button').forEach(button => {
-            button.addEventListener('click', function() {
-                const jobId = this.getAttribute('data-job-id');
-                const statusCell = document.getElementById(`status-${jobId}`);
-
-                // Simulate job running
-                const isSuccessful = runJob(jobId);
-
-                if (isSuccessful) {
-                    statusCell.textContent = "Success";
-                    statusCell.classList.remove('status-failure');
-                    statusCell.classList.add('status-success'); // Apply green background
-                } else {
-                    statusCell.textContent = "Failed";
-                    statusCell.classList.remove('status-success');
-                    statusCell.classList.add('status-failure'); // Apply red background
-                }
-            });
-        });
-    </script>
 </body>
 
 </html>

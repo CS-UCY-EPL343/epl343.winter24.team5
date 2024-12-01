@@ -28,7 +28,7 @@ try{
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>User Dashboard</title>
+    <title>User Page</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 
@@ -39,7 +39,7 @@ try{
             <h3 class="sidebar-title">Dashboard</h3>
             <ul class="sidebar-links">
                 <li><a href="#">Polls</a></li>
-                <li><a href="jobs.php">Jobs</a></li>
+                <li><a href="#reports">Reports</a></li>
                 <li><a href="#settings">Settings</a></li>
             </ul>
         </aside>
@@ -69,5 +69,6 @@ try{
             </div>
         </main>
     </div>
+    <?php require_once 'footer.php'; ?>
 </body>
 </html>
