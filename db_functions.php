@@ -178,6 +178,63 @@ function approveOrRejectUser($userId, $approvalStatus) {
     }
 }
 
+function createPoll($creatorId, $title, $description, $expirationDate, $status) {
+    try {
+        $pdo = getDatabaseConnection(); // Replace with your DB connection function
+        $stmt = $pdo->prepare("
+            EXEC CreatePoll 
+                @Creator_ID = :Creator_ID, 
+                @Title = :Title, 
+                @Description = :Description, 
+                @Expiration_Date = :Expiration_Date, 
+                @Status = :Status
+        ");
+        $stmt->bindParam(':Creator_ID', $creatorId, PDO::PARAM_INT);
+        $stmt->bindParam(':Title', $title, PDO::PARAM_STR);
+        $stmt->bindParam(':Description', $description, PDO::PARAM_STR);
+        $stmt->bindParam(':Expiration_Date', $expirationDate, PDO::PARAM_STR); // Pass as a string in DATETIME format
+        $stmt->bindParam(':Status', $status, PDO::PARAM_STR);
+        return $stmt->execute();
+    } catch (PDOException $e) {
+        handleSqlError($e); // Pass to handleSqlError for detailed logging
+    }
+}
+
+function addUserToPoll($pollId, $userId) {
+    try {
+        $pdo = getDatabaseConnection(); // Replace with your DB connection function
+        $stmt = $pdo->prepare("EXEC AddUserToPoll :Poll_ID, :User_ID");
+        $stmt->bindParam(':Poll_ID', $pollId, PDO::PARAM_INT);
+        $stmt->bindParam(':User_ID', $userId, PDO::PARAM_INT);
+        return $stmt->execute();
+    } catch (PDOException $e) {
+        handleSqlError($e); // Pass to handleSqlError for detailed logging
+    }
+}
+
+function getAllPolls() {
+    try {
+        $pdo = getDatabaseConnection();
+        $stmt = $pdo->prepare("EXEC GetAllPolls");
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    } catch (PDOException $e) {
+        handleSqlError($e); // Pass to handleSqlError for detailed logging
+    }
+}
+
+function getAllUsers() {
+    try {
+        $pdo = getDatabaseConnection();
+        $stmt = $pdo->prepare("EXEC GetAllUsers");
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    } catch (PDOException $e) {
+        handleSqlError($e); // Pass to handleSqlError for detailed logging
+    }
+}
+
+
 function handleSqlError(PDOException $e)
 {
     if (session_status() === PHP_SESSION_NONE) {
