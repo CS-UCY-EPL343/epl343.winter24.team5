@@ -69,7 +69,6 @@ $jobs = getJobListings();
                                                 Configure
                                             </button>
                                         </td>
-                                        <td class="status-column" id="status-<?= $job['Job_ID']; ?>">Pending</td>
                                     </tr>
                                 <?php endforeach; ?>
                             <?php else: ?>
