@@ -1,11 +1,7 @@
 <?php
 require_once 'db_functions.php'; // Include your database functions
 require_once 'navbar.php'; // Include navbar
-
-if (session_status() === PHP_SESSION_NONE) {
-    session_start();
-}
-
+require_once 'session_check.php';
 // Ensure only 'Φορέας Υλοποίησης' (Admin) can access this page
 if (!isset($_SESSION['role']) || $_SESSION['role'] !== 'Admin') {
     header("Location: index.php");
