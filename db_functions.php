@@ -1,5 +1,7 @@
 <?php
-
+    use PHPMailer\PHPMailer\PHPMailer;
+    use PHPMailer\PHPMailer\Exception;
+    require 'vendor/autoload.php'; // Φόρτωση PHPMailer
 function getDatabaseConnection()
 {
     try {
@@ -178,6 +180,122 @@ function approveOrRejectUser($userId, $approvalStatus) {
     }
 }
 
+function createPoll($creatorId, $title, $description, $expirationDate, $status) {
+    try {
+        $pdo = getDatabaseConnection(); // Replace with your DB connection function
+        $stmt = $pdo->prepare("
+            EXEC CreatePoll 
+                @Creator_ID = :Creator_ID, 
+                @Title = :Title, 
+                @Description = :Description, 
+                @Expiration_Date = :Expiration_Date, 
+                @Status = :Status
+        ");
+        $stmt->bindParam(':Creator_ID', $creatorId, PDO::PARAM_INT);
+        $stmt->bindParam(':Title', $title, PDO::PARAM_STR);
+        $stmt->bindParam(':Description', $description, PDO::PARAM_STR);
+        $stmt->bindParam(':Expiration_Date', $expirationDate, PDO::PARAM_STR); // Pass as a string in DATETIME format
+        $stmt->bindParam(':Status', $status, PDO::PARAM_STR);
+        return $stmt->execute();
+    } catch (PDOException $e) {
+        handleSqlError($e); // Pass to handleSqlError for detailed logging
+    }
+}
+
+function addUserToPoll($pollId, $userId) {
+    try {
+        $pdo = getDatabaseConnection(); // Replace with your DB connection function
+        $stmt = $pdo->prepare("EXEC AddUserToPoll :Poll_ID, :User_ID");
+        $stmt->bindParam(':Poll_ID', $pollId, PDO::PARAM_INT);
+        $stmt->bindParam(':User_ID', $userId, PDO::PARAM_INT);
+        return $stmt->execute();
+    } catch (PDOException $e) {
+        handleSqlError($e); // Pass to handleSqlError for detailed logging
+    }
+}
+
+function getAllPolls() {
+    try {
+        $pdo = getDatabaseConnection();
+        $stmt = $pdo->prepare("EXEC GetAllPolls");
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    } catch (PDOException $e) {
+        handleSqlError($e); // Pass to handleSqlError for detailed logging
+    }
+}
+
+function getAllUsers($pollId) {
+    try {
+        $pdo = getDatabaseConnection();
+        $stmt = $pdo->prepare("EXEC GetAllUsers :Poll_ID");
+        $stmt->bindParam(':Poll_ID', $pollId, PDO::PARAM_INT);
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    } catch (PDOException $e) {
+        handleSqlError($e); // Pass to handleSqlError for detailed logging
+    }
+}
+
+function getPollDetails($pollId) {
+    try {
+        $pdo = getDatabaseConnection(); // Replace with your DB connection function
+        $stmt = $pdo->prepare("EXEC GetPollDetails :Poll_ID");
+        $stmt->bindParam(':Poll_ID', $pollId, PDO::PARAM_INT);
+        $stmt->execute();
+        return $stmt->fetch(PDO::FETCH_ASSOC);
+    } catch (PDOException $e) {
+        handleSqlError($e); // Handle the SQL error
+    }
+}
+
+
+function getUserPolls($userId) {
+    try {
+        $pdo = getDatabaseConnection();
+        $stmt = $pdo->prepare("EXEC GetUserPolls :UserID");
+        $stmt->bindParam(':UserID', $userId, PDO::PARAM_INT);
+        $stmt->execute();
+
+        $polls = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        
+        // Return an empty array if no polls are found
+        return $polls ?: [];
+    } catch (PDOException $e) {
+        handleSqlError($e);
+        return [];
+    }
+}
+
+
+function getPoll($pollId) {
+    try {
+        $pdo = getDatabaseConnection(); // Ensure this function connects to your database
+        $stmt = $pdo->prepare("EXEC GetPoll :PollID");
+        $stmt->bindParam(':PollID', $pollId, PDO::PARAM_INT);
+        $stmt->execute();
+        return $stmt->fetch(PDO::FETCH_ASSOC); // Fetch a single poll as an associative array
+    } catch (PDOException $e) {
+        handleSqlError($e); // Handle the SQL error appropriately
+    }
+}
+
+function addVote($voterId, $pollId, $decision) {
+    try {
+        $pdo = getDatabaseConnection(); // Ensure this function connects to your database
+        $stmt = $pdo->prepare("EXEC AddVote :Voter_ID, :Poll_ID, :Decision");
+        $stmt->bindParam(':Voter_ID', $voterId, PDO::PARAM_INT);
+        $stmt->bindParam(':Poll_ID', $pollId, PDO::PARAM_INT);
+        $stmt->bindParam(':Decision', $decision, PDO::PARAM_BOOL);
+        $stmt->execute();
+        return true; // Return true on successful execution
+    } catch (PDOException $e) {
+        handleSqlError($e); // Handle the SQL error appropriately
+        return false; // Return false on failure
+    }
+}
+
+
 function handleSqlError(PDOException $e)
 {
     if (session_status() === PHP_SESSION_NONE) {
@@ -212,3 +330,79 @@ function handleSqlError(PDOException $e)
     header('Location: error.php');
     exit();
 }
+
+
+/**
+ * Αποστολή email πρόσκλησης για συμμετοχή σε δημοσκόπηση
+ */
+function sendPollInvitationEmail($recipientEmail, $recipientName, $pollTitle)
+{
+    $mail = new PHPMailer(true);
+
+    try {
+        // Ρυθμίσεις SMTP
+        $mail->isSMTP();
+        $mail->Host = 'smtp.gmail.com';
+        $mail->SMTPAuth = true;
+        $mail->Username = 'mitilineos123@gmail.com'; // Ενημέρωσε με το email σου
+        $mail->Password = 'dqog gaos gpce flfj';     // Ενημέρωσε με το App Password σου
+        $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
+        $mail->Port = 587;
+
+        // Ρυθμίσεις αποστολέα και παραλήπτη
+        $mail->setFrom('mitilineos123@gmail.com', 'Lil Indian');
+        $mail->addAddress($recipientEmail, $recipientName);
+
+        // Περιεχόμενο email
+        $mail->isHTML(true);
+        $mail->Subject = 'You have been added to a poll!';
+        $mail->Body = "
+            <h1>Hello, $recipientName!</h1>
+            <p>You have been added to the poll: <strong>$pollTitle</strong>.</p>
+            <p>Please login to the system to participate.</p>
+        ";
+
+        $mail->send();
+        return true;
+    } catch (Exception $e) {
+        error_log("Email could not be sent. Error: {$mail->ErrorInfo}");
+        return false;
+    }
+}
+
+/**
+ * Λήψη και αποστολή email σε χρήστη για δημοσκόπηση
+ */
+function notifyUserForPoll($voterId, $pollId)
+{
+    try {
+        $conn = getDatabaseConnection();
+
+        // Λήψη πληροφοριών χρήστη και δημοσκόπησης
+        $stmt = $conn->prepare("
+            SELECT 
+                u.Email_Address, 
+                u.First_Name, 
+                p.Title 
+            FROM dbo.USER u
+            JOIN dbo.POLL p ON p.Poll_ID = :pollId
+            WHERE u.User_ID = :voterId
+        ");
+        $stmt->execute(['voterId' => $voterId, 'pollId' => $pollId]);
+        $userInfo = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        if ($userInfo) {
+            $emailSent = sendPollInvitationEmail($userInfo['Email_Address'], $userInfo['First_Name'], $userInfo['Title']);
+            if ($emailSent) {
+                return "Email sent successfully to {$userInfo['First_Name']}!";
+            } else {
+                return "Failed to send email.";
+            }
+        } else {
+            return "User or Poll not found.";
+        }
+    } catch (PDOException $e) {
+        handleSqlError($e);
+    }
+}
+

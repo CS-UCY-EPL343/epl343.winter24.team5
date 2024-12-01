@@ -9,13 +9,12 @@ html, body {
     color: #333;
 }
 
-
 /* Wrapper for page content */
 .wrapper1 {
     display: flex;
     align-items: center;
     justify-content: center;
-    min-height: 84.1vh; /* Ensure the wrapper fills the viewport height */
+    min-height: 85vh; /* Ensure the wrapper fills the viewport height */
 }
 
 
@@ -164,6 +163,7 @@ footer {
     height: 100%;
 }
 .poll-votes {
+    margin-top: 20px;
     font-size: 0.9rem;
     color: #6c757d;
 }
@@ -277,6 +277,7 @@ footer {
 /* create_account.php */
 .container {
     background-color: #ffffff;
+    min-height: 85vh;
     padding: 20px;
     border-radius: 10px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
@@ -405,6 +406,32 @@ p1 {
     transform: translate(-50%, -50%);
 }
 
+/* Wrapper for job page content */
+.job-wrapper {
+    display: flex;
+    align-items: flex-start; /* Align items at the top */
+    justify-content: center;
+    min-height: 84.1vh; /* Ensure the wrapper fills the viewport height */
+}
+
+/* Main content box for job listings */
+.job-content-box {
+    background-color: white;
+    padding: 2em;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    width: 90%; /* Cover more screen width */
+    margin-top: 0; /* Remove extra space above the content box */
+    text-align: center;
+}
+
+/* Job listings table with updated border color */
+.job-listing-table {
+    width: 100%;
+    margin: 0;
+    border-collapse: collapse;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
 
 .job-listing-table th, .job-listing-table td {
     padding: 1em;
@@ -465,150 +492,4 @@ tr:nth-child(even) {
 
 tr:hover {
     background-color: #f1f1f1;
-}
-.job-page-wrapper {
-    display: flex;
-    align-items: flex-start; /* Align items at the top */
-    justify-content: center;
-    min-height: 84.1vh; /* Ensure the wrapper fills the viewport height */
-}
-
-/* Main content box for job listings */
-.job-content-box-unique {
-    background-color: white;
-    padding: 2em;
-    border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    width: 90%; /* Cover more screen width */
-    margin-top: 0; /* Remove extra space above the content box */
-    text-align: center;
-}
-
-/* Job listings table with updated border color */
-.job-table-custom {
-    width: 100%;
-    margin: 0;
-    border-collapse: collapse;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-}
-
-.job-table-custom th,
-.job-table-custom td {
-    padding: 1em;
-    border: 1px solid #444; /* Darker border for better contrast */
-    text-align: left;
-}
-
-.job-table-custom th { 
-    background-color: #050b45;
-    color: white;
-    border-bottom: 3px solid #444; /* Add a thicker border under the header for separation */
-    border-right: 2px solid #333; /* Add a border to visually separate the columns */
-}
-
-.job-table-custom td {
-    border-right: 1px solid #333; /* Add border between table cells */
-}
-
-.job-table-custom tr:nth-child(even) {
-    background-color: #f2f2f2;
-}
-
-.unique-header-cell,
-.unique-data-cell {
-    border: 1px solid #ddd;
-    background-color: #f2f2f2;
-    text-align: center; /* Center align text in the column headers */
-    padding: 10px;
-}
-
-.unique-button-container {
-    text-align: center;
-    display: grid;
-    width: 100%;
-    justify-content: center;
-}
-
-.unique-button-container button {
-    background-color: #007BFF;
-    color: white;
-    padding: 0.7em 1.5em;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 1em;
-}
-
-.unique-button-container button:hover {
-    background-color: #555;
-}
-
-.d-block-custom {
-    height: 100%;
-    display: block !important;
-    width: 10%;
-}
-
-.col-width-custom {
-    width: 12%;
-    height: 100%;
-}
-
-.unique-row-style:nth-child(even) {
-    background-color: #e0e0e0;
-}
-
-.unique-row-style:hover {
-    background-color: #f1f1f1;
-}
-
-.success-message-custom {
-    color: green; /* Ensure the text is green */
-    font-size: 2em; /* Make the message larger */
-    font-weight: bold;
-    text-align: center;
-    margin-top: 10px; /* Minimal gap between table and message */
-    display: none; /* Initially hidden */
-}
-
-.page-container-unique {
-    display: flex;
-    flex-direction: column;
-    align-items: center; /* Centers the table and message horizontally */
-    margin: 0 auto; /* Centers the entire page-container */
-    gap: 0; /* Ensures no extra spacing between child elements */
-}
-
-.content-container-unique {
-    width: 80%; /* Adjust table width as needed */
-    margin-bottom: 0; /* Ensure minimal gap between table and message */
-}
-
-footer.unique-footer {
-    background-color: #050b45; /* Matches the header background for consistency */
-    color: white; /* Text color for contrast */
-    text-align: center;
-    padding: 1em 0;
-    position: relative;
-    width: 100%;
-    margin-top: auto; /* Pushes footer to the bottom of the page */
-    font-size: 0.9em; /* Slightly smaller font for subtlety */
-    border-top: 3px solid #444; /* Optional: Adds a top border to separate content */
-}
-.status-column {
-    font-weight: bold;
-    text-align: center;
-    color: white; /* Default text color for better contrast */
-}
-
-.status-success {
-    background-color: #008000; /* Green background for success */
-    color: #FFFFFF; /* White text for contrast */
-    text-align: center; /* Align text in the center */
-}
-
-.status-failure {
-    background-color: #FF0000; /* Red background for failure */
-    color: #FFFFFF; /* White text for contrast */
-    text-align: center; /* Align text in the center */
 }
