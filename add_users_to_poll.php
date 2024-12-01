@@ -33,7 +33,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['user_id'])) {
 
 // Fetch users for selection
 try {
-    $users = getAllUsers(); // Fetch all users
+    $users = getAllUsers($pollId); // Fetch all users
 } catch (PDOException $e) {
     $error = handleSqlError($e);
 }

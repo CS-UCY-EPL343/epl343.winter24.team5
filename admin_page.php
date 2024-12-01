@@ -103,7 +103,7 @@ try {
                                         <h5 class="card-title"><?= htmlspecialchars($poll['Title']) ?></h5>
                                         <p class="card-text"><?= htmlspecialchars($poll['Description']) ?></p>
                                         <p class="poll-votes">Expiration: <?= htmlspecialchars($poll['Expiration_Date']) ?></p>
-                                        <a href="pollpage.php?poll_id=<?= htmlspecialchars($poll['Poll_ID']) ?>" class="btn btn-primary mt-auto">View</a>
+                                        <a href="admin_view_polls.php?poll_id=<?= htmlspecialchars($poll['Poll_ID']) ?>" class="btn btn-primary mt-auto">View</a>
                                         <a href="polleditpage.php?poll_id=<?= htmlspecialchars($poll['Poll_ID']) ?>" class="btn btn-warning mt-2">Edit</a>
                                     </div>
                                 </div>

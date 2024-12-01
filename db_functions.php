@@ -225,16 +225,31 @@ function getAllPolls() {
     }
 }
 
-function getAllUsers() {
+function getAllUsers($pollId) {
     try {
         $pdo = getDatabaseConnection();
-        $stmt = $pdo->prepare("EXEC GetAllUsers");
+        $stmt = $pdo->prepare("EXEC GetAllUsers :Poll_ID");
+        $stmt->bindParam(':Poll_ID', $pollId, PDO::PARAM_INT);
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     } catch (PDOException $e) {
         handleSqlError($e); // Pass to handleSqlError for detailed logging
     }
 }
+
+function getPollDetails($pollId) {
+    try {
+        $pdo = getDatabaseConnection(); // Replace with your DB connection function
+        $stmt = $pdo->prepare("EXEC GetPollDetails :Poll_ID");
+        $stmt->bindParam(':Poll_ID', $pollId, PDO::PARAM_INT);
+        $stmt->execute();
+        return $stmt->fetch(PDO::FETCH_ASSOC);
+    } catch (PDOException $e) {
+        handleSqlError($e); // Handle the SQL error
+    }
+}
+
+
 function getUserPolls($userId) {
     try {
         $pdo = getDatabaseConnection();
