@@ -32,9 +32,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['user_id'])) {
         $error = handleSqlError($e);
     }
 }
-
-
-
 // Fetch users for selection
 try {
     $users = getAllUsers($pollId); // Fetch all users
@@ -51,36 +48,48 @@ try {
     <title>Add Users to Poll</title>
     <link rel="stylesheet" href="styles.css">
 </head>
+
 <body>
-    <!-- Content Section -->
-    <div>
-        <h1>Add Users to Poll</h1>
+    <div class="dashboard-container">
+        <!-- Sidebar -->
+        <?php require_once 'user_dashboard.php'; ?>
 
-        <p>Poll ID: <?= htmlspecialchars($pollId) ?></p>
+        <!-- Main Content -->
+        <main class="dashboard-main">
+            <div class="content-box2">
+                <!-- Title -->
+                <h2 class="poll-title">Add Users to Poll</h2>
 
-        <?php if (isset($success)): ?>
-            <p style="color: green;"><?= htmlspecialchars($success) ?></p>
-        <?php endif; ?>
+                <!-- Success/Error Messages -->
+                <?php if (isset($success)): ?>
+                    <p style="color: green;"><?= htmlspecialchars($success) ?></p>
+                <?php endif; ?>
+                <?php if (isset($error)): ?>
+                    <p style="color: red;"><?= htmlspecialchars($error) ?></p>
+                <?php endif; ?>
 
-        <?php if (isset($error)): ?>
-            <p style="color: red;"><?= htmlspecialchars($error) ?></p>
-        <?php endif; ?>
+                <!-- Poll Information -->
+                <p class="poll-description">Poll ID: <?= htmlspecialchars($pollId) ?></p>
 
-        <form method="post" action="">
-            <div>
-                <label for="user_id">Select User:</label>
-                <select name="user_id" id="user_id" required>
-                    <?php foreach ($users as $user): ?>
-                        <option value="<?= htmlspecialchars($user['User_ID']) ?>">
-                            <?= htmlspecialchars($user['First_Name'] . ' ' . $user['Last_Name'] . ' (' . $user['Username'] . ')') ?>
-                        </option>
-                    <?php endforeach; ?>
-                </select>
+                <!-- Form -->
+                <form method="post" action="">
+                    <div class="poll-option-group">
+                        <label for="user_id" class="poll-description">Select User:</label>
+                        <select name="user_id" id="user_id" class="form-control" required>
+                            <?php foreach ($users as $user): ?>
+                                <option value="<?= htmlspecialchars($user['User_ID']) ?>">
+                                    <?= htmlspecialchars($user['First_Name'] . ' ' . $user['Last_Name'] . ' (' . $user['Username'] . ')') ?>
+                                </option>
+                            <?php endforeach; ?>
+                        </select>
+                    </div>
+                    <div class="form-actions">
+                        <button type="submit" class="btn-submit">Add User</button>
+                    </div>
+                </form>
             </div>
-            <div>
-                <button type="submit">Add User</button>
-            </div>
-        </form>
+        </main>
     </div>
+    <?php require_once 'footer.php'; ?>
 </body>
 </html>
