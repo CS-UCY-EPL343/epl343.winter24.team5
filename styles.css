@@ -15,7 +15,7 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  min-height: 85vh; /* Ensure the wrapper fills the viewport height */
+  min-height: 87%; /* Ensure the wrapper fills the viewport height */
 }
 
 /* Main content area */
@@ -142,7 +142,6 @@ table {
 
 /* Footer */
 footer {
-  position: absolute;
   bottom: 0;
   right: 0;
   left: 0;
