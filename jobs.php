@@ -21,12 +21,6 @@ if (!isset($_SESSION['role']) || $_SESSION['role'] !== 'Admin') {
     $is_admin = false;
 }
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['Job_ID'])) {
-    $_SESSION['Job_ID'] = intval($_POST['Job_ID']); // Store job_id in the session
-    header("Location: configuration.php"); // Redirect to configuration.php
-    exit();
-}
-
 $jobs = getJobListings();
 ?>
 
@@ -95,9 +89,9 @@ $jobs = getJobListings();
                                         <td>
                                             <div style="display: flex; justify-content: center; gap: 10px;">
                                                 <!-- Configure Button -->
-                                                <form method="POST" action="" style="display:inline;">
+                                                <form action="configuration.php" method="GET">
                                                     <input type="hidden" name="Job_ID" value="<?= $job['Job_ID']; ?>">
-                                                    <button type="submit" class="button">Configure</button>
+                                                    <button type="submit" name="submit_config" class="button">Configure</button>
                                                 </form>
 
                                                 <!-- Edit Job Button (Visible to Admins Only) -->
