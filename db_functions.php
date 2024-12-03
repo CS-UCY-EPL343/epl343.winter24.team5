@@ -163,10 +163,52 @@ function getJobListings()
     }
 }
 
+function insertJobConfiguration(
+    $jobId,
+    $userId,
+    $configName,
+    $parameters = null,
+    $scheduleTime = null,
+    $recurrence = null
+) {
+    try {
+        // Establish database connection
+        $conn = getDatabaseConnection();
+
+        // Prepare the stored procedure call for inserting job configuration
+        $stmt = $conn->prepare("
+            EXEC [dbo].[InsertJobConfiguration] 
+            @Job_ID = :job_id,
+            @User_ID = :user_id,
+            @Configuration_Name = :config_name,
+            @Parameters = :parameters,
+            @Schedule_Time = :schedule_time,
+            @Recurrence = :recurrence
+        ");
+
+        // Bind parameters
+        $stmt->bindParam(':job_id', $jobId, PDO::PARAM_INT);
+        $stmt->bindParam(':user_id', $userId, PDO::PARAM_INT);
+        $stmt->bindParam(':config_name', $configName);
+        $stmt->bindParam(':parameters', $parameters);
+        $stmt->bindParam(':schedule_time', $scheduleTime);
+        $stmt->bindParam(':recurrence', $recurrence);
+
+        // Execute the query
+        $stmt->execute();
+
+        return null; // Return null for success
+    } catch (PDOException $e) {
+        handleSqlError($e); // Handle SQL errors
+        return false; // Return false on failure
+    }
+}
+
 function createJobConfiguration($jobId, $userId, $configName, $parameters = null, $scheduleTime = null, $recurrence = null)
 {
     global $db; // Assuming `$db` is the PDO connection initialized in `db_functions.php`
-
+    // Establish database connection
+    $db = getDatabaseConnection();
     try {
         $sql = "
             INSERT INTO [dbo].[JOB_CONFIGURATION] (
