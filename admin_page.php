@@ -8,6 +8,7 @@ require_once 'navbar.php';
 require_once 'db_functions.php';
 require_once 'session_check.php';
 
+
 if (!isset($_SESSION['role']) || $_SESSION['role'] !== 'Admin') {
     header("Location: index.php");
     exit();
@@ -23,6 +24,7 @@ try {
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -61,9 +63,9 @@ try {
                     <?php foreach ($polls as $poll): ?>
                         <div class="poll-card1" style="position: relative;">
                             <!-- Add Users Button -->
-                            <a href="add_users_to_poll.php?poll_id=<?= htmlspecialchars($poll['Poll_ID']) ?>" 
-                               style="position: absolute; top: 10px; right: 10px; font-size: 1.5rem; color: black; cursor: pointer;" 
-                               title="Add Users to Poll">
+                            <a href="add_users_to_poll.php?poll_id=<?= htmlspecialchars($poll['Poll_ID']) ?>"
+                                style="position: absolute; top: 10px; right: 10px; font-size: 1.5rem; color: black; cursor: pointer;"
+                                title="Add Users to Poll">
                                 <i class="bi bi-person-fill-add"></i>
                             </a>
                             <h3 class="poll-title"><?= htmlspecialchars($poll['Title']) ?></h3>
@@ -79,5 +81,7 @@ try {
             </div>
         </main>
     </div>
+    <?php require_once 'footer.php'; ?>
 </body>
+
 </html>
