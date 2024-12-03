@@ -72,7 +72,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 </head>
 
 <body>
-    <div class="container">
+    <div class="container-account">
         <h2>Create Account</h2>
         <?php if (isset($error)): ?>
             <p1><?= htmlspecialchars($error) ?></p1>
