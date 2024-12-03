@@ -13,14 +13,30 @@ if (!isset($_SESSION['user_id'])) {
     exit();
 }
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['Job_ID'])) {
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    // Debug: Print POST data to confirm the Job_ID is coming through
+    echo "<pre>";
+    print_r($_POST); // Check the POST array
+    echo "</pre>";
+
     $_SESSION['Job_ID'] = intval($_POST['Job_ID']); // Store job_id in the session
-    // user_id is already stored in the session from login
-    header("Location: configuration.php"); // Redirect to configuration.php
+
+    // Redirect to configuration.php
+    header("Location: configuration.php");
     exit();
+} else {
+    // If POST is not set, print the Job_ID in the URL
+    if (isset($_GET['Job_ID'])) {
+        echo "Job ID from URL: " . htmlspecialchars($_GET['Job_ID']);
+    } else {
+        echo "No Job ID received.";
+    }
 }
 
-$jobs = [];
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    var_dump($_POST); // To see the data being posted
+}
+
 $jobs = getJobListings();
 ?>
 
