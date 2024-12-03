@@ -26,12 +26,14 @@ if (!$pollDetails) {
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Poll Details - Admin</title>
     <link rel="stylesheet" href="styles.css">
 </head>
+
 <body>
     <div class="container">
         <h2 class="mb-4"><?= htmlspecialchars($pollDetails['Title']) ?></h2>
@@ -45,10 +47,11 @@ if (!$pollDetails) {
 
         <!-- Back Button -->
         <div class="mb-4">
-            <a href="admin_page.php" class="btn-back">Back to Admin Page</a>
+            <a href="admin_page.php" class="poll-button">Go Back</a>
         </div>
     </div>
 
     <?php require_once 'footer.php'; ?>
 </body>
+
 </html>

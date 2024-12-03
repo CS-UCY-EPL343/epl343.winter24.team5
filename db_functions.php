@@ -480,6 +480,35 @@ function notifyUserForPoll($voterId, $pollId)
     }
 }
 
+function editPoll($pollId, $newStatus, $newDescription, $newExpirationDate)
+{
+    try {
+        $pdo = getDatabaseConnection(); // Ensure this function connects to your database
+
+        // Prepare the SQL to call the stored procedure
+        $stmt = $pdo->prepare("
+            EXEC EditPoll 
+                @Poll_ID = :Poll_ID, 
+                @New_Status = :New_Status, 
+                @New_Description = :New_Description, 
+                @New_Expiration_Date = :New_Expiration_Date
+        ");
+
+        // Bind the parameters
+        $stmt->bindParam(':Poll_ID', $pollId, PDO::PARAM_INT);
+        $stmt->bindParam(':New_Status', $newStatus, PDO::PARAM_STR);
+        $stmt->bindParam(':New_Description', $newDescription, PDO::PARAM_STR);
+        $stmt->bindParam(':New_Expiration_Date', $newExpirationDate, PDO::PARAM_STR);
+
+        // Execute the stored procedure
+        $stmt->execute();
+
+        return "Poll updated successfully.";
+    } catch (PDOException $e) {
+        handleSqlError($e); // Pass to handleSqlError for detailed logging
+    }
+}
+
 function createTask($creatorId, $title, $description, $dateDue) {
     try {
         $pdo = getDatabaseConnection(); 
@@ -519,6 +548,4 @@ function searchTasksByTitle($searchTerm) {
         return []; // Return an empty array on error
     }
 }
-
-
 
