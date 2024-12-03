@@ -27,9 +27,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         // Allowed file extensions
         $allowed_extensions = [
-            'java', 'py', 'js', 'cs', 'cpp', 'c', 'rb', 'go', 'ts', 'swift', 'php',
-            'pl', 'sh', 'r', 'kt', 'sql', 'html', 'css', 'json', 'xml', 'yml', 'yaml'
+            'java', 'py', 'js', 'cs', 'cpp', 'c', 'rb', 'go', 'ts', 'php',
+            'pl', 'sh', 'r', 'sql', 'html', 'css', 'json', 'xml'
         ];
+
 
         foreach ($_FILES['program_files']['name'] as $index => $file_name) {
             $file_tmp_path = $_FILES['program_files']['tmp_name'][$index];
@@ -120,7 +121,7 @@ if (isset($_SESSION['message'])) {
                     <div class="form-group">
                         <label for="program_files">Upload Program Files</label>
                         <input type="file" id="program_files" name="program_files[]" class="form-control" multiple required>
-                        <small>Allowed file types: .java, .py, .js, .cs, .cpp, .c, .rb, .go, .ts, .swift, .php, .pl, .sh, .r, .kt, .sql, .html, .css, .json, .xml, .yml, .yaml</small>
+                        <small>Allowed file types: .java, .py, .js, .cs, .cpp, .c, .rb, .go, .ts, .php, .pl, .sh, .r, .sql, .html, .css, .json, .xml</small>
                     </div>
                     <div class="form-actions">
                         <button type="submit" class="configure-button">Create Job</button>
