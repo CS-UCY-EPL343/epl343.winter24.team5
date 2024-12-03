@@ -561,3 +561,11 @@ function searchTasksByTitle($searchTerm) {
     }
 }
 
+function getUserDetails($userId) {
+    $pdo = getDatabaseConnection();
+    $stmt = $pdo->prepare("SELECT Email_Address, First_Name, Last_Name FROM [dbo].[USER] WHERE User_ID = :userId");
+    $stmt->bindParam(':userId', $userId, PDO::PARAM_INT);
+    $stmt->execute();
+    return $stmt->fetch(PDO::FETCH_ASSOC);
+}
+
