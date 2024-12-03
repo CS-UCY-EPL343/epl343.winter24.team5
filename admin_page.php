@@ -20,6 +20,14 @@ try {
 } catch (PDOException $e) {
     $error = handleSqlError($e);
 }
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['poll_id'])) {
+    $pollID = intval($_POST['poll_id']);
+    updatePollStatusAndVerdict($pollID);
+    header("Location: " . $_SERVER['PHP_SELF']); // Refresh the page
+    exit();
+}
+
 ?>
 
 <!DOCTYPE html>
@@ -62,21 +70,34 @@ try {
                 <?php else: ?>
                     <?php foreach ($polls as $poll): ?>
                         <div class="poll-card1" style="position: relative;">
-                            <!-- Add Users Button -->
-                            <a href="add_users_to_poll.php?poll_id=<?= htmlspecialchars($poll['Poll_ID']) ?>"
-                                style="position: absolute; top: 10px; right: 10px; font-size: 1.5rem; color: black; cursor: pointer;"
-                                title="Add Users to Poll">
-                                <i class="bi bi-person-fill-add"></i>
-                            </a>
-                            <h3 class="poll-title"><?= htmlspecialchars($poll['Title']) ?></h3>
-                            <p class="poll-description"><?= htmlspecialchars($poll['Description']) ?></p>
-                            <p class="poll-votes">Expiration: <?= htmlspecialchars($poll['Expiration_Date']) ?></p>
-                            <div class="poll-actions">
-                                <a href="admin_view_polls.php?poll_id=<?= htmlspecialchars($poll['Poll_ID']) ?>" class="poll-button">View</a>
-                                <a href="admin_edit_polls.php?poll_id=<?= htmlspecialchars($poll['Poll_ID']) ?>" class="poll-button-yellow">Edit</a>
-                            </div>
+                            <?php if ($poll['Status'] !== 'Finished'): ?>
+                                <!-- Add Users Button -->
+                                <a href="add_users_to_poll.php?poll_id=<?= htmlspecialchars($poll['Poll_ID']) ?>"
+                                    style="position: absolute; top: 10px; right: 10px; font-size: 1.5rem; color: black; cursor: pointer;"
+                                    title="Add Users to Poll">
+                                    <i class="bi bi-person-fill-add"></i>
+                                </a>
+                                <h3 class="poll-title"><?= htmlspecialchars($poll['Title']) ?></h3>
+                                <p class="poll-description"><?= htmlspecialchars($poll['Description']) ?></p>
+                                <p class="poll-votes">Expiration: <?= htmlspecialchars($poll['Expiration_Date']) ?></p>
+                                <div class="poll-actions">
+                                    <a href="admin_view_polls.php?poll_id=<?= htmlspecialchars($poll['Poll_ID']) ?>" class="poll-button">View</a>
+                                    <a href="admin_edit_polls.php?poll_id=<?= htmlspecialchars($poll['Poll_ID']) ?>" class="poll-button-yellow">Edit</a>
+                                    <form method="POST" style="display: inline;">
+                                        <input type="hidden" name="poll_id" value="<?= htmlspecialchars($poll['Poll_ID']) ?>">
+                                        <button type="submit" class="poll-button-red">Finish Poll</button>
+                                    </form>
+                                </div>
+                            <?php else: ?>
+                                <h3 class="poll-title"><?= htmlspecialchars($poll['Title']) ?></h3>
+                                <p class="poll-description"><?= htmlspecialchars($poll['Description']) ?></p>
+                                <p class="poll-votes">Expiration: <?= htmlspecialchars($poll['Expiration_Date']) ?></p>
+                                <span class="poll-status">Poll Finished</span>
+                            <?php endif; ?>
                         </div>
                     <?php endforeach; ?>
+
+
                 <?php endif; ?>
             </div>
         </main>

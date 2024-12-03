@@ -259,6 +259,18 @@ function addUserToPoll($pollId, $userId)
     }
 }
 
+function updatePollStatusAndVerdict($pollID)
+{
+    try {
+        $db = getDatabaseConnection(); // Assuming you have a function to get the DB connection
+        $stmt = $db->prepare("EXEC UpdatePollStatusAndVerdict @Poll_ID = :pollID");
+        $stmt->bindParam(':pollID', $pollID, PDO::PARAM_INT);
+        $stmt->execute();
+    } catch (PDOException $e) {
+        handleSqlError($e); // Use your error-handling function
+    }
+}
+
 function getAllPolls()
 {
     try {
