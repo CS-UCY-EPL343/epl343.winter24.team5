@@ -7,8 +7,8 @@ if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
 
-$jobId = isset($_SESSION['job_id']) ? $_SESSION['job_id'] : null;
-$userId = isset($_SESSION['user_id']) ? $_SESSION['user_id'] : null;
+$jobId = isset($_SESSION['Job_ID']) ? $_SESSION['Job_ID'] : null;
+$userId = isset($_SESSION['User_ID']) ? $_SESSION['User_ID'] : null;
 
 if (!$jobId || !$userId) {
     // Redirect back to jobs.php or show an error if either is missing
@@ -66,7 +66,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <div class="config-box">
                     <h1>Procedure Configuration</h1>
                     <form action="configuration.php?job_id=<?php echo $jobId; ?>" method="POST">
-                  
+
                         <!-- Configuration Name -->
                         <label for="config_name">Configuration Name:</label>
                         <input type="text" id="config_name" name="config_name" required>
