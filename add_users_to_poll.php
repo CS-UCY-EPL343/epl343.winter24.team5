@@ -20,11 +20,23 @@ $pollId = intval($_GET['poll_id']); // Get the selected poll ID
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['user_id'])) {
     $userId = intval($_POST['user_id']);
 
+  
     try {
         if (addUserToPoll($pollId, $userId)) {
-            //$polltitle=getPollTitleById($pollId);
-            //sendPollInvitationEmail($users['Email_Address'],$user['First_Name'] . ' ' . $user['Last_Name'], $polltitle);
-            $success = "User successfully added to the poll!";
+            // Get poll title and user details
+            $pollTitle = getPollTitleById($pollId);
+            $userDetails = getUserDetails($userId); // Fetch user details
+
+            // Send poll invitation email
+            if ($userDetails && sendPollInvitationEmail(
+                $userDetails['Email_Address'],
+                $userDetails['First_Name'] . ' ' . $userDetails['Last_Name'],
+                $pollTitle
+            )) {
+                $success = "User successfully added to the poll and notified via email!";
+            } else {
+                $error = "User added to the poll, but the email could not be sent.";
+            }
         } else {
             $error = "Failed to add the user to the poll.";
         }
@@ -52,8 +64,18 @@ try {
 <body>
     <div class="dashboard-container">
         <!-- Sidebar -->
-        <?php require_once 'user_dashboard.php'; ?>
-
+        <aside class="sidebar">
+            <h3 class="sidebar-title">Admin Dashboard</h3>
+            <ul class="sidebar-links">
+                <li><a href="create_poll.php">Create Poll</a></li>
+                <li><a href="create_tasks.php">Create a Task</a></li> 
+                <li><a href="admin_page.php">Polls</a></li>
+                <li><a href="pending_user_approvals.php" class="active">User Approvals</a></li>
+                <li><a href="jobs.php">Jobs</a></li>
+                <li><a href="Tasks.php">Tasks</a></li> 
+                <li><a href="#settings">Settings</a></li>
+            </ul>
+        </aside>
         <!-- Main Content -->
         <main class="dashboard-main">
             <div class="content-box2">

@@ -259,6 +259,18 @@ function addUserToPoll($pollId, $userId)
     }
 }
 
+function updatePollStatusAndVerdict($pollID)
+{
+    try {
+        $db = getDatabaseConnection(); // Assuming you have a function to get the DB connection
+        $stmt = $db->prepare("EXEC UpdatePollStatusAndVerdict @Poll_ID = :pollID");
+        $stmt->bindParam(':pollID', $pollID, PDO::PARAM_INT);
+        $stmt->execute();
+    } catch (PDOException $e) {
+        handleSqlError($e); // Use your error-handling function
+    }
+}
+
 function getAllPolls()
 {
     try {
@@ -406,7 +418,6 @@ function handleSqlError(PDOException $e)
     exit();
 }
 
-
 /**
  * Αποστολή email πρόσκλησης για συμμετοχή σε δημοσκόπηση
  */
@@ -481,7 +492,7 @@ function notifyUserForPoll($voterId, $pollId)
     }
 }
 
-function editPoll($pollId, $newStatus, $newDescription, $newExpirationDate)
+function editPoll($pollId, $newTitle, $newDescription, $newExpirationDate)
 {
     try {
         $pdo = getDatabaseConnection(); // Ensure this function connects to your database
@@ -490,14 +501,14 @@ function editPoll($pollId, $newStatus, $newDescription, $newExpirationDate)
         $stmt = $pdo->prepare("
             EXEC EditPoll 
                 @Poll_ID = :Poll_ID, 
-                @New_Status = :New_Status, 
+                @New_Title = :New_Title, 
                 @New_Description = :New_Description, 
                 @New_Expiration_Date = :New_Expiration_Date
         ");
 
         // Bind the parameters
         $stmt->bindParam(':Poll_ID', $pollId, PDO::PARAM_INT);
-        $stmt->bindParam(':New_Status', $newStatus, PDO::PARAM_STR);
+        $stmt->bindParam(':New_Title', $newTitle, PDO::PARAM_STR);
         $stmt->bindParam(':New_Description', $newDescription, PDO::PARAM_STR);
         $stmt->bindParam(':New_Expiration_Date', $newExpirationDate, PDO::PARAM_STR);
 
@@ -509,3 +520,52 @@ function editPoll($pollId, $newStatus, $newDescription, $newExpirationDate)
         handleSqlError($e); // Pass to handleSqlError for detailed logging
     }
 }
+
+function createTask($creatorId, $title, $description, $dateDue) {
+    try {
+        $pdo = getDatabaseConnection(); 
+        $stmt = $pdo->prepare("EXEC CreateTask :user_id, :title, :description, :date_due");
+        $stmt->bindParam(':user_id', $creatorId, PDO::PARAM_INT);
+        $stmt->bindParam(':title', $title, PDO::PARAM_STR);
+        $stmt->bindParam(':description', $description, PDO::PARAM_STR);
+        $stmt->bindParam(':date_due', $dateDue, PDO::PARAM_STR);
+
+        return $stmt->execute();
+    } catch (PDOException $e) {
+        handleSqlError($e); // 
+        return false; // Return false if an error occurs
+    }
+}
+
+function getAllTasks() {
+    try {
+        $pdo = getDatabaseConnection(); 
+        $stmt = $pdo->query("EXEC GetAllTasks"); // Call the stored procedure
+        return $stmt->fetchAll(PDO::FETCH_ASSOC); // Fetch results as an associative array
+    } catch (PDOException $e) {
+        handleSqlError($e); // Log and handle the error
+        return []; // Return an empty array on error
+    }
+}
+
+function searchTasksByTitle($searchTerm) {
+    try {
+        $pdo = getDatabaseConnection(); // Ensure this returns a valid PDO connection
+        $stmt = $pdo->prepare("EXEC SearchTasksByTitle :search");
+        $stmt->bindParam(':search', $searchTerm, PDO::PARAM_STR);
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    } catch (PDOException $e) {
+        handleSqlError($e); // Log or display the error
+        return []; // Return an empty array on error
+    }
+}
+
+function getUserDetails($userId) {
+    $pdo = getDatabaseConnection();
+    $stmt = $pdo->prepare("SELECT Email_Address, First_Name, Last_Name FROM [dbo].[USER] WHERE User_ID = :userId");
+    $stmt->bindParam(':userId', $userId, PDO::PARAM_INT);
+    $stmt->execute();
+    return $stmt->fetch(PDO::FETCH_ASSOC);
+}
+

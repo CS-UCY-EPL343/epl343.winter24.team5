@@ -42,9 +42,11 @@ $pendingApprovals = getPendingApprovals();
             <h3 class="sidebar-title">Admin Dashboard</h3>
             <ul class="sidebar-links">
                 <li><a href="create_poll.php">Create Poll</a></li>
+                <li><a href="create_tasks.php">Create a Task</a></li> 
                 <li><a href="admin_page.php">Polls</a></li>
                 <li><a href="pending_user_approvals.php" class="active">User Approvals</a></li>
                 <li><a href="jobs.php">Jobs</a></li>
+                <li><a href="Tasks.php">Tasks</a></li>
                 <li><a href="#settings">Settings</a></li>
             </ul>
         </aside>
