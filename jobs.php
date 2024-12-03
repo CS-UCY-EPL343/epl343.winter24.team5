@@ -8,7 +8,7 @@ if (session_status() === PHP_SESSION_NONE) {
 }
 
 if (!isset($_SESSION['user_id'])) {
-    header("Location: login.php"); // Redirect to login if not authenticated
+    header("Location: sign_in_account.php"); // Redirect to login if not authenticated
     exit();
 }
 
