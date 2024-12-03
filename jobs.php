@@ -3,7 +3,6 @@ require_once 'navbar.php';
 require_once 'db_functions.php';
 require_once 'session_check.php';
 
-
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
@@ -13,14 +12,21 @@ if (!isset($_SESSION['user_id'])) {
     exit();
 }
 
+// Get the user role from the database
+$user_id = $_SESSION['user_id'];
+$is_admin = true;
+
+// Fetch the user's role from the database
+if (!isset($_SESSION['role']) || $_SESSION['role'] !== 'Admin') {
+    $is_admin = false;
+}
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['Job_ID'])) {
     $_SESSION['Job_ID'] = intval($_POST['Job_ID']); // Store job_id in the session
-    // user_id is already stored in the session from login
     header("Location: configuration.php"); // Redirect to configuration.php
     exit();
 }
 
-$jobs = [];
 $jobs = getJobListings();
 ?>
 
@@ -52,6 +58,15 @@ $jobs = getJobListings();
         <main class="dashboard-main">
             <div class="dashboard-header">
                 <h1>Job Listings</h1>
+
+                <!-- Create New Job Button (Visible to Admins Only) -->
+                <?php if ($is_admin): ?>
+                    <div style="display: flex; justify-content: center; gap: 10px; margin-bottom: 1px;">
+                        <form method="GET" action="create_job.php" style="display:inline;">
+                            <button type="submit" class="button">Create New Job</button>
+                        </form>
+                    </div>
+                <?php endif; ?>
             </div>
             <div class="job-wrapper">
                 <div class="job-content-box">
@@ -63,7 +78,7 @@ $jobs = getJobListings();
                                 <th>Job Name</th>
                                 <th>Job Description</th>
                                 <th>Creation Date</th>
-                                <th>Configure</th>
+                                <th>Actions</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -76,11 +91,21 @@ $jobs = getJobListings();
                                         <td><?= htmlspecialchars($job['Job_Description']); ?></td>
                                         <td><?= htmlspecialchars($job['Creation_Date']); ?></td>
                                         <td>
-                                            <!-- Configure Button -->
-                                            <form method="POST" action="" style="display:inline;">
-                                                <input type="hidden" name="Job_ID" value="<?= $job['Job_ID']; ?>">
-                                                <button type="submit" class="configure-button">Configure</button>
-                                            </form>
+                                            <div style="display: flex; justify-content: center; gap: 10px;">
+                                                <!-- Configure Button -->
+                                                <form method="POST" action="" style="display:inline;">
+                                                    <input type="hidden" name="Job_ID" value="<?= $job['Job_ID']; ?>">
+                                                    <button type="submit" class="button">Configure</button>
+                                                </form>
+
+                                                <!-- Edit Job Button (Visible to Admins Only) -->
+                                                <?php if ($is_admin): ?>
+                                                    <form method="GET" action="edit_job.php" style="display:inline;">
+                                                        <input type="hidden" name="Job_ID" value="<?= $job['Job_ID']; ?>">
+                                                        <button type="submit" class="button">Edit Job</button>
+                                                    </form>
+                                                <?php endif; ?>
+                                            </div>
                                         </td>
                                     </tr>
                                 <?php endforeach; ?>
