@@ -453,13 +453,6 @@ p1 {
   margin-bottom: 1em;
 }
 
-/* Poll Description */
-.poll-description {
-  font-size: 1.1em;
-  line-height: 1.6;
-  color: #555;
-  margin-bottom: 2em;
-}
 
 /* Poll Results */
 .poll-results h5 {
@@ -828,7 +821,7 @@ tr:hover {
 }
 .form-container-large .form-control {
   width: 100%;
-  padding: 0.75em;
+  padding-bottom: 0.75em;
   border: 1px solid #ccc;
   border-radius: 5px;
 }

@@ -15,16 +15,16 @@ if (!isset($_SESSION['role']) || $_SESSION['role'] !== 'User') {
 
 $userID = $_SESSION['user_id'];
 
-try{
-
+try {
     $polls = getUserPolls($userID);
-} catch( PDOException $e){
+} catch (PDOException $e) {
     $error = handleSqlError($e);
 }
 ?>
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -51,10 +51,14 @@ try{
                 <?php else: ?>
                     <?php foreach ($polls as $poll): ?>
                         <div class="poll-card1">
-                                <h3 class="poll-title"><?= htmlspecialchars($poll['Title']) ?></h5>
-                                <p class="poll-description"><?= htmlspecialchars($poll['Description']) ?></p>
-                                <p class="poll-votes">Votes: Yes <?= htmlspecialchars($poll['Votes_For']) ?> | No <?= htmlspecialchars($poll['Votes_Against']) ?></p>
-                                <a href="pollpage.php?poll_id=<?= htmlspecialchars($poll['Poll_ID']) ?>" class="poll-button">View</a>
+                            <h3 class="poll-title"><?= htmlspecialchars($poll['Title']) ?></h3>
+                            <p class="poll-description"><?= htmlspecialchars($poll['Description']) ?></p>
+                            <p class="poll-votes">Votes: Yes <?= htmlspecialchars($poll['Votes_For']) ?> | No <?= htmlspecialchars($poll['Votes_Against']) ?></p>
+                            <?php if ($poll['Status'] === "Finished"): ?>
+                                <p class="poll-status">Poll has concluded, Final Result: </p><?php htmlspecialchars($poll['Final_Verdict']) ?>
+                            <?php else: ?>
+                                <a href="pollpage.php?poll_id=<?= htmlspecialchars($poll['Poll_ID']) ?>" class="poll-button">Vote</a>
+                            <?php endif; ?>
                         </div>
                     <?php endforeach; ?>
                 <?php endif; ?>
@@ -63,4 +67,5 @@ try{
     </div>
     <?php require_once 'footer.php'; ?>
 </body>
+
 </html>
