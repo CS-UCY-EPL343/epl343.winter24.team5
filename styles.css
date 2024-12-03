@@ -1,847 +1,850 @@
-/* General styles */    
-html, body {
-    height: 100vh; /* Ensure the body takes the full height of the viewport */
-    margin: 0;
-    padding: 0;
-    font-family: Arial, sans-serif;
-    background-color: #d7e0f7;
-    text-align: center;
-    color: #333;
+/* General styles */
+html,
+body {
+  height: 100vh; /* Ensure the body takes the full height of the viewport */
+  margin: 0;
+  padding: 0;
+  font-family: Arial, sans-serif;
+  background-color: #d7e0f7;
+  text-align: center;
+  color: #333;
 }
 
 /* Wrapper for page content */
 .wrapper1 {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    min-height: 85vh; /* Ensure the wrapper fills the viewport height */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 87%; /* Ensure the wrapper fills the viewport height */
 }
-
 
 /* Main content area */
 .main-content1 {
-    flex: 1; /* Push the footer to the bottom */
+  flex: 1; /* Push the footer to the bottom */
 }
 .hero1 {
-    text-align: center;
-    padding: 1.5em;
-    color: #333;
+  text-align: center;
+  padding: 1.5em;
+  color: #333;
 }
 .hero1 h1 {
-    font-size: 2.5em;
-    margin-bottom: 0.5em;
+  font-size: 2.5em;
+  margin-bottom: 0.5em;
 }
 .hero1 p {
-    font-size: 1.2em;
-    max-width: 800px;
-    margin: 0 auto;
-    color: #555; /* Optional: add a subtle color */
+  font-size: 1.2em;
+  max-width: 800px;
+  margin: 0 auto;
+  color: #555; /* Optional: add a subtle color */
 }
-
 
 /* Center the content box in the middle */
 .content {
-    padding: 2em 2em 2em;
-    margin: 0 auto;
-    background-color: #e0e0e0;
-    border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-    text-align: center;
-} 
+  padding: 2em 2em 2em;
+  margin: 0 auto;
+  background-color: #e0e0e0;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  text-align: center;
+}
 
 /* Table Styles */
 table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-bottom: 20px;
-    background-color: white;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 20px;
+  background-color: white;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 .content1 {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 1.5em;
-    margin-bottom: 2%;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 1.5em;
+  margin-bottom: 2%;
 }
 .content-box1 {
-    background-color: white;
-    padding: 1.5em;
-    border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    width: 600px;
-    margin-top: 2%;
-    text-align: center;
+  background-color: white;
+  padding: 1.5em;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  width: 600px;
+  margin-top: 2%;
+  text-align: center;
 }
 .content-box1 h2 {
-    margin-bottom: 0.5em;
+  margin-bottom: 0.5em;
 }
 .content-box1 p {
-    font-size: 1em;
-    line-height: 1.5;
-    color: #555;
+  font-size: 1em;
+  line-height: 1.5;
+  color: #555;
 }
-
 
 /* Navigation bar styles */
 .navbar {
-    background-color: #020625;
-    color: #92bbfa;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 0.7em;
+  background-color: #020625;
+  color: #92bbfa;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.7em;
 }
 .navbar .brand {
-    font-size: 1.5em;
-    font-weight: bold;
+  font-size: 1.5em;
+  font-weight: bold;
 }
 .navbar .brand a {
-    margin-left: 0.5em;
-    color: white;
-    text-decoration: none;
-    font-size: 1em;
-    font-weight: bold;
+  margin-left: 0.5em;
+  color: white;
+  text-decoration: none;
+  font-size: 1em;
+  font-weight: bold;
 }
 .navbar .brand a:hover {
-    color: inherit;
-    text-decoration: none;
+  color: inherit;
+  text-decoration: none;
 }
 .navbar .nav-links-left {
-    display: flex;
-    gap: 1em;
-    margin-left: 2em;
+  display: flex;
+  gap: 1em;
+  margin-left: 2em;
 }
 .navbar .nav-links-left a,
 .navbar .auth a {
-    color: white;
-    text-decoration: none;
-    padding: 0.5em 1em;
-    border-radius: 5px;
-    transition: background-color 0.3s;
+  color: white;
+  text-decoration: none;
+  padding: 0.5em 1em;
+  border-radius: 5px;
+  transition: background-color 0.3s;
 }
 .navbar .nav-links-left a:hover,
 .navbar .auth a:hover {
-    background-color: #2d5591;
+  background-color: #2d5591;
 }
 .navbar .auth {
-    margin-left: auto;
+  margin-left: auto;
 }
 
 .nav-link {
-    display: block;
-    padding: var(--bs-nav-link-padding-y) var(--bs-nav-link-padding-x);
-    font-size: var(--bs-nav-link-font-size);
-    font-weight: var(--bs-nav-link-font-weight);
-    color: var(--bs-nav-link-color);
-    text-decoration: none;
-    background: 0 0;
-    text-align: left;
-    border: 0;
-    transition: color .15s ease-in-out, background-color .15s ease-in-out, border-color .15s ease-in-out;
+  display: block;
+  padding: var(--bs-nav-link-padding-y) var(--bs-nav-link-padding-x);
+  font-size: var(--bs-nav-link-font-size);
+  font-weight: var(--bs-nav-link-font-weight);
+  color: var(--bs-nav-link-color);
+  text-decoration: none;
+  background: 0 0;
+  text-align: left;
+  border: 0;
+  transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out,
+    border-color 0.15s ease-in-out;
 }
 
 /* Footer */
 footer {
-    margin-top: auto; /* Push footer to the bottom of the content */
-    text-align: center;
-    padding: 1em;
-    background-color: #020625;
-    color: white;
+  bottom: 0;
+  right: 0;
+  left: 0;
+  z-index: 10;
+  text-align: center;
+  padding: 1em;
+  background-color: #020625;
+  color: white;
 }
 
 .poll-card {
-    width: calc(33.333% - 20px); /* Three cards per row with a little space between */
-    height: 300px; /* Slightly longer cards */
-    margin-bottom: 20px; /* Space between rows */
-    flex-shrink: 0; /* Ensure consistent sizing */
+  width: calc(
+    33.333% - 20px
+  ); /* Three cards per row with a little space between */
+  height: 300px; /* Slightly longer cards */
+  margin-bottom: 20px; /* Space between rows */
+  flex-shrink: 0; /* Ensure consistent sizing */
 }
 .poll-card .card-body {
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 100%;
 }
 .poll-votes {
-    margin-top: 20px;
-    font-size: 0.9rem;
-    color: #6c757d;
+  margin-top: 20px;
+  font-size: 0.9rem;
+  color: #6c757d;
 }
 .poll-container {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 20px; /* Space between cards */
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px; /* Space between cards */
 }
 .navbar .users-link {
-    margin-right: auto;
+  margin-right: auto;
 }
-
 
 /* Login Container */
 .login-container {
-    margin: 0 auto;
-    margin-top: 100px; /* Offset for fixed navbar */
-    width: 300px;
-    background-color: white;
-    padding: 2em;
-    border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    text-align: center;
+  margin: 0 auto;
+  margin-top: 100px; /* Offset for fixed navbar */
+  width: 300px;
+  background-color: white;
+  padding: 2em;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  text-align: center;
 }
 .login-container h2 {
-    margin-bottom: 1em;
+  margin-bottom: 1em;
 }
 .login-container label {
-    display: block;
-    margin-bottom: 0.5em;
-    text-align: left;
+  display: block;
+  margin-bottom: 0.5em;
+  text-align: left;
 }
 .login-container input {
-    width: 100%;
-    padding: 0.5em;
-    margin-bottom: 0.5em;
-    border: 1px solid #ccc;
-    border-radius: 5px;
+  width: 100%;
+  padding: 0.5em;
+  margin-bottom: 0.5em;
+  border: 1px solid #ccc;
+  border-radius: 5px;
 }
 .login-container input:focus {
-    outline: none;
-    border: 1px solid #007BFF;
-    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+  outline: none;
+  border: 1px solid #007bff;
+  box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
 }
 .login-container button {
-    width: 100%;
-    padding: 0.5em;
-    background-color: #020625;
-    color: white;
-    border: none;
-    margin-top: 5%;
-    border-radius: 5px;
-    font-size: 1em;
-    cursor: pointer;
+  width: 100%;
+  padding: 0.5em;
+  background-color: #020625;
+  color: white;
+  border: none;
+  margin-top: 5%;
+  border-radius: 5px;
+  font-size: 1em;
+  cursor: pointer;
 }
 .login-container button:hover {
-    background-color: #2d5591;
+  background-color: #2d5591;
 }
-
 
 /* Account Creation */
 .create-account {
-    margin-top: 1em;
+  margin-top: 1em;
 }
 .create-account a {
-    color: #333;
-    text-decoration: none;
+  color: #333;
+  text-decoration: none;
 }
 .create-account a:hover {
-    text-decoration: underline;
+  text-decoration: underline;
 }
-
 
 /* error.php */
 /* Error Container */
 .error-container {
-    max-width: 400px;
-    margin: 100px auto;
-    padding: 20px;
-    background-color: #fff;
-    border: 1px solid #ccc;
-    border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    text-align: center;
+  max-width: 400px;
+  margin: 100px auto;
+  padding: 20px;
+  background-color: #fff;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  text-align: center;
 }
 .error-container h2 {
-    font-size: 2em;
-    margin-bottom: 10px;
-    color: #020625;
+  font-size: 2em;
+  margin-bottom: 10px;
+  color: #020625;
 }
 .error-container .error-message {
-    font-size: 1.2em;
-    color: #333;
-    margin-bottom: 20px;
+  font-size: 1.2em;
+  color: #333;
+  margin-bottom: 20px;
 }
 .error-container .button-container button {
-    background-color: #020625;
-    color: white;
-    border: none;
-    padding: 10px 20px;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 1em;
-    transition: background-color 0.3s;
+  background-color: #020625;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 1em;
+  transition: background-color 0.3s;
 }
 .error-container .button-container button:hover {
-    background-color: #2d5591;
+  background-color: #2d5591;
 }
-
 
 /* create_account.php */
 .container {
-    background-color: #ffffff;
-    min-height: 85vh;
-    padding: 20px;
-    border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    width: 400px;
-    margin: 0 auto; /* Start rectangle just below the start of the page */
-    margin-top: 30px;
-    margin-bottom: 30px;
+  height: 40%;
+  background-color: #ffffff;
+  min-height: 10%;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  width: 30%;
+  margin: 0 auto;
+  margin-top: 3%;
+  margin-bottom: 3%;
 }
+
 h2 {
-    text-align: center;
-    margin-bottom: 20px;
+  text-align: center;
+  margin-bottom: 20px;
 }
 label {
-    text-align: left;
-    display: block;
-    margin: 10px 0 5px;
+  text-align: left;
+  display: block;
+  margin: 10px 0 5px;
 }
-input, select {
-    width: 100%;
-    padding: 10px;
-    margin-bottom: 15px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    box-sizing: border-box;
-    background-color: #fff; /* Default input background */
+input,
+select {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 15px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  box-sizing: border-box;
+  background-color: #fff; /* Default input background */
 }
-input:valid, select:valid {
-    background-color: #e8f0fe; /* Light gray when valid */
+input:valid,
+select:valid {
+  background-color: #e8f0fe; /* Light gray when valid */
 }
-input:focus, select:focus {
-    border-color: #007bff;
-    outline: none;
-    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+input:focus,
+select:focus {
+  border-color: #007bff;
+  outline: none;
+  box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
 }
 button {
-    width: 100%;
-    padding: 10px;
-    background-color: #020625;
-    color: #ffffff;
-    border: none;
-    border-radius: 5px;
-    font-size: 16px;
-    font-weight: bold;
-    cursor: pointer;
+  width: 100%;
+  padding: 10px;
+  background-color: #020625;
+  color: #ffffff;
+  border: none;
+  border-radius: 5px;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
 }
 button:hover {
-    background-color: #2d5591
+  background-color: #2d5591;
 }
 p1 {
-    color: red;
-    text-align: center;
+  color: red;
+  text-align: center;
 }
 .date-picker {
-    display: flex;
-    align-items: center;
+  display: flex;
+  align-items: center;
 }
 /* General alignment for labels and inputs */
 .container label {
-    display: block;
-    margin-bottom: 5px;
-    text-align: left;
+  display: block;
+  margin-bottom: 5px;
+  text-align: left;
 }
-.container input, .container select {
-    padding: 10px;
-    margin-bottom: 15px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    box-sizing: border-box;
+.container input,
+.container select {
+  padding: 10px;
+  margin-bottom: 15px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  box-sizing: border-box;
 }
-.container input:focus, .container select:focus {
-    border-color: #007bff;
-    outline: none;
-    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+.container input:focus,
+.container select:focus {
+  border-color: #007bff;
+  outline: none;
+  box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
 }
 .container input[type="date"] {
-    padding: 10px;
-    font-size: 15px;
-    color: #000;
-    width: 100%; /* Align with other inputs */
+  padding: 10px;
+  font-size: 15px;
+  color: #000;
+  width: 100%; /* Align with other inputs */
 }
-
 
 /* pollpage.php */
 /* Custom styles for poll options */
 /* pollpage.php */
 /* Custom styles for poll options */
 .content-box2 {
-    background-color: white;
-    padding: 1.5em;
-    border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    width: 600px;
-    margin-top: 11%;
-    margin-left: 20%;
-    text-align: center;
+  background-color: white;
+  padding: 1.5em;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  width: 600px;
+  margin-top: 11%;
+  margin-left: 20%;
+  text-align: center;
 }
 .poll-option-group {
-    display: flex;
-    justify-content: center; /* Align options horizontally in the center */
-    align-items: center; /* Vertically center the options */
-    gap: 20px; /* Space between Yes and No options */
-    margin: 30px 0; /* Increased margin for better spacing */
+  display: flex;
+  justify-content: center; /* Align options horizontally in the center */
+  align-items: center; /* Vertically center the options */
+  gap: 20px; /* Space between Yes and No options */
+  margin: 30px 0; /* Increased margin for better spacing */
 }
 
 .poll-option {
-    display: flex;
-    align-items: center;
-    gap: 10px; /* Space between radio button and label */
+  display: flex;
+  align-items: center;
+  gap: 10px; /* Space between radio button and label */
 }
 
 .custom-radio {
-    appearance: none; /* Remove default styling */
-    width: 20px;
-    height: 20px;
-    border: 2px solid #020625;
-    border-radius: 50%;
-    display: inline-block;
-    position: relative;
-    cursor: pointer;
-    outline: none;
-    transition: all 0.3s ease;
+  appearance: none; /* Remove default styling */
+  width: 20px;
+  height: 20px;
+  border: 2px solid #020625;
+  border-radius: 50%;
+  display: inline-block;
+  position: relative;
+  cursor: pointer;
+  outline: none;
+  transition: all 0.3s ease;
 }
 
 .custom-radio:checked {
-    background-color: #020625;
-    border-color: #020625;
+  background-color: #020625;
+  border-color: #020625;
 }
 
 .custom-radio:checked::after {
-    content: '';
-    width: 8px;
-    height: 8px;
-    background-color: white;
-    border-radius: 50%;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
+  content: "";
+  width: 8px;
+  height: 8px;
+  background-color: white;
+  border-radius: 50%;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
 }
 
 /* Updated container to center the poll card */
 .poll-dashboard {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: calc(100vh - 80px); /* Ensures proper height with header/footer */
-    padding: 20px;
-    background-color: #d7e0f7; /* Match the background */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: calc(100vh - 80px); /* Ensures proper height with header/footer */
+  padding: 20px;
+  background-color: #d7e0f7; /* Match the background */
 }
 
 /* Updated content box for the poll card */
 .poll-content-box {
-    background-color: white;
-    padding: 2em;
-    border-radius: 10px;
-    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2); /* Slightly stronger shadow */
-    width: 100%;
-    max-width: 700px; /* Constrain the maximum width */
-    margin: 0; /* Remove unwanted margin */
-    text-align: center;
+  background-color: white;
+  padding: 2em;
+  border-radius: 10px;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2); /* Slightly stronger shadow */
+  width: 100%;
+  max-width: 700px; /* Constrain the maximum width */
+  margin: 0; /* Remove unwanted margin */
+  text-align: center;
 }
 
 /* Poll Title */
 .poll-title {
-    font-size: 1.8em;
-    color: #020625;
-    margin-bottom: 1em;
+  font-size: 1.8em;
+  color: #020625;
+  margin-bottom: 1em;
 }
 
 /* Poll Description */
 .poll-description {
-    font-size: 1.1em;
-    line-height: 1.6;
-    color: #555;
-    margin-bottom: 2em;
+  font-size: 1.1em;
+  line-height: 1.6;
+  color: #555;
+  margin-bottom: 2em;
 }
 
 /* Poll Results */
 .poll-results h5 {
-    font-size: 1.2em;
-    color: #020625;
-    margin-bottom: 0.5em;
+  font-size: 1.2em;
+  color: #020625;
+  margin-bottom: 0.5em;
 }
 
 .poll-results p {
-    font-size: 1em;
-    color: #333;
-    margin-bottom: 0.5em;
+  font-size: 1em;
+  color: #333;
+  margin-bottom: 0.5em;
 }
 
 /* Submit Button */
 .btn-submit {
-    background-color: #020625;
-    color: white;
-    padding: 0.8em 2em;
-    font-size: 1.1em;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
+  background-color: #020625;
+  color: white;
+  padding: 0.8em 2em;
+  font-size: 1.1em;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
 }
 
 .btn-submit:hover {
-    background-color: #2d5591;
+  background-color: #2d5591;
 }
-
 
 /* jobs.php */
 /* Wrapper for job page content */
 .job-wrapper {
-    display: flex;
-    align-items: flex-start; /* Align items at the top */
-    justify-content: center;
-    min-height: 84.1vh; /* Ensure the wrapper fills the viewport height */
+  display: flex;
+  align-items: flex-start; /* Align items at the top */
+  justify-content: center;
+  min-height: 84.1vh; /* Ensure the wrapper fills the viewport height */
 }
 
 /* Main content box for job listings */
 .job-content-box {
-    background-color: white;
-    padding: 2em;
-    border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    width: 90%; /* Cover more screen width */
-    margin-top: 0; /* Remove extra space above the content box */
-    text-align: center;
+  background-color: white;
+  padding: 2em;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  width: 90%; /* Cover more screen width */
+  margin-top: 0; /* Remove extra space above the content box */
+  text-align: center;
 }
 
 /* Job listings table with updated border color */
 .job-listing-table {
-    width: 100%;
-    margin: 0;
-    border-collapse: collapse;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  margin: 0;
+  border-collapse: collapse;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
-.job-listing-table th, .job-listing-table td {
-    padding: 1em;
-    border: 1px solid #444; /* Darker border for better contrast */
-    text-align: left;
+.job-listing-table th,
+.job-listing-table td {
+  padding: 1em;
+  border: 1px solid #444; /* Darker border for better contrast */
+  text-align: left;
 }
 
-.job-listing-table th { 
-    background-color: #050b45;
-    color: white;
-    border-bottom: 3px solid #444; /* Add a thicker border under the header for separation */
-    border-right: 2px solid #333; /* Add a border to visually separate the columns */
+.job-listing-table th {
+  background-color: #050b45;
+  color: white;
+  border-bottom: 3px solid #444; /* Add a thicker border under the header for separation */
+  border-right: 2px solid #333; /* Add a border to visually separate the columns */
 }
 
 .job-listing-table td {
-    border-right: 1px solid #333; /* Add border between table cells */
+  border-right: 1px solid #333; /* Add border between table cells */
 }
 
 .job-listing-table tr:nth-child(even) {
-    background-color: #f2f2f2;
+  background-color: #f2f2f2;
 }
-th, td {
-    border: 1px solid #ddd;
-    background-color: #f2f2f2;
-    text-align: center; /* Center align text in the column headers */
-    padding: 10px;
+th,
+td {
+  border: 1px solid #ddd;
+  background-color: #f2f2f2;
+  text-align: center; /* Center align text in the column headers */
+  padding: 10px;
 }
-
 
 .button-container button {
-    background-color: #007BFF;
-    color: white;
-    padding: 0.7em 1.5em;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 1em;
+  background-color: #007bff;
+  color: white;
+  padding: 0.7em 1.5em;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 1em;
 }
 
 .button-container button:hover {
-    background-color: #555;
+  background-color: #555;
 }
 
-.d-md-block{
-    height: 100%;
-    display: block !important;
-    width: 10%;
+.d-md-block {
+  height: 100%;
+  display: block !important;
+  width: 10%;
 }
 
 .col-md-3 {
-    width: 12%;
-    height: 1000;
+  width: 12%;
+  height: 1000;
 }
 
 tr:nth-child(even) {
-    background-color: #e0e0e0;
+  background-color: #e0e0e0;
 }
 
 tr:hover {
-    background-color: #f1f1f1;
+  background-color: #f1f1f1;
 }
 
 .add-user-button {
-position: absolute;
-top: 10px;
-right: 10px;
-background-color: #000;
-color: white;
-border: none;
-width: 32px;
-height: 32px;
-display: flex;
-align-items: center;
-justify-content: center;
-cursor: pointer;
-transition: background-color 0.3s ease;
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background-color: #000;
+  color: white;
+  border: none;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
 }
 
 .add-user-button:hover {
-background-color: #333;
+  background-color: #333;
 }
-
 
 .poll-card {
-    position: relative;
+  position: relative;
 }
-
-
 
 /* user_page.php */
 /* Dashboard Layout */
 /* Dashboard Layout */
 .dashboard-container {
-    display: flex;
-    min-height: 100vh;
-    background-color: #d7e0f7;
+  display: flex;
+  min-height: 100vh;
+  background-color: #d7e0f7;
 }
 
 /* Sidebar */
 .sidebar {
-    width: 130px;
-    background-color: #020625;
-    color: white;
-    padding: 20px;
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    position: sticky;
-    top: 0;
-    height: 100vh;
+  width: 130px;
+  background-color: #020625;
+  color: white;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  position: sticky;
+  top: 0;
+  height: 100vh;
 }
 
 .sidebar-title {
-    margin-left: 3px;
-    font-size: 1.5em;
-    margin-bottom: 20px;
-    color: #92bbfa;
+  margin-left: 3px;
+  font-size: 1.5em;
+  margin-bottom: 20px;
+  color: #92bbfa;
 }
 
 .sidebar-links {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-    width: 100%;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  width: 100%;
 }
 
 .sidebar-links li {
-    margin-bottom: 10px;
-    width: 100%;
+  margin-bottom: 10px;
+  width: 100%;
 }
 
 .sidebar-links a {
-    color: white;
-    text-decoration: none;
-    padding: 10px;
-    display: block;
-    border-radius: 5px;
-    transition: background-color 0.3s;
+  color: white;
+  text-decoration: none;
+  padding: 10px;
+  display: block;
+  border-radius: 5px;
+  transition: background-color 0.3s;
 }
 
 .sidebar-links a:hover {
-    background-color: #2d5591;
+  background-color: #2d5591;
 }
 
 /* Main Content */
 .dashboard-main {
-    flex: 1;
-    padding: 20px;
+  flex: 1;
+  padding: 20px;
 }
 
 .dashboard-header {
-    margin-bottom: 20px;
+  margin-bottom: 20px;
 }
 
 .dashboard-header h1 {
-    font-size: 2em;
-    color: #333;
+  font-size: 2em;
+  color: #333;
 }
 
 /* Poll Cards */
 .poll-container {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 20px;
-    justify-content: space-between;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  justify-content: space-between;
 }
 
 .poll-card1 {
-    background-color: white;
-    border-radius: 15px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    width: calc(50% - 50px); /* Two cards per row */
-    padding: 20px;
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    text-align: left;
+  background-color: white;
+  border-radius: 15px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  width: calc(50% - 50px); /* Two cards per row */
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  text-align: left;
 }
 
 .poll-title {
-    font-size: 1.5em;
-    color: #020625;
-    margin-bottom: 10px;
+  font-size: 1.5em;
+  color: #020625;
+  margin-bottom: 10px;
 }
 
 .poll-description {
-    font-size: 1em;
-    margin-bottom: 15px;
-    color: #555;
+  font-size: 1em;
+  margin-bottom: 15px;
+  color: #555;
 }
 
 .poll-votes {
-    font-size: 0.9em;
-    color: #333;
-    margin-bottom: 15px;
+  font-size: 0.9em;
+  color: #333;
+  margin-bottom: 15px;
 }
 
 .poll-button {
-    align-self: flex-start;
-    background-color: #020625;
-    color: white;
-    text-decoration: none;
-    padding: 10px 20px;
-    border-radius: 5px;
-    font-size: 1em;
-    transition: background-color 0.3s;
+  align-self: flex-start;
+  background-color: #020625;
+  color: white;
+  text-decoration: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  font-size: 1em;
+  transition: background-color 0.3s;
 }
 
 .poll-button:hover {
-    background-color: #2d5591;
+  background-color: #2d5591;
 }
 
 .poll-button-yellow {
-    display: inline-block;
-    padding: 10px 15px;
-    font-size: 0.9em;
-    text-decoration: none;
-    border-radius: 5px;
-    text-align: center;
-    background-color: #5897f6;
-    color: #fff;
-    border: none;
+  display: inline-block;
+  padding: 10px 15px;
+  font-size: 0.9em;
+  text-decoration: none;
+  border-radius: 5px;
+  text-align: center;
+  background-color: #5897f6;
+  color: #fff;
+  border: none;
 }
 
 .poll-button-yellow:hover {
-    background-color: #92bbfa;
+  background-color: #92bbfa;
 }
 
 .config-container {
-    display: flex;
-    justify-content: center;
-    align-items: flex-start; /* Align at the top */
-    height: auto; /* Adjust height dynamically */
-    margin: 2em auto; /* Add spacing around the container */
-    width: 90%; /* Ensure it fits within the wrapper */
+  display: flex;
+  justify-content: center;
+  align-items: flex-start; /* Align at the top */
+  height: auto; /* Adjust height dynamically */
+  margin: 2em auto; /* Add spacing around the container */
+  width: 90%; /* Ensure it fits within the wrapper */
 }
 
 .config-box {
-    background-color: #FFFFFF; /* White background for the box */
-    padding: 1.5em; /* Adjust padding */
-    border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow */
-    width: 50%; /* Match width with the other page's content box */
-    text-align: center; /* Center-align content inside the box */
+  background-color: #ffffff; /* White background for the box */
+  padding: 1.5em; /* Adjust padding */
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+  width: 50%; /* Match width with the other page's content box */
+  text-align: center; /* Center-align content inside the box */
 }
 
 .config-box h1 {
-    text-align: center;
-    color: #050B45; /* Navy blue */
-    margin-bottom: 1em;
+  text-align: center;
+  color: #050b45; /* Navy blue */
+  margin-bottom: 1em;
 }
 
 .config-box form {
-    display: flex;
-    flex-direction: column;
+  display: flex;
+  flex-direction: column;
 }
 
 .config-box label {
-    font-weight: bold;
-    margin-top: 1em;
-    text-align: left; /* Align labels to the left */
+  font-weight: bold;
+  margin-top: 1em;
+  text-align: left; /* Align labels to the left */
 }
 
 .config-box input,
 .config-box select {
-    padding: 0.5em;
-    font-size: 1em;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    margin-top: 0.5em;
+  padding: 0.5em;
+  font-size: 1em;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  margin-top: 0.5em;
 }
 
 .config-box button {
-    background-color: #000; /* Blue button */
-    color: white;
-    padding: 0.7em;
-    border: none;
-    border-radius: 5px;
-    margin-top: 1.5em;
-    cursor: pointer;
-    font-size: 1em;
+  background-color: #000; /* Blue button */
+  color: white;
+  padding: 0.7em;
+  border: none;
+  border-radius: 5px;
+  margin-top: 1.5em;
+  cursor: pointer;
+  font-size: 1em;
 }
 
 .config-box button:hover {
-    background-color: #333; /* Darker blue */
+  background-color: #333; /* Darker blue */
 }
 
 .form-container-large {
-    background-color: #ffffff;
-    margin: 2% auto;
-    padding: 3em;
-    border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    width: 80%; /* Cover more of the page */
-    max-width: 1200px;
-    text-align: center;
+  background-color: #ffffff;
+  margin: 2% auto;
+  padding: 3em;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  width: 80%; /* Cover more of the page */
+  max-width: 1200px;
+  text-align: center;
 }
 .form-container-large h1 {
-    font-size: 2.5em;
-    margin-bottom: 1em;
-    color: #020625;
+  font-size: 2.5em;
+  margin-bottom: 1em;
+  color: #020625;
 }
 .form-container-large .form-group {
-    margin-bottom: 1.5em;
-    text-align: left;
+  margin-bottom: 1.5em;
+  text-align: left;
 }
 .form-container-large .form-group label {
-    display: block;
-    font-weight: bold;
-    margin-bottom: 0.5em;
+  display: block;
+  font-weight: bold;
+  margin-bottom: 0.5em;
 }
 .form-container-large .form-control {
-    width: 100%;
-    padding: 0.75em;
-    border: 1px solid #ccc;
-    border-radius: 5px;
+  width: 100%;
+  padding: 0.75em;
+  border: 1px solid #ccc;
+  border-radius: 5px;
 }
 .form-container-large .form-actions {
-    margin-top: 2em;
+  margin-top: 2em;
 }
 .form-container-large .form-actions button {
-    background-color: #020625;
-    color: white;
-    border: none;
-    padding: 0.75em 1.5em;
-    border-radius: 5px;
-    font-size: 1em;
-    cursor: pointer;
+  background-color: #020625;
+  color: white;
+  border: none;
+  padding: 0.75em 1.5em;
+  border-radius: 5px;
+  font-size: 1em;
+  cursor: pointer;
 }
 .form-container-large .form-actions button:hover {
-    background-color: #0056b3;
+  background-color: #0056b3;
 }
 
