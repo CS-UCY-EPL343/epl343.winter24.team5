@@ -7,6 +7,7 @@ require 'vendor/autoload.php'; // Φόρτωση PHPMailer
 
 // Σύνδεση με τη βάση δεδομένων
 try {
+    echo "rek";
     $pdo = new PDO('sqlsrv:Server=epl343project.database.windows.net;Database=EPL343DB', 'epl343project', '5thSemesterPomba!', [
         PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
     ]);
@@ -27,7 +28,6 @@ function sendEmail($recipientEmail, $recipientName, $pollTitle) {
         $mail->Password = 'dqog gaos gpce flfj'; 
         $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
         $mail->Port = 587;
-
         // Ρυθμίσεις αποστολέα και παραλήπτη
         $mail->setFrom('mitilineos123@gmail.com', 'Lil Indian');
         $mail->addAddress($recipientEmail, $recipientName);
