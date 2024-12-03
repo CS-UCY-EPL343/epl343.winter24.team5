@@ -8,7 +8,7 @@ if (session_status() === PHP_SESSION_NONE) {
 }
 
 if (!isset($_SESSION['user_id'])) {
-    header("Location: login.php"); // Redirect to login if not authenticated
+    header("Location: sign_in_account.php"); // Redirect to login if not authenticated
     exit();
 }
 
@@ -61,9 +61,9 @@ $jobs = getJobListings();
 
                 <!-- Create New Job Button (Visible to Admins Only) -->
                 <?php if ($is_admin): ?>
-                    <div style="display: flex; justify-content: center; gap: 10px; margin-bottom: 1px;">
+                    <div style="display: flex; justify-content: center; gap: 10px; margin-bottom: 15px;">
                         <form method="GET" action="create_job.php" style="display:inline;">
-                            <button type="submit" class="button">Create New Job</button>
+                            <button type="submit" class="configure-button">Create New Job</button>
                         </form>
                     </div>
                 <?php endif; ?>
