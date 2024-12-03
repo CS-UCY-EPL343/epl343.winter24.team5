@@ -8,8 +8,8 @@ if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
 
-if (!isset($_SESSION['ser_ID'])) {
-    header("Location: sign_in_account.php"); // Redirect to login if not authenticated
+if (!isset($_SESSION['User_ID'])) {
+    header("Location: login.php"); // Redirect to login if not authenticated
     exit();
 }
 
