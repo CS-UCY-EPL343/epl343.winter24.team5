@@ -68,8 +68,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $stmt->execute();
 
                 // Set success message in session and redirect
-                $_SESSION['success_message'] = 'Job and programs inserted successfully!';
-                header('Location: success.php');
+                $_SESSION['message'] = 'Job and programs inserted successfully!';
+                header('Location: create_job.php'); 
                 exit();
             } catch (PDOException $e) {
                 $message = 'Error inserting job: ' . $e->getMessage();
@@ -80,6 +80,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 }
 
+// Check for session message and display it
 if (isset($_SESSION['message'])) {
     $message = $_SESSION['message'];
     unset($_SESSION['message']); // Clear the session message
