@@ -73,7 +73,7 @@ try {
                             <p class="poll-votes">Expiration: <?= htmlspecialchars($poll['Expiration_Date']) ?></p>
                             <div class="poll-actions">
                                 <a href="admin_view_polls.php?poll_id=<?= htmlspecialchars($poll['Poll_ID']) ?>" class="poll-button">View</a>
-                                <a href="admin_view_polls.php?poll_id=<?= htmlspecialchars($poll['Poll_ID']) ?>" class="poll-button-yellow">Edit</a>
+                                <a href="admin_edit_polls.php?poll_id=<?= htmlspecialchars($poll['Poll_ID']) ?>" class="poll-button-yellow">Edit</a>
                             </div>
                         </div>
                     <?php endforeach; ?>
