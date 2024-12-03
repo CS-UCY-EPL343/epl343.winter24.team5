@@ -488,7 +488,7 @@ function handleSqlError(PDOException $e)
 //     }
 // }
 
-function editPoll($pollId, $newStatus, $newDescription, $newExpirationDate)
+function editPoll($pollId, $newTitle, $newDescription, $newExpirationDate)
 {
     try {
         $pdo = getDatabaseConnection(); // Ensure this function connects to your database
@@ -497,14 +497,14 @@ function editPoll($pollId, $newStatus, $newDescription, $newExpirationDate)
         $stmt = $pdo->prepare("
             EXEC EditPoll 
                 @Poll_ID = :Poll_ID, 
-                @New_Status = :New_Status, 
+                @New_Title = :New_Title, 
                 @New_Description = :New_Description, 
                 @New_Expiration_Date = :New_Expiration_Date
         ");
 
         // Bind the parameters
         $stmt->bindParam(':Poll_ID', $pollId, PDO::PARAM_INT);
-        $stmt->bindParam(':New_Status', $newStatus, PDO::PARAM_STR);
+        $stmt->bindParam(':New_Title', $newTitle, PDO::PARAM_STR);
         $stmt->bindParam(':New_Description', $newDescription, PDO::PARAM_STR);
         $stmt->bindParam(':New_Expiration_Date', $newExpirationDate, PDO::PARAM_STR);
 
@@ -558,4 +558,12 @@ function searchTasksByTitle($searchTerm)
         handleSqlError($e); // Log or display the error
         return []; // Return an empty array on error
     }
+}
+function getUserDetails($userId)
+{
+    $pdo = getDatabaseConnection();
+    $stmt = $pdo->prepare("SELECT Email_Address, First_Name, Last_Name FROM [dbo].[USER] WHERE User_ID = :userId");
+    $stmt->bindParam(':userId', $userId, PDO::PARAM_INT);
+    $stmt->execute();
+    return $stmt->fetch(PDO::FETCH_ASSOC);
 }
