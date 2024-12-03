@@ -1,5 +1,9 @@
 <?php
 
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\Exception;
+
+require 'vendor/autoload.php'; // Φόρτωση PHPMailer
 function getDatabaseConnection()
 {
     try {
@@ -159,52 +163,10 @@ function getJobListings()
     }
 }
 
-function insertJobConfiguration(
-    $jobId,
-    $userId,
-    $configName,
-    $parameters = null,
-    $scheduleTime = null,
-    $recurrence = null
-) {
-    try {
-        // Establish database connection
-        $conn = getDatabaseConnection();
-
-        // Prepare the stored procedure call for inserting job configuration
-        $stmt = $conn->prepare("
-            EXEC [dbo].[InsertJobConfiguration] 
-            @Job_ID = :job_id,
-            @User_ID = :user_id,
-            @Configuration_Name = :config_name,
-            @Parameters = :parameters,
-            @Schedule_Time = :schedule_time,
-            @Recurrence = :recurrence
-        ");
-
-        // Bind parameters
-        $stmt->bindParam(':job_id', $jobId, PDO::PARAM_INT);
-        $stmt->bindParam(':user_id', $userId, PDO::PARAM_INT);
-        $stmt->bindParam(':config_name', $configName);
-        $stmt->bindParam(':parameters', $parameters);
-        $stmt->bindParam(':schedule_time', $scheduleTime);
-        $stmt->bindParam(':recurrence', $recurrence);
-
-        // Execute the query
-        $stmt->execute();
-
-        return null; // Return null for success
-    } catch (PDOException $e) {
-        handleSqlError($e); // Handle SQL errors
-        return false; // Return false on failure
-    }
-}
-
 function createJobConfiguration($jobId, $userId, $configName, $parameters = null, $scheduleTime = null, $recurrence = null)
 {
     global $db; // Assuming `$db` is the PDO connection initialized in `db_functions.php`
-    // Establish database connection
-    $db = getDatabaseConnection();
+
     try {
         $sql = "
             INSERT INTO [dbo].[JOB_CONFIGURATION] (
@@ -459,76 +421,76 @@ function handleSqlError(PDOException $e)
 /**
  * Αποστολή email πρόσκλησης για συμμετοχή σε δημοσκόπηση
  */
-// function sendPollInvitationEmail($recipientEmail, $recipientName, $pollTitle)
-// {
-//     $mail = new PHPMailer(true);
+function sendPollInvitationEmail($recipientEmail, $recipientName, $pollTitle)
+{
+    $mail = new PHPMailer(true);
 
-//     try {
-//         // Ρυθμίσεις SMTP
-//         $mail->isSMTP();
-//         $mail->Host = 'smtp.gmail.com';
-//         $mail->SMTPAuth = true;
-//         $mail->Username = 'mitilineos123@gmail.com'; // Ενημέρωσε με το email σου
-//         $mail->Password = 'dqog gaos gpce flfj';     // Ενημέρωσε με το App Password σου
-//         $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
-//         $mail->Port = 587;
+    try {
+        // Ρυθμίσεις SMTP
+        $mail->isSMTP();
+        $mail->Host = 'smtp.gmail.com';
+        $mail->SMTPAuth = true;
+        $mail->Username = 'mitilineos123@gmail.com'; // Ενημέρωσε με το email σου
+        $mail->Password = 'dqog gaos gpce flfj';     // Ενημέρωσε με το App Password σου
+        $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
+        $mail->Port = 587;
 
-//         // Ρυθμίσεις αποστολέα και παραλήπτη
-//         $mail->setFrom('mitilineos123@gmail.com', 'System');
-//         $mail->addAddress($recipientEmail, $recipientName);
+        // Ρυθμίσεις αποστολέα και παραλήπτη
+        $mail->setFrom('mitilineos123@gmail.com', 'System');
+        $mail->addAddress($recipientEmail, $recipientName);
 
-//         // Περιεχόμενο email
-//         $mail->isHTML(true);
-//         $mail->Subject = 'You have been added to a poll!';
-//         $mail->Body = "
-//             <h1>Hello, $recipientName!</h1>
-//             <p>You have been added to the poll: <strong>$pollTitle</strong>.</p>
-//             <p>Please login to the system to participate.</p>
-//         ";
+        // Περιεχόμενο email
+        $mail->isHTML(true);
+        $mail->Subject = 'You have been added to a poll!';
+        $mail->Body = "
+            <h1>Hello, $recipientName!</h1>
+            <p>You have been added to the poll: <strong>$pollTitle</strong>.</p>
+            <p>Please login to the system to participate.</p>
+        ";
 
-//         $mail->send();
-//         return true;
-//     } catch (Exception $e) {
-//         error_log("Email could not be sent. Error: {$mail->ErrorInfo}");
-//         return false;
-//     }
-// }
+        $mail->send();
+        return true;
+    } catch (Exception $e) {
+        error_log("Email could not be sent. Error: {$mail->ErrorInfo}");
+        return false;
+    }
+}
 
-// /**
-//  * Λήψη και αποστολή email σε χρήστη για δημοσκόπηση
-//  */
-// function notifyUserForPoll($voterId, $pollId)
-// {
-//     try {
-//         $conn = getDatabaseConnection();
+/**
+ * Λήψη και αποστολή email σε χρήστη για δημοσκόπηση
+ */
+function notifyUserForPoll($voterId, $pollId)
+{
+    try {
+        $conn = getDatabaseConnection();
 
-//         // Λήψη πληροφοριών χρήστη και δημοσκόπησης
-//         $stmt = $conn->prepare("
-//             SELECT 
-//                 u.Email_Address, 
-//                 u.First_Name, 
-//                 p.Title 
-//             FROM dbo.USER u
-//             JOIN dbo.POLL p ON p.Poll_ID = :pollId
-//             WHERE u.User_ID = :voterId
-//         ");
-//         $stmt->execute(['voterId' => $voterId, 'pollId' => $pollId]);
-//         $userInfo = $stmt->fetch(PDO::FETCH_ASSOC);
+        // Λήψη πληροφοριών χρήστη και δημοσκόπησης
+        $stmt = $conn->prepare("
+            SELECT 
+                u.Email_Address, 
+                u.First_Name, 
+                p.Title 
+            FROM dbo.USER u
+            JOIN dbo.POLL p ON p.Poll_ID = :pollId
+            WHERE u.User_ID = :voterId
+        ");
+        $stmt->execute(['voterId' => $voterId, 'pollId' => $pollId]);
+        $userInfo = $stmt->fetch(PDO::FETCH_ASSOC);
 
-//         if ($userInfo) {
-//             $emailSent = sendPollInvitationEmail($userInfo['Email_Address'], $userInfo['First_Name'], $userInfo['Title']);
-//             if ($emailSent) {
-//                 return "Email sent successfully to {$userInfo['First_Name']}!";
-//             } else {
-//                 return "Failed to send email.";
-//             }
-//         } else {
-//             return "User or Poll not found.";
-//         }
-//     } catch (PDOException $e) {
-//         handleSqlError($e);
-//     }
-// }
+        if ($userInfo) {
+            $emailSent = sendPollInvitationEmail($userInfo['Email_Address'], $userInfo['First_Name'], $userInfo['Title']);
+            if ($emailSent) {
+                return "Email sent successfully to {$userInfo['First_Name']}!";
+            } else {
+                return "Failed to send email.";
+            }
+        } else {
+            return "User or Poll not found.";
+        }
+    } catch (PDOException $e) {
+        handleSqlError($e);
+    }
+}
 
 function editPoll($pollId, $newTitle, $newDescription, $newExpirationDate)
 {
@@ -559,10 +521,9 @@ function editPoll($pollId, $newTitle, $newDescription, $newExpirationDate)
     }
 }
 
-function createTask($creatorId, $title, $description, $dateDue)
-{
+function createTask($creatorId, $title, $description, $dateDue) {
     try {
-        $pdo = getDatabaseConnection();
+        $pdo = getDatabaseConnection(); 
         $stmt = $pdo->prepare("EXEC CreateTask :user_id, :title, :description, :date_due");
         $stmt->bindParam(':user_id', $creatorId, PDO::PARAM_INT);
         $stmt->bindParam(':title', $title, PDO::PARAM_STR);
@@ -576,10 +537,9 @@ function createTask($creatorId, $title, $description, $dateDue)
     }
 }
 
-function getAllTasks()
-{
+function getAllTasks() {
     try {
-        $pdo = getDatabaseConnection();
+        $pdo = getDatabaseConnection(); 
         $stmt = $pdo->query("EXEC GetAllTasks"); // Call the stored procedure
         return $stmt->fetchAll(PDO::FETCH_ASSOC); // Fetch results as an associative array
     } catch (PDOException $e) {
@@ -588,8 +548,7 @@ function getAllTasks()
     }
 }
 
-function searchTasksByTitle($searchTerm)
-{
+function searchTasksByTitle($searchTerm) {
     try {
         $pdo = getDatabaseConnection(); // Ensure this returns a valid PDO connection
         $stmt = $pdo->prepare("EXEC SearchTasksByTitle :search");
@@ -601,11 +560,12 @@ function searchTasksByTitle($searchTerm)
         return []; // Return an empty array on error
     }
 }
-function getUserDetails($userId)
-{
+
+function getUserDetails($userId) {
     $pdo = getDatabaseConnection();
     $stmt = $pdo->prepare("SELECT Email_Address, First_Name, Last_Name FROM [dbo].[USER] WHERE User_ID = :userId");
     $stmt->bindParam(':userId', $userId, PDO::PARAM_INT);
     $stmt->execute();
     return $stmt->fetch(PDO::FETCH_ASSOC);
 }
+
