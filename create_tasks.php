@@ -112,8 +112,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['title'], $_POST['desc
         <main class="dashboard-main">
             <div class="form-container-large">
                 <div style="text-align: right; margin-top: 5px;">
-                    <a href="Tasks.php" class="poll-button">Back to Tasks</a>
-                </div>
+                <button onclick="window.history.back()" class="go-button" style="width: 10%">Go Back</button></div>
                 <h1>Create Task</h1>
                 <?php if (isset($success)): ?>
                     <div class="alert alert-success" role="alert">
