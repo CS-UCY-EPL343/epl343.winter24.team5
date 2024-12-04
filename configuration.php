@@ -82,7 +82,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <div class="dashboard-container">
         <!-- Sidebar -->
         <aside class="sidebar">
-            <h3 class="sidebar-title"><?= $is_admin ? 'Admin Dashboard' : 'User Dashboard'; ?></h3>
+        <h3 class="sidebar-title"><?= $is_admin ? 'Admin Dashboard' : 'User Dashboard'; ?></h3>
             <ul class="sidebar-links">
                 <!-- Common Links -->
                 <li>
@@ -93,41 +93,44 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     <a href="jobs.php"
                         class="<?= basename($_SERVER['PHP_SELF']) == 'jobs.php' ? 'active' : ''; ?>">Jobs</a>
                 </li>
+                <?php if (!$is_admin): ?>
                 <li>
                     <a href="assigned_tasks.php"
-                        class="<?= basename($_SERVER['PHP_SELF']) == 'Tasks.php' ? 'active' : ''; ?>">Assigned Tasks</a>
+                        class="<?= basename($_SERVER['PHP_SELF']) === 'assigned_tasks.php' ? 'active' : ''; ?>">
+                        Assigned Tasks
+                    </a>
                 </li>
+                <?php endif; ?>
                 <li>
                     <a href="Tasks.php"
                         class="<?= basename($_SERVER['PHP_SELF']) == 'Tasks.php' ? 'active' : ''; ?>">Tasks</a>
                 </li>
-                
+
 
                 <!-- Admin-Only Links -->
                 <?php if ($is_admin): ?>
-                    <li>
-                        <a href="create_poll.php"
-                            class="<?= basename($_SERVER['PHP_SELF']) == 'create_poll.php' ? 'active' : ''; ?>">Create Poll</a>
-                    </li>
+                <li>
+                    <a href="create_poll.php"
+                        class="<?= basename($_SERVER['PHP_SELF']) == 'create_poll.php' ? 'active' : ''; ?>">Create
+                        Poll</a>
+                </li>
 
-                    <li>
-                        <a href="pending_user_approvals.php"
-                            class="<?= basename($_SERVER['PHP_SELF']) == 'pending_user_approvals.php' ? 'active' : ''; ?>">User Approvals</a>
-                    </li>
-                    <?php endif; ?>  
-
-                    <li>
-                        <a href="create_tasks.php"
-                            class="<?= basename($_SERVER['PHP_SELF']) == 'create_tasks.php' ? 'active' : ''; ?>">Create Task</a>
-                    </li>
-                    <li>
+                <li>
+                    <a href="pending_user_approvals.php"
+                        class="<?= basename($_SERVER['PHP_SELF']) == 'pending_user_approvals.php' ? 'active' : ''; ?>">User
+                        Approvals</a>
+                </li>
+                <?php endif; ?>
+                <li>
+                    <a href="create_tasks.php"
+                        class="<?= basename($_SERVER['PHP_SELF']) == 'create_tasks.php' ? 'active' : ''; ?>">Create
+                        Task</a>
+                </li>
+                <li>
                     <a href="writeAiChat.php"
                         class="<?= basename($_SERVER['PHP_SELF']) == 'writeAiChat.php' ? 'active' : ''; ?>">ChatBot</a>
                 </li>
-
             </ul>
-
-
 
             <!-- SVG at the bottom -->
             <div class="sidebar-bottom">

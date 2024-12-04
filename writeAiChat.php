@@ -52,12 +52,14 @@ $is_admin = $user_role === 'Admin';
                         Jobs
                     </a>
                 </li>
+                <?php if (!$is_admin): ?>
                 <li>
                     <a href="assigned_tasks.php"
                         class="<?= basename($_SERVER['PHP_SELF']) === 'assigned_tasks.php' ? 'active' : ''; ?>">
                         Assigned Tasks
                     </a>
                 </li>
+                <?php endif; ?>
                 <li>
                     <a href="Tasks.php"
                         class="<?= basename($_SERVER['PHP_SELF']) === 'Tasks.php' ? 'active' : ''; ?>">
