@@ -35,7 +35,6 @@ if (!$job) {
 $message = '';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    // Get updated fields
     $job_name = $_POST['job_name'] ?? '';
     $job_description = $_POST['job_description'] ?? '';
 
