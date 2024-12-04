@@ -42,33 +42,29 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Retrieve configuration details from the form
     $configName = $_POST['config_name'] ?? null;
 
-    // Concatenate parameters based on dynamic input
+    // Concatenate parameters based on dynamic input (if programs exist)
     $parameters = [];
-    foreach ($programs as $index => $program) {
-        $param_key = 'param' . $index;
-            if (!empty($_POST[$param_key])) {
+    if (!empty($programs)) {
+        foreach ($programs as $index => $program) {
+            $param_key = 'param' . $index;
+            if (isset($_POST[$param_key]) && trim($_POST[$param_key]) !== '') {
+                // Add program name (prefix) with language in parentheses and parameter as "Program_Name (Language): Parameter"
                 $parameters[] = $program['Program_Name'] . ' (' . $program['Language'] . '): ' . $_POST[$param_key];
             }
-}
-
-// Join parameters only if the array is not empty
-$parameters_string = !empty($parameters) ? implode('; ', $parameters) : null;
-
-    $parameters_string = implode('; ', $parameters); // Join parameters with a semicolon and space
-
-    // Call the function to insert the job configuration (pass single string for parameters)
-    if (empty($parameters_string)) {
-        $errorMessage = "Please provide parameters for at least one program.";
-    } else {
-        // Call the function to insert the job configuration
-        $result = insertJobConfiguration($jobID, $user_id, $configName, $parameters_string);
-    
-        if ($result) {
-            $successMessage = "Job configuration saved successfully.";
-        } else {
-            $errorMessage = "Failed to save job configuration.";
         }
-    }    
+    }
+
+    // Join parameters only if there are programs and parameters are provided
+    $parameters_string = !empty($parameters) ? implode('; ', $parameters) : null;
+
+    // Call the function to insert the job configuration
+    $result = insertJobConfiguration($jobID, $user_id, $configName, $parameters_string);
+
+    if ($result) {
+        $successMessage = "Job configuration saved successfully.";
+    } else {
+        $errorMessage = "Failed to save job configuration.";
+    }
 }
 ?>
 
@@ -134,18 +130,24 @@ $parameters_string = !empty($parameters) ? implode('; ', $parameters) : null;
                             </tr>
 
                             <!-- Dynamic Parameter Fields -->
-                            <?php foreach ($programs as $index => $program): ?>
-                            <tr>
-                                <td>
-                                    <label for="param<?= $index; ?>">
-                                        Parameter(s) for <?= htmlspecialchars($program['Program_Name']) . ' (' . htmlspecialchars($program['Language']) . ')'; ?>:
-                                    </label>
-                                </td>
-                                <td>
-                                    <input type="text" id="param<?= $index; ?>" name="param<?= $index; ?>">
-                                </td>
-                            </tr>
-                            <?php endforeach; ?>
+                            <?php if (!empty($programs)): ?>
+                                <?php foreach ($programs as $index => $program): ?>
+                                <tr>
+                                    <td>
+                                        <label for="param<?= $index; ?>">
+                                            Parameter(s) for <?= htmlspecialchars($program['Program_Name']) . ' (' . htmlspecialchars($program['Language']) . ')'; ?>:
+                                        </label>
+                                    </td>
+                                    <td>
+                                        <input type="text" id="param<?= $index; ?>" name="param<?= $index; ?>">
+                                    </td>
+                                </tr>
+                                <?php endforeach; ?>
+                            <?php else: ?>
+                                <tr>
+                                    <td colspan="2" style="text-align: center;">No programs linked to this job.</td>
+                                </tr>
+                            <?php endif; ?>
                         </table>
 
                         <input type="hidden" name="Job_ID" value="<?= htmlspecialchars($jobID); ?>">
