@@ -62,6 +62,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['title'], $_POST['desc
         <!-- Main Content -->
         <main class="dashboard-main">
             <div class="form-container-large">
+            <div style="text-align: right; margin-top: 5px;">
+                    <a href="admin_page.php" class="poll-button">Back to Admin Page</a>
+                </div>
                 <h1>Create Task</h1>
                 <?php if (isset($success)): ?>
                     <div class="alert alert-success" role="alert">

@@ -492,7 +492,7 @@ function notifyUserForPoll($voterId, $pollId)
     }
 }
 
-function editPoll($pollId, $newTitle, $newDescription, $newExpirationDate)
+function editPoll($pollId, $newTitle, $newDescription, $newExpirationDate, $newStatus)
 {
     try {
         $pdo = getDatabaseConnection(); // Ensure this function connects to your database
@@ -503,7 +503,8 @@ function editPoll($pollId, $newTitle, $newDescription, $newExpirationDate)
                 @Poll_ID = :Poll_ID, 
                 @New_Title = :New_Title, 
                 @New_Description = :New_Description, 
-                @New_Expiration_Date = :New_Expiration_Date
+                @New_Expiration_Date = :New_Expiration_Date,
+                @New_Status = :New_Status
         ");
 
         // Bind the parameters
@@ -511,6 +512,8 @@ function editPoll($pollId, $newTitle, $newDescription, $newExpirationDate)
         $stmt->bindParam(':New_Title', $newTitle, PDO::PARAM_STR);
         $stmt->bindParam(':New_Description', $newDescription, PDO::PARAM_STR);
         $stmt->bindParam(':New_Expiration_Date', $newExpirationDate, PDO::PARAM_STR);
+        $stmt->bindParam(':New_Status', $newStatus, PDO::PARAM_STR);
+
 
         // Execute the stored procedure
         $stmt->execute();

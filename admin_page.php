@@ -155,7 +155,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['poll_id'])) {
                                 <div class="poll-actions">
                                     <a href="admin_view_polls.php?poll_id=<?= htmlspecialchars($poll['Poll_ID']) ?>" class="poll-button">View</a>
                                     <a href="admin_edit_polls.php?poll_id=<?= htmlspecialchars($poll['Poll_ID']) ?>" class="poll-button-yellow">Edit</a>
-                                    <form method="POST" style="display: inline;">
+                                    <form method="POST">
                                         <input type="hidden" name="poll_id" value="<?= htmlspecialchars($poll['Poll_ID']) ?>">
                                         <button type="submit" class="poll-button-red">Finish Poll</button>
                                     </form>

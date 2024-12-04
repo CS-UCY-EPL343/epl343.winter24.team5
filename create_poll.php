@@ -35,12 +35,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['title'], $_POST['desc
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Create Poll</title>
     <link rel="stylesheet" href="styles.css"> <!-- Include your styles.css -->
 </head>
+
 <body>
     <!-- Wrapper -->
     <div class="dashboard-container">
@@ -49,7 +51,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['title'], $_POST['desc
             <h3 class="sidebar-title">Admin Dashboard</h3>
             <ul class="sidebar-links">
                 <li><a href="create_poll.php" class="active">Create Poll</a></li>
-                <li><a href="create_tasks.php">Create a Task</a></li> 
+                <li><a href="create_tasks.php">Create a Task</a></li>
                 <li><a href="admin_page.php">Polls</a></li>
                 <li><a href="pending_user_approvals.php">User Approvals</a></li>
                 <li><a href="jobs.php">Jobs</a></li>
@@ -61,17 +63,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['title'], $_POST['desc
         <!-- Main Content -->
         <main class="dashboard-main">
             <div class="form-container-large">
+                <div style="text-align: right; margin-top: 5px;">
+                    <a href="admin_page.php" class="poll-button">Back to Admin Page</a>
+                </div>
+
                 <h1>Create Poll</h1>
                 <?php if (isset($success)): ?>
-                    <div class="alert alert-success" role="alert">
-                        <?= htmlspecialchars($success) ?>
-                    </div>
+                <div class="alert alert-success" role="alert">
+                    <?= htmlspecialchars($success) ?>
+                </div>
                 <?php endif; ?>
 
                 <?php if (isset($error)): ?>
-                    <div class="alert alert-danger" role="alert">
-                        <?= htmlspecialchars($error) ?>
-                    </div>
+                <div class="alert alert-danger" role="alert">
+                    <?= htmlspecialchars($error) ?>
+                </div>
                 <?php endif; ?>
 
                 <form method="post" action="">
@@ -81,11 +87,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['title'], $_POST['desc
                     </div>
                     <div class="form-group">
                         <label for="description">Description</label>
-                        <textarea name="description" id="description" class="form-control" maxlength="255" required></textarea>
+                        <textarea name="description" id="description" class="form-control" maxlength="255"
+                            required></textarea>
                     </div>
                     <div class="form-group">
                         <label for="expiration_date">Expiration Date</label>
-                        <input type="datetime-local" name="expiration_date" id="expiration_date" class="form-control" required>
+                        <input type="datetime-local" name="expiration_date" id="expiration_date" class="form-control"
+                            required>
                     </div>
                     <div class="form-group">
                         <label for="status">Status</label>
@@ -102,4 +110,5 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['title'], $_POST['desc
         </main>
     </div>
 </body>
+
 </html>
