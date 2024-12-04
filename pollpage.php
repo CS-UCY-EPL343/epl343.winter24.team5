@@ -8,6 +8,8 @@ if (!isset($_SESSION['role']) || $_SESSION['role'] !== 'User') {
     exit();
 }
 
+$user_role = $_SESSION['role'] ?? 'User';
+$is_admin = $user_role === 'Admin';
 // Check if User_ID exists in the session
 if (!isset($_SESSION['user_id'])) {
     header("Location: index.php"); // Redirect if User_ID is not set in the session
@@ -69,7 +71,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <body>
     <div class="dashboard-container">
         <!-- Sidebar -->
-        <?php require_once 'user_dashboard.php'; ?>
+        <aside class="sidebar">
+            <h3 class="sidebar-title"><?= $is_admin ? 'Admin Dashboard' : 'User Dashboard'; ?></h3>
+            <ul class="sidebar-links">
+                <li><a href="admin_page.php">Polls</a></li>
+                <li><a href="jobs.php">Jobs</a></li>
+                <li><a href="writeAiChat.php">ChatBot</a></li>
+                <li><a href="#settings">Settings</a></li>
+                <?php if ($is_admin): ?>
+                    <li><a href="create_poll.php">Create Poll</a></li>
+                    <li><a href="create_tasks.php">Create a Task</a></li>
+                    <li><a href="pending_user_approvals.php">User Approvals</a></li>
+                    <li><a href="Tasks.php">Tasks</a></li>
+                <?php endif; ?>
+            </ul>
+        </aside>
         <!-- Main Content -->
         <main class="dashboard-main">
             <?php if (isset($error)): ?>
