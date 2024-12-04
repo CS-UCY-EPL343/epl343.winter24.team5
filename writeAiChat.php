@@ -85,13 +85,15 @@ $is_admin = $user_role === 'Admin';
                             User Approvals
                         </a>
                     </li>
-                <?php endif; ?>
-                <li>
+                    <?php else: ?>
+                        <li>
                     <a href="create_tasks_user.php"
                         class="<?= basename($_SERVER['PHP_SELF']) === 'create_tasks_user.php' ? 'active' : ''; ?>">
                         Create Task
                     </a>
                 </li>
+                <?php endif; ?>
+
                 <li>
                     <a href="#settings"
                         class="<?= basename($_SERVER['PHP_SELF']) === '#settings' ? 'active' : ''; ?>">
