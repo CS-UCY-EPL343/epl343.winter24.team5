@@ -122,7 +122,7 @@ try {
                             <p class="poll-votes">Votes: Yes <?= htmlspecialchars($poll['Votes_For']) ?> | No
                                 <?= htmlspecialchars($poll['Votes_Against']) ?></p>
                             <?php if ($poll['Status'] === "Finished"): ?>
-                                <p class="poll-status">Poll has concluded, Final Result: <?php if ($poll['Final_Verdict'] == 1): ?>
+                                <p class="poll-status">Poll has concluded. Final Result: <?php if ($poll['Final_Verdict'] == 1): ?>
                                         Decision Will Go Through
                                     <?php else: ?>
                                         Decision Will Not Go Through

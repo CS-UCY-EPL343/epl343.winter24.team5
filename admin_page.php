@@ -178,11 +178,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['poll_id'])) {
                                     <?php else: ?>
                                         Decision Will Not Go Through
                                     <?php endif; ?>
-                                </span>
-                                <div style="margin-left: 90%;">
+
                                     <a href=" admin_view_polls.php?poll_id=<?= htmlspecialchars($poll['Poll_ID']) ?>"
                                         class="poll-button">View</a>
-                                </div>
+
+                                </span>
                             <?php endif; ?>
                         </div>
                     <?php endforeach; ?>
