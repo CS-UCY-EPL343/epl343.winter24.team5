@@ -3,7 +3,7 @@
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
 
-require 'vendor/autoload.php'; // Φόρτωση PHPMailer
+require 'vendor/autoload.php'; 
 function getDatabaseConnection()
 {
     try {
@@ -524,9 +524,10 @@ function editPoll($pollId, $newTitle, $newDescription, $newExpirationDate, $newS
     }
 }
 
-function createTask($creatorId, $title, $description, $dateDue) {
+function createTask($creatorId, $title, $description, $dateDue)
+{
     try {
-        $pdo = getDatabaseConnection(); 
+        $pdo = getDatabaseConnection();
         $stmt = $pdo->prepare("EXEC CreateTask :user_id, :title, :description, :date_due");
         $stmt->bindParam(':user_id', $creatorId, PDO::PARAM_INT);
         $stmt->bindParam(':title', $title, PDO::PARAM_STR);
@@ -540,9 +541,10 @@ function createTask($creatorId, $title, $description, $dateDue) {
     }
 }
 
-function getAllTasks() {
+function getAllTasks()
+{
     try {
-        $pdo = getDatabaseConnection(); 
+        $pdo = getDatabaseConnection();
         $stmt = $pdo->query("EXEC GetAllTasks"); // Call the stored procedure
         return $stmt->fetchAll(PDO::FETCH_ASSOC); // Fetch results as an associative array
     } catch (PDOException $e) {
@@ -551,7 +553,8 @@ function getAllTasks() {
     }
 }
 
-function searchTasksByTitle($searchTerm) {
+function searchTasksByTitle($searchTerm)
+{
     try {
         $pdo = getDatabaseConnection(); // Ensure this returns a valid PDO connection
         $stmt = $pdo->prepare("EXEC SearchTasksByTitle :search");
@@ -564,3 +567,52 @@ function searchTasksByTitle($searchTerm) {
     }
 }
 
+function getUserDetails($userId)
+{
+    $pdo = getDatabaseConnection();
+    $stmt = $pdo->prepare("SELECT Email_Address, First_Name, Last_Name FROM [dbo].[USER] WHERE User_ID = :userId");
+    $stmt->bindParam(':userId', $userId, PDO::PARAM_INT);
+    $stmt->execute();
+    return $stmt->fetch(PDO::FETCH_ASSOC);
+}
+
+function insertJobConfiguration(
+    $jobId,
+    $userId,
+    $configName,
+    $parameters = null,
+    $scheduleTime = null,
+    $recurrence = null
+) {
+    try {
+        // Establish database connection
+        $conn = getDatabaseConnection();
+
+        // Prepare the stored procedure call for inserting job configuration
+        $stmt = $conn->prepare("
+            EXEC [dbo].[InsertJobConfiguration] 
+            @Job_ID = :job_id,
+            @User_ID = :user_id,
+            @Configuration_Name = :config_name,
+            @Parameters = :parameters,
+            @Schedule_Time = :schedule_time,
+            @Recurrence = :recurrence
+        ");
+
+        // Bind parameters
+        $stmt->bindParam(':job_id', $jobId, PDO::PARAM_INT);
+        $stmt->bindParam(':user_id', $userId, PDO::PARAM_INT);
+        $stmt->bindParam(':config_name', $configName);
+        $stmt->bindParam(':parameters', $parameters);
+        $stmt->bindParam(':schedule_time', $scheduleTime);
+        $stmt->bindParam(':recurrence', $recurrence);
+
+        // Execute the query
+        $stmt->execute();
+
+        return null; // Return null for success
+    } catch (PDOException $e) {
+        handleSqlError($e); // Handle SQL errors
+        return false; // Return false on failure
+    }
+}

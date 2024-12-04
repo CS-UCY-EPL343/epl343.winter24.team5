@@ -20,37 +20,73 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $job_name = $_POST['job_name'] ?? '';
     $job_description = $_POST['job_description'] ?? '';
 
-    // Check if file is uploaded
-    if (isset($_FILES['program_file']) && $_FILES['program_file']['error'] === UPLOAD_ERR_OK) {
-        $file_tmp_path = $_FILES['program_file']['tmp_name'];
-        $file_contents = file_get_contents($file_tmp_path);
-        $programs_json = json_decode($file_contents, true);
+    // Check if files are uploaded
+    if (!empty($_FILES['program_files']['name'][0])) {
+        $programs = []; // Array to hold program details
+        $unsupported_files = []; // Array to collect unsupported file names
 
-        if ($programs_json === null) {
-            $message = 'Invalid JSON file format.';
-        } else {
+        // Allowed file extensions
+        $allowed_extensions = [
+            'java', 'py', 'js', 'cs', 'cpp', 'c', 'rb', 'go', 'ts', 'php',
+            'pl', 'sh', 'r', 'sql', 'html', 'css', 'json', 'xml'
+        ];
+
+
+        foreach ($_FILES['program_files']['name'] as $index => $file_name) {
+            $file_tmp_path = $_FILES['program_files']['tmp_name'][$index];
+            $file_extension = pathinfo($file_name, PATHINFO_EXTENSION);
+
+            if (!in_array($file_extension, $allowed_extensions)) {
+                $unsupported_files[] = $file_name; // Add unsupported file to the list
+                continue; // Skip further processing for this file
+            }
+
+            $program_content = file_get_contents($file_tmp_path);
+            $programs[] = [
+                'Program_Name' => pathinfo($file_name, PATHINFO_FILENAME),
+                'Code' => base64_encode($program_content),
+                'Language' => strtoupper($file_extension),
+                'Version' => '1.0'
+            ];
+        }
+
+        // If there are unsupported files, display them in the message
+        if (!empty($unsupported_files)) {
+            $message = "Unsupported file types:\n" . implode("\n", $unsupported_files);
+        } elseif (empty($message)) {
             try {
                 $pdo = getDatabaseConnection();
+
+                // Prepare the programs JSON string
+                $programs_json = json_encode($programs);
 
                 // Prepare and execute the stored procedure
                 $stmt = $pdo->prepare("EXEC InsertJobWithPrograms :Creator_ID, :Job_Name, :Job_Description, :Programs");
                 $stmt->bindParam(':Creator_ID', $creator_id, PDO::PARAM_INT);
                 $stmt->bindParam(':Job_Name', $job_name, PDO::PARAM_STR);
                 $stmt->bindParam(':Job_Description', $job_description, PDO::PARAM_STR);
-                $stmt->bindParam(':Programs', $file_contents, PDO::PARAM_STR);
+                $stmt->bindParam(':Programs', $programs_json, PDO::PARAM_STR);
                 $stmt->execute();
 
-                $message = 'Job and programs inserted successfully!';
+                // Set success message in session and redirect
+                $_SESSION['message'] = 'Job and programs inserted successfully!';
+                header('Location: create_job.php'); 
+                exit();
             } catch (PDOException $e) {
                 $message = 'Error inserting job: ' . $e->getMessage();
             }
         }
     } else {
-        $message = 'Please upload a valid JSON file for the programs.';
+        $message = 'Please upload at least one program file.';
     }
 }
-?>
 
+// Check for session message and display it
+if (isset($_SESSION['message'])) {
+    $message = $_SESSION['message'];
+    unset($_SESSION['message']); // Clear the session message
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -69,7 +105,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             </div>
             <div class="form-container-large">
                 <?php if (!empty($message)): ?>
-                    <p style="color: <?= strpos($message, 'success') !== false ? 'green' : 'red'; ?>;"><?= htmlspecialchars($message); ?></p>
+                    <p style="color: <?= strpos($message, 'successfully') !== false ? 'green' : 'red'; ?>;">
+                        <?= nl2br(htmlspecialchars($message)); ?>
+                    </p>
                 <?php endif; ?>
                 <form method="POST" enctype="multipart/form-data">
                     <div class="form-group">
@@ -81,21 +119,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         <textarea id="job_description" name="job_description" class="form-control" rows="4" required></textarea>
                     </div>
                     <div class="form-group">
-                        <label for="program_file">Upload Programs JSON File</label>
-                        <input type="file" id="program_file" name="program_file" class="form-control" accept=".json" required>
-                        <small>File should be in JSON format with the following structure:</small>
-                        <pre>
-[
-  {
-    "Program_Name": "Program1",
-    "Program_Description": "Description of Program1",
-    "Code": "Base64EncodedCodeHere",
-    "Language": "Python",
-    "Version": "1.0"
-  },
-  ...
-]
-                        </pre>
+                        <label for="program_files">Upload Program Files</label>
+                        <input type="file" id="program_files" name="program_files[]" class="form-control" multiple required>
+                        <small>Allowed file types: .java, .py, .js, .cs, .cpp, .c, .rb, .go, .ts, .php, .pl, .sh, .r, .sql, .html, .css, .json, .xml</small>
                     </div>
                     <div class="form-actions">
                         <button type="submit" class="configure-button">Create Job</button>

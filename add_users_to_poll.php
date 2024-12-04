@@ -20,11 +20,23 @@ $pollId = intval($_GET['poll_id']); // Get the selected poll ID
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['user_id'])) {
     $userId = intval($_POST['user_id']);
 
+  
     try {
         if (addUserToPoll($pollId, $userId)) {
-            //$polltitle=getPollTitleById($pollId);
-            //sendPollInvitationEmail($users['Email_Address'],$user['First_Name'] . ' ' . $user['Last_Name'], $polltitle);
-            $success = "User successfully added to the poll!";
+            // Get poll title and user details
+            $pollTitle = getPollTitleById($pollId);
+            $userDetails = getUserDetails($userId); // Fetch user details
+
+            // Send poll invitation email
+            if ($userDetails && sendPollInvitationEmail(
+                $userDetails['Email_Address'],
+                $userDetails['First_Name'] . ' ' . $userDetails['Last_Name'],
+                $pollTitle
+            )) {
+                $success = "User successfully added to the poll and notified via email!";
+            } else {
+                $error = "User added to the poll, but the email could not be sent.";
+            }
         } else {
             $error = "Failed to add the user to the poll.";
         }
