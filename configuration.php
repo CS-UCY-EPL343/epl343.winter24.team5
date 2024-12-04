@@ -41,7 +41,21 @@ if ($jobID) {
 // Handle Create Request
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && $_POST['action'] === 'create') {
     $configName = $_POST['config_name'] ?? null;
-    $parameters = $_POST['parameters'] ?? '';
+
+    // Concatenate parameters based on dynamic input (if programs exist)
+    $parameters = [];
+    if (!empty($programs)) {
+        foreach ($programs as $index => $program) {
+            $param_key = 'param' . $index;
+            if (isset($_POST[$param_key]) && trim($_POST[$param_key]) !== '') {
+                // Add program name (prefix) with language in parentheses and parameter as "Program_Name (Language): Parameter"
+                $parameters[] = $program['Program_Name'] . ' (' . $program['Language'] . '): ' . $_POST[$param_key];
+            }
+        }
+    }
+
+    // Join parameters only if there are programs and parameters are provided
+    $parameters_string = !empty($parameters) ? implode('; ', $parameters) : null;
 
     $result = insertJobConfiguration($jobID, $user_id, $configName, $parameters);
 
@@ -82,6 +96,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $_POST['action'] === 'create') {
                         <table class="config-table">
                             <tr>
                                 <td><label for="config_name">Configuration Name:</label></td>
+                                <td><input type="text" id="config_name" name="config_name" required></td>
                                 <td><input type="text" id="config_name" name="config_name" required></td>
                             </tr>
                             <tr>
