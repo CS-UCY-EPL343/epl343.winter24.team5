@@ -65,44 +65,24 @@ try {
                     </a>
                 </li>
                 <li>
+                    <a href="assigned_tasks.php"
+                        class="<?= basename($_SERVER['PHP_SELF']) === 'assigned_tasks.php' ? 'active' : ''; ?>">
+                        Assigned Tasks
+                    </a>
+                </li>
+                <li>
+                    <a href="create_tasks.php"
+                        class="<?= basename($_SERVER['PHP_SELF']) === 'create_tasks.php' ? 'active' : ''; ?>">
+                        Create a Task
+                    </a>
+                </li>
+                <li>
                     <a href="writeAiChat.php"
                         class="<?= basename($_SERVER['PHP_SELF']) === 'writeAiChat.php' ? 'active' : ''; ?>">
                         ChatBot
                     </a>
                 </li>
 
-                <!-- Admin-Only Links -->
-                <?php if ($is_admin): ?>
-                    <li>
-                        <a href="create_poll.php"
-                            class="<?= basename($_SERVER['PHP_SELF']) === 'create_poll.php' ? 'active' : ''; ?>">
-                            Create Poll
-                        </a>
-                    </li>
-                    <li>
-                        <a href="create_tasks.php"
-                            class="<?= basename($_SERVER['PHP_SELF']) === 'create_tasks.php' ? 'active' : ''; ?>">
-                            Create a Task
-                        </a>
-                    </li>
-                    <li>
-                        <a href="pending_user_approvals.php"
-                            class="<?= basename($_SERVER['PHP_SELF']) === 'pending_user_approvals.php' ? 'active' : ''; ?>">
-                            User Approvals
-                        </a>
-                    </li>
-                    <?php else: ?>
-                    <li>
-                        <a href="create_tasks_user.php"
-                            class="<?= basename($_SERVER['PHP_SELF']) == 'create_tasks_user.php' ? 'active' : ''; ?>">Create Task</a>
-                    </li>
-                <?php endif; ?>
-                <li>
-                    <a href="#settings"
-                        class="<?= basename($_SERVER['PHP_SELF']) === '#settings' ? 'active' : ''; ?>">
-                        Settings
-                    </a>
-                </li>
             </ul>
 
         </aside>
