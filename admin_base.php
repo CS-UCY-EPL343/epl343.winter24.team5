@@ -269,6 +269,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['poll_id'])) {
             .append('g')
             .call(force.drag);
 
+        var urlMapping = {
+            "Polls": "admin_page.php",
+            "Jobs": "jobs.php",
+            "Tasks": "Tasks.php",
+            "ChatBot": "writeAiChat.php",
+            "Create Poll": "create_poll.php",
+            "Create a Task": "create_tasks.php",
+            "User Approvals": "pending_user_approvals.php",
+            "Settings": "settings.php"
+        };
+
         node.append('circle')
             .attr('r', function(d) {
                 return circleWidth + d.value + 20; // Scale size based on `value`
@@ -281,9 +292,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['poll_id'])) {
             })
             .attr('strokewidth', '2')
             .on('click', function(d) { // Add click event listener
-                const pageName = d.name.replace(/\s+/g, '_').toLowerCase() + '.php'; // Convert name to URL
-                window.location.href = pageName; // Redirect to the corresponding PHP page
-                exit();
+                const pageName = urlMapping[d.name]; // Get URL from the mapping
+                if (pageName) {
+                    window.location.href = pageName; // Redirect to the corresponding URL
+                } else {
+                    console.error(`No URL mapping found for ${d.name}`);
+                }
             });
 
         node.append('text')
@@ -295,9 +309,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['poll_id'])) {
             .attr('font-size', '.8em')
             .attr('dy', 4) // Center text inside the circle
             .style('cursor', 'pointer') // Add pointer cursor for better UX
-            .on('click', function(d) { // Fix: Use correct parameters
-                const pageName = d.name.replace(/\s+/g, '_').toLowerCase() + '.php'; // Convert name to URL
-                window.location.href = pageName; // Redirect to the corresponding PHP page
+            .on('click', function(event, d) { // Add click event listener for text
+                const pageName = urlMapping[d.name]; // Get URL from the mapping
+                if (pageName) {
+                    window.location.href = pageName; // Redirect to the corresponding URL
+                } else {
+                    console.error(`No URL mapping found for ${d.name}`);
+                }
             });
         force.on('tick', function(e) {
             node.attr('transform', function(d) {

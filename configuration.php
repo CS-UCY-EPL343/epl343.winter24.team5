@@ -41,27 +41,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     // Retrieve configuration details from the form
     $configName = $_POST['config_name'] ?? null;
-
-    // Concatenate parameters based on dynamic input (if programs exist)
-    $parameters = [];
-    if (!empty($programs)) {
-        foreach ($programs as $index => $program) {
-            $param_key = 'param' . $index;
-            if (isset($_POST[$param_key]) && trim($_POST[$param_key]) !== '') {
-                // Add program name (prefix) with language in parentheses and parameter as "Program_Name (Language): Parameter"
-                $parameters[] = $program['Program_Name'] . ' (' . $program['Language'] . '): ' . $_POST[$param_key];
-            }
-        }
-    }
-
-    // Join parameters only if there are programs and parameters are provided
-    $parameters_string = !empty($parameters) ? implode('; ', $parameters) : null;
+    $parameters = $_POST['parameters'] ?? '';
 
     // Call the function to insert the job configuration
-    $result = insertJobConfiguration($jobID, $user_id, $configName, $parameters_string);
+    $result = insertJobConfiguration($jobID, $user_id, $configName, $parameters);
 
     if ($result) {
-        $successMessage = "Job configuration saved successfully.";
+        header("Location: jobs.php"); // Redirect to jobs page after success
+        exit();
     } else {
         $errorMessage = "Failed to save job configuration.";
     }
@@ -76,6 +63,28 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Configure Job</title>
     <link rel="stylesheet" href="styles.css">
+    <style>
+        /* Make the parameters box non-resizable and styled like the config_name box */
+        textarea#parameters {
+            width: 100%;
+            height: 2em;
+            padding: 0.5em;
+            font-size: 1em;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-sizing: border-box;
+            resize: none; /* Prevent resizing */
+        }
+
+        ul.program-list {
+            list-style-type: disc;
+            padding-left: 20px;
+        }
+
+        ul.program-list li {
+            margin-bottom: 5px;
+        }
+    </style>
 </head>
 
 <body>
@@ -131,14 +140,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         class="<?= basename($_SERVER['PHP_SELF']) == 'writeAiChat.php' ? 'active' : ''; ?>">ChatBot</a>
                 </li>
             </ul>
-
-            <!-- SVG at the bottom -->
-            <div class="sidebar-bottom">
-                <a href="admin_easter_egg.html" class="sidebar-link">
-                    <img src="videos/dinoegg.png" alt="Dino Egg" class="sidebar-icon">
-                </a>
-            </div>
-        </aside>
+</aside>
 
         <!-- Main Content -->
         <main class="dashboard-main">
@@ -147,9 +149,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     <h1>Configure Job</h1>
 
                     <!-- Display Success or Error Messages -->
-                    <?php if (isset($successMessage)): ?>
-                    <div class="success-message" style="color: green;"><?= htmlspecialchars($successMessage); ?></div>
-                    <?php elseif (isset($errorMessage)): ?>
+                    <?php if (isset($errorMessage)): ?>
                     <div class="error-message" style="color: red;"><?= htmlspecialchars($errorMessage); ?></div>
                     <?php endif; ?>
 
@@ -158,32 +158,27 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         <table class="config-table">
                             <tr>
                                 <td><label for="config_name">Configuration Name:</label></td>
-                                <td><input type="text" id="config_name" name="config_name" required></td>
+                                <td><input type="text" id="config_name" name="config_name" class="form-control" required></td>
                             </tr>
-
-                            <!-- Dynamic Parameter Fields -->
-                            <?php if (!empty($programs)): ?>
-                                <?php foreach ($programs as $index => $program): ?>
-                                <tr>
-                                    <td>
-                                        <label for="param<?= $index; ?>">
-                                            Parameter(s) for <?= htmlspecialchars($program['Program_Name']) . ' (' . htmlspecialchars($program['Language']) . ')'; ?>:
-                                        </label>
-                                    </td>
-                                    <td>
-                                        <input type="text" id="param<?= $index; ?>" name="param<?= $index; ?>">
-                                    </td>
-                                </tr>
-                                <?php endforeach; ?>
-                            <?php else: ?>
-                                <tr>
-                                    <td colspan="2" style="text-align: center;">No programs linked to this job.</td>
-                                </tr>
-                            <?php endif; ?>
+                            <tr>
+                                <td><label for="parameters">Parameters:</label></td>
+                                <td><textarea id="parameters" name="parameters" required></textarea></td>
+                            </tr>
                         </table>
 
+                        <?php if (!empty($programs)): ?>
+                            <h3>Linked Programs:</h3>
+                            <ul class="program-list">
+                                <?php foreach ($programs as $program): ?>
+                                    <li><?= htmlspecialchars($program['Program_Name']) . ' (' . htmlspecialchars($program['Language']) . ')'; ?></li>
+                                <?php endforeach; ?>
+                            </ul>
+                        <?php else: ?>
+                            <p style="color: red;">No programs linked to this job.</p>
+                        <?php endif; ?>
+
                         <input type="hidden" name="Job_ID" value="<?= htmlspecialchars($jobID); ?>">
-                        <button type="submit" name="submit_config">Submit Configuration</button>
+                        <button type="submit" name="submit_config" class="configure-button">Submit Configuration</button>
                     </form>
                 </div>
             </div>
