@@ -102,9 +102,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['poll_id'])) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title style="text-align: center;">Admin Dashboard</title>
-    <link rel=" stylesheet" href="styles.css"> <!-- Link to your existing styles -->
+    <title>Admin Dashboard</title>
+    <link rel="stylesheet" href="styles.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <script src="https://d3js.org/d3.v3.min.js"></script> <!-- Include D3.js -->
 </head>
 
 <body>
@@ -121,9 +122,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['poll_id'])) {
                 <li><a href="create_tasks.php" class="<?= basename($_SERVER['PHP_SELF']) == 'create_tasks.php' ? 'active' : '' ?>">Create a Task</a></li>
                 <li><a href="pending_user_approvals.php" class="<?= basename($_SERVER['PHP_SELF']) == 'pending_user_approvals.php' ? 'active' : '' ?>">User Approvals</a></li>
             </ul>
-
-
-            <!-- SVG at the bottom -->
             <div class="sidebar-bottom">
                 <a href="admin_easter_egg.html" class="sidebar-link">
                     <img src="videos/dinoegg.png" alt="Dino Egg" class="sidebar-icon">
@@ -133,65 +131,144 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['poll_id'])) {
 
         <!-- Main Content -->
         <main class="dashboard-main">
-            <div class="dashboard-header">
-                <h1>Polls</h1>
-            </div>
-            <div class="poll-container">
-                <?php if (isset($error)): ?>
-                    <div class="alert alert-danger" role="alert">
-                        <?= htmlspecialchars($error) ?>
-                    </div>
-                <?php elseif (empty($polls)): ?>
-                    <p>No polls available.</p>
-                <?php else: ?>
-                    <?php foreach ($polls as $poll): ?>
-                        <div class="poll-card1" style="position: relative;">
-                            <?php if ($poll['Status'] !== 'Finished'): ?>
-                                <!-- Add Users Button -->
-                                <a href="add_users_to_poll.php?poll_id=<?= htmlspecialchars($poll['Poll_ID']) ?>"
-                                    style="position: absolute; top: 10px; right: 10px; font-size: 1.5rem; color: black; cursor: pointer;"
-                                    title="Add Users to Poll">
-                                    <i class="bi bi-person-fill-add"></i>
-                                </a>
-                                <h3 class="poll-title"><?= htmlspecialchars($poll['Title']) ?></h3>
-                                <p class="poll-description"><?= htmlspecialchars($poll['Description']) ?></p>
-                                <p class="poll-votes">Expiration: <?= htmlspecialchars($poll['Expiration_Date']) ?></p>
-                                <div class="poll-actions">
-                                    <a href="admin_view_polls.php?poll_id=<?= htmlspecialchars($poll['Poll_ID']) ?>"
-                                        class="poll-button">View</a>
-                                    <a href="admin_edit_polls.php?poll_id=<?= htmlspecialchars($poll['Poll_ID']) ?>"
-                                        class="poll-button-yellow">Edit</a>
-                                    <form method="POST">
-                                        <input type="hidden" name="poll_id" value="<?= htmlspecialchars($poll['Poll_ID']) ?>">
-                                        <button type="submit" class="poll-button-red">Finish Poll.
-                                        </button>
-                                    </form>
-                                </div>
-                            <?php else: ?>
-                                <h3 class="poll-title"><?= htmlspecialchars($poll['Title']) ?></h3>
-                                <p class="poll-description"><?= htmlspecialchars($poll['Description']) ?></p>
-                                <p class="poll-votes">Expiration: <?= htmlspecialchars($poll['Expiration_Date']) ?></p>
-                                <span class="poll-status">Poll Finished. Result:
-                                    <?php if ($poll['Final_Verdict'] == 1): ?>
-                                        Decision Will Go Through
-                                    <?php else: ?>
-                                        Decision Will Not Go Through
-                                    <?php endif; ?>
-
-                                    <a href=" admin_view_polls.php?poll_id=<?= htmlspecialchars($poll['Poll_ID']) ?>"
-                                        class="poll-button">View</a>
-
-                                </span>
-                            <?php endif; ?>
-                        </div>
-                    <?php endforeach; ?>
-
-
-                <?php endif; ?>
-            </div>
+            <div id="graph-container"></div> <!-- Add a container for the graph -->
         </main>
     </div>
     <?php require_once 'footer.php'; ?>
+
+    <!-- JavaScript -->
+    <script>
+        var w = 1000,
+            h = 800,
+            circleWidth = 10; // Default circle size
+
+        var palette = {
+            "lightgray": "#E5E8E8",
+            "gray": "#708284",
+            "mediumgray": "#536870",
+            "blue": "#3B757F"
+        };
+
+        var colors = d3.scale.category20();
+
+        var nodes = [{
+                name: "Polls",
+                value: 30
+            },
+            {
+                name: "Jobs",
+                value: 20,
+                target: [0]
+            },
+            {
+                name: "Tasks",
+                value: 25,
+                target: [0, 1]
+            },
+            {
+                name: "ChatBot",
+                value: 15,
+                target: [0, 1, 2]
+            },
+            {
+                name: "Create Poll",
+                value: 18,
+                target: [0, 3]
+            },
+            {
+                name: "Create a Task",
+                value: 22,
+                target: [0, 3, 4]
+            },
+            {
+                name: "User Approvals",
+                value: 17,
+                target: [0, 1, 2]
+            },
+            {
+                name: "Settings",
+                value: 10,
+                target: [0, 1, 2]
+            }
+        ];
+
+        var links = [];
+
+        for (var i = 0; i < nodes.length; i++) {
+            if (nodes[i].target !== undefined) {
+                for (var x = 0; x < nodes[i].target.length; x++) {
+                    links.push({
+                        source: nodes[i],
+                        target: nodes[nodes[i].target[x]]
+                    });
+                }
+            }
+        }
+
+        var myChart = d3.select("#graph-container")
+            .append("svg")
+            .attr("width", w)
+            .attr("height", h);
+
+        var force = d3.layout.force()
+            .nodes(nodes)
+            .links([])
+            .gravity(0.1)
+            .charge(-1000)
+            .size([w, h]);
+
+        var link = myChart.selectAll('line')
+            .data(links).enter().append('line')
+            .attr('stroke', palette.gray)
+            .attr('strokewidth', '2');
+
+        var node = myChart.selectAll('g')
+            .data(nodes).enter()
+            .append('g')
+            .call(force.drag);
+
+        node.append('circle')
+            .attr('r', function(d) {
+                return circleWidth + d.value + 20; // Scale size based on `value`
+            })
+            .attr('fill', function(d, i) {
+                return colors(i); // Assign unique color
+            })
+            .attr('stroke', function(d, i) {
+                return 'black'; // Add a black border to circles
+            })
+            .attr('strokewidth', '2');
+
+        node.append('text')
+            .text(function(d) {
+                return d.name;
+            })
+            .attr('font-family', 'Helvetica')
+            .attr('text-anchor', 'middle')
+            .attr('font-size', '.8em')
+            .attr('dy', 4); // Center text inside the circle
+
+        force.on('tick', function(e) {
+            node.attr('transform', function(d) {
+                return 'translate(' + d.x + ',' + d.y + ')';
+            });
+
+            link.attr('x1', function(d) {
+                    return d.source.x;
+                })
+                .attr('y1', function(d) {
+                    return d.source.y;
+                })
+                .attr('x2', function(d) {
+                    return d.target.x;
+                })
+                .attr('y2', function(d) {
+                    return d.target.y;
+                });
+        });
+
+        force.start();
+    </script>
 </body>
 
 </html>
