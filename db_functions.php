@@ -695,3 +695,25 @@ function getJobConfigurations($jobId, $userId) {
         return [];
     }
 }
+
+function updateJobConfiguration($configID, $configName, $parameters)
+{
+    try {
+        $pdo = getDatabaseConnection();
+        $stmt = $pdo->prepare("
+            EXEC UpdateJobConfiguration 
+            @Job_Configuration_ID = :configID,
+            @Configuration_Name = :configName,
+            @Parameters = :parameters
+        ");
+        $stmt->bindParam(':configID', $configID, PDO::PARAM_INT);
+        $stmt->bindParam(':configName', $configName, PDO::PARAM_STR);
+        $stmt->bindParam(':parameters', $parameters, PDO::PARAM_STR);
+        $stmt->execute();
+
+        return true;
+    } catch (PDOException $e) {
+        handleSqlError($e);
+        return false;
+    }
+}
