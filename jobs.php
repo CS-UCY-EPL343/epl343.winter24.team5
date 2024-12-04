@@ -79,8 +79,12 @@ $jobs = getJobListings();
                         <a href="pending_user_approvals.php"
                             class="<?= basename($_SERVER['PHP_SELF']) == 'pending_user_approvals.php' ? 'active' : ''; ?>">User Approvals</a>
                     </li>
-                <?php endif; ?>
-
+                    <?php else: ?>
+                    <li>
+                          <a href="create_tasks_user.php"
+                            class="<?= basename($_SERVER['PHP_SELF']) == 'create_tasks_for_users.php' ? 'active' : ''; ?>">Create Task</a>
+                    </li>
+                <?php endif; ?>                
                 <!-- Settings -->
                 <li>
                     <a href="#settings"

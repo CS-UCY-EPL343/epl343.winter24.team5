@@ -23,7 +23,7 @@ $tasks = [];
 // Retrieve tasks based on search term
 try {
     if ($searchTerm) {
-        $tasks = searchTasksByTitle($searchTerm); // Assuming `searchTasksByTitle` is defined in db_functions.php
+        $tasks = searchTasksByTitle($searchTerm); 
     } else {
         $tasks = getAllTasks(); // Retrieve all tasks if no search term
     }
@@ -210,7 +210,15 @@ try {
                             User Approvals
                         </a>
                     </li>
+                    <?php else: ?>
+                        <li>
+                    <a href="create_tasks_user.php"
+                        class="<?= basename($_SERVER['PHP_SELF']) === 'create_tasks_user.php' ? 'active' : ''; ?>">
+                        Create Task
+                    </a>
+                </li>
                 <?php endif; ?>
+
                 <li>
                     <a href="#settings"
                         class="<?= basename($_SERVER['PHP_SELF']) === '#settings' ? 'active' : ''; ?>">
