@@ -91,18 +91,34 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <div class="dashboard-container">
         <!-- Sidebar -->
         <aside class="sidebar">
-            <h3 class="sidebar-title"><?= $is_admin ? 'Admin Dashboard' : 'User Dashboard'; ?></h3>
+        <h3 class="sidebar-title"><?= $is_admin ? 'Admin Dashboard' : 'User Dashboard'; ?></h3>
             <ul class="sidebar-links">
                 <li><a href="<?= $is_admin ? 'admin_page.php' : 'user_page.php'; ?>">Polls</a></li>
                 <li><a href="jobs.php">Jobs</a></li>
                 <li><a href="Tasks.php">Tasks</a></li>
                 <li><a href="writeAiChat.php">ChatBot</a></li>
                 <?php if ($is_admin): ?>
-                <li><a href="create_poll.php">Create Poll</a></li>
-                <li><a href="create_tasks.php">Create a Task</a></li>
-                <li><a href="pending_user_approvals.php">User Approvals</a></li>
+                <li>
+                    <a href="create_poll.php"
+                        class="<?= basename($_SERVER['PHP_SELF']) == 'create_poll.php' ? 'active' : ''; ?>">Create
+                        Poll</a>
+                </li>
+
+                <li>
+                    <a href="pending_user_approvals.php"
+                        class="<?= basename($_SERVER['PHP_SELF']) == 'pending_user_approvals.php' ? 'active' : ''; ?>">User
+                        Approvals</a>
+                </li>
                 <?php endif; ?>
-                <li><a href="#settings">Settings</a></li>
+                <li>
+                    <a href="create_tasks.php"
+                        class="<?= basename($_SERVER['PHP_SELF']) == 'create_tasks.php' ? 'active' : ''; ?>">Create
+                        Task</a>
+                </li>
+                <li>
+                    <a href="writeAiChat.php"
+                        class="<?= basename($_SERVER['PHP_SELF']) == 'writeAiChat.php' ? 'active' : ''; ?>">ChatBot</a>
+                </li>
             </ul>
         </aside>
 

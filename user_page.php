@@ -27,9 +27,9 @@ try {
 <!DOCTYPE html>
 <html lang="en">
 <style>
-    .sidebar-links a.active {
-        background-color: #6db4ff;
-    }
+.sidebar-links a.active {
+    background-color: #6db4ff;
+}
 </style>
 
 <head>
@@ -47,40 +47,40 @@ try {
             <ul class="sidebar-links">
                 <!-- Common Links -->
                 <li>
-                    <a href="<?= $is_admin ? 'admin_page.php' : 'user_page.php'; ?>">Polls</a>
+                    <a href="<?= $is_admin ? 'admin_page.php' : 'user_page.php'; ?>"
+                        class="<?= basename($_SERVER['PHP_SELF']) == ($is_admin ? 'admin_page.php' : 'user_page.php') ? 'active' : ''; ?>">Polls</a>
                 </li>
-                <li><a href="jobs.php">Jobs</a></li>
-                <li><a href="Tasks.php">Tasks</a></li>
-                <li><a href="writeAiChat.php">ChatBot</a></li>
-                <li><a href="create_tasks.php">Create a Task</a></li>
-                <!-- Admin-Only Links -->
-                <?php if ($is_admin): ?>
-                    <li>
-                        <a href="create_poll.php"
-                            class="<?= basename($_SERVER['PHP_SELF']) === 'create_poll.php' ? 'active' : ''; ?>">
-                            Create Poll
-                        </a>
-                    </li>
-                    <li>
-                        <a href="create_tasks.php"
-                            class="<?= basename($_SERVER['PHP_SELF']) === 'create_tasks.php' ? 'active' : ''; ?>">
-                            Create a Task
-                        </a>
-                    </li>
-                    <li>
-                        <a href="pending_user_approvals.php"
-                            class="<?= basename($_SERVER['PHP_SELF']) === 'pending_user_approvals.php' ? 'active' : ''; ?>">
-                            User Approvals
-                        </a>
-                    </li>
-                <?php else: ?>
-                    <li>
-                        <a href="create_tasks_user.php"
-                            class="<?= basename($_SERVER['PHP_SELF']) == 'create_tasks_user.php' ? 'active' : ''; ?>">Create Task</a>
-                    </li>
-                <?php endif; ?>
+                <li>
+                    <a href="jobs.php"
+                        class="<?= basename($_SERVER['PHP_SELF']) == 'jobs.php' ? 'active' : ''; ?>">Jobs</a>
+                </li>
+                <li>
+                    <a href="assigned_tasks.php"
+                        class="<?= basename($_SERVER['PHP_SELF']) === 'assigned_tasks.php' ? 'active' : ''; ?>">
+                        Assigned Tasks
+                    </a>
+                </li>
+                <li>
+                    <a href="Tasks.php"
+                        class="<?= basename($_SERVER['PHP_SELF']) == 'Tasks.php' ? 'active' : ''; ?>">Tasks</a>
+                </li>
+
+
+                <li>
+                    <a href="create_tasks.php"
+                        class="<?= basename($_SERVER['PHP_SELF']) == 'create_tasks.php' ? 'active' : ''; ?>">Create
+                        Task</a>
+                </li>
+                <li>
+                    <a href="writeAiChat.php"
+                        class="<?= basename($_SERVER['PHP_SELF']) == 'writeAiChat.php' ? 'active' : ''; ?>">ChatBot</a>
+                </li>
+
+
 
             </ul>
+
+
         </aside>
 
         <!-- Main Content -->
@@ -90,31 +90,31 @@ try {
             </div>
             <div class="poll-container">
                 <?php if (isset($error)): ?>
-                    <div class="alert alert-danger" role="alert">
-                        <?= htmlspecialchars($error) ?>
-                    </div>
+                <div class="alert alert-danger" role="alert">
+                    <?= htmlspecialchars($error) ?>
+                </div>
                 <?php elseif (empty($polls)): ?>
-                    <p>No polls available for this user.</p>
+                <p>No polls available for this user.</p>
                 <?php else: ?>
-                    <?php foreach ($polls as $poll): ?>
-                        <div class="poll-card1">
-                            <h3 class="poll-title"><?= htmlspecialchars($poll['Title']) ?></h3>
-                            <p class="poll-description"><?= htmlspecialchars($poll['Description']) ?></p>
-                            <!-- <p class="poll-votes">Votes: Yes <?= htmlspecialchars($poll['Votes_For']) ?> | No
+                <?php foreach ($polls as $poll): ?>
+                <div class="poll-card1">
+                    <h3 class="poll-title"><?= htmlspecialchars($poll['Title']) ?></h3>
+                    <p class="poll-description"><?= htmlspecialchars($poll['Description']) ?></p>
+                    <!-- <p class="poll-votes">Votes: Yes <?= htmlspecialchars($poll['Votes_For']) ?> | No
                                 <?= htmlspecialchars($poll['Votes_Against']) ?></p> -->
-                            <?php if ($poll['Status'] === "Finished"): ?>
-                                <p class="poll-status">Poll has concluded. Final Result: <?php if ($poll['Final_Verdict'] == 1): ?>
-                                        Decision Will Go Through
-                                    <?php else: ?>
-                                        Decision Will Not Go Through
-                                    <?php endif; ?> </p>
+                    <?php if ($poll['Status'] === "Finished"): ?>
+                    <p class="poll-status">Poll has concluded. Final Result: <?php if ($poll['Final_Verdict'] == 1): ?>
+                        Decision Will Go Through
+                        <?php else: ?>
+                        Decision Will Not Go Through
+                        <?php endif; ?> </p>
 
-                            <?php else: ?>
-                                <a href="pollpage.php?poll_id=<?= htmlspecialchars($poll['Poll_ID']) ?>"
-                                    class="poll-button">Vote</a>
-                            <?php endif; ?>
-                        </div>
-                    <?php endforeach; ?>
+                    <?php else: ?>
+                    <a href="pollpage.php?poll_id=<?= htmlspecialchars($poll['Poll_ID']) ?>"
+                        class="poll-button">Vote</a>
+                    <?php endif; ?>
+                </div>
+                <?php endforeach; ?>
                 <?php endif; ?>
             </div>
         </main>

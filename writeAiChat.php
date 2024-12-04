@@ -52,16 +52,18 @@ $is_admin = $user_role === 'Admin';
                         Jobs
                     </a>
                 </li>
+                <?php if (!$is_admin): ?>
+                <li>
+                    <a href="assigned_tasks.php"
+                        class="<?= basename($_SERVER['PHP_SELF']) === 'assigned_tasks.php' ? 'active' : ''; ?>">
+                        Assigned Tasks
+                    </a>
+                </li>
+                <?php endif; ?>
                 <li>
                     <a href="Tasks.php"
                         class="<?= basename($_SERVER['PHP_SELF']) === 'Tasks.php' ? 'active' : ''; ?>">
                         Tasks
-                    </a>
-                </li>
-                <li>
-                    <a href="writeAiChat.php"
-                        class="<?= basename($_SERVER['PHP_SELF']) === 'writeAiChat.php' ? 'active' : ''; ?>">
-                        ChatBot
                     </a>
                 </li>
 
@@ -73,12 +75,7 @@ $is_admin = $user_role === 'Admin';
                             Create Poll
                         </a>
                     </li>
-                    <li>
-                        <a href="create_tasks.php"
-                            class="<?= basename($_SERVER['PHP_SELF']) === 'create_tasks.php' ? 'active' : ''; ?>">
-                            Create a Task
-                        </a>
-                    </li>
+
                     <li>
                         <a href="pending_user_approvals.php"
                             class="<?= basename($_SERVER['PHP_SELF']) === 'pending_user_approvals.php' ? 'active' : ''; ?>">
@@ -86,20 +83,21 @@ $is_admin = $user_role === 'Admin';
                         </a>
                     </li>
                     <?php else: ?>
-                        <li>
-                    <a href="create_tasks_user.php"
-                        class="<?= basename($_SERVER['PHP_SELF']) === 'create_tasks_user.php' ? 'active' : ''; ?>">
-                        Create Task
-                    </a>
-                </li>
-                <?php endif; ?>
 
+                <?php endif; ?>
                 <li>
-                    <a href="#settings"
-                        class="<?= basename($_SERVER['PHP_SELF']) === '#settings' ? 'active' : ''; ?>">
-                        Settings
+                        <a href="create_tasks.php"
+                            class="<?= basename($_SERVER['PHP_SELF']) === 'create_tasks.php' ? 'active' : ''; ?>">
+                            Create Task
+                        </a>
+                    </li>
+                <li>
+                    <a href="writeAiChat.php"
+                        class="<?= basename($_SERVER['PHP_SELF']) === 'writeAiChat.php' ? 'active' : ''; ?>">
+                        ChatBot
                     </a>
                 </li>
+
             </ul>
 
         </aside>

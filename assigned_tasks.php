@@ -126,21 +126,21 @@ try {
                     </a>
                 </li>
                 <li>
-                    <a href="Tasks.php"
-                        class="<?= basename($_SERVER['PHP_SELF']) === 'Tasks.php' ? 'active' : ''; ?>">
-                        Tasks
-                    </a>
-                </li>
-                <li>
                     <a href="assigned_tasks.php"
                         class="<?= basename($_SERVER['PHP_SELF']) === 'assigned_tasks.php' ? 'active' : ''; ?>">
                         Assigned Tasks
                     </a>
                 </li>
                 <li>
+                    <a href="Tasks.php"
+                        class="<?= basename($_SERVER['PHP_SELF']) === 'Tasks.php' ? 'active' : ''; ?>">
+                        Tasks
+                    </a>
+                </li>
+                <li>
                     <a href="create_tasks.php"
                         class="<?= basename($_SERVER['PHP_SELF']) === 'create_tasks.php' ? 'active' : ''; ?>">
-                        Create a Task
+                        Create Task
                     </a>
                 </li>
                 <li>

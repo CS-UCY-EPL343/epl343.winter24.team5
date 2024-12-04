@@ -13,6 +13,9 @@ if (!isset($_SESSION['user_id'])) {
     header("Location: index.php");
     exit();
 }
+$user_role = $_SESSION['role'] ?? 'User';
+$is_admin = $user_role === 'Admin';
+$user_id = $_SESSION['user_id'];
 
 // Handle POST request for creating a task
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['title'], $_POST['description'], $_POST['date_due'])) {
@@ -52,18 +55,55 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['title'], $_POST['desc
 <body>
     <!-- Wrapper -->
     <div class="dashboard-container">
-        <!-- Sidebar -->
-        <aside class="sidebar">
-            <h3 class="sidebar-title">Admin Dashboard</h3>
+    <aside class="sidebar">
+        <h3 class="sidebar-title"><?= $is_admin ? 'Admin Dashboard' : 'User Dashboard'; ?></h3>
             <ul class="sidebar-links">
-                <li><a href="admin_page.php" class="<?= basename($_SERVER['PHP_SELF']) == 'admin_page.php' ? 'active' : '' ?>">Polls</a></li>
-                <li><a href="jobs.php" class="<?= basename($_SERVER['PHP_SELF']) == 'jobs.php' ? 'active' : '' ?>">Jobs</a></li>
-                <li><a href="Tasks.php" class="<?= basename($_SERVER['PHP_SELF']) == 'Tasks.php' ? 'active' : '' ?>">Tasks</a></li>
-                <li><a href="writeAiChat.php" class="<?= basename($_SERVER['PHP_SELF']) == 'writeAiChat.php' ? 'active' : '' ?>">ChatBot</a></li>
-                <li><a href="create_poll.php" class="<?= basename($_SERVER['PHP_SELF']) == 'create_poll.php' ? 'active' : '' ?>">Create Poll</a></li>
-                <li><a href="create_tasks.php" class="<?= basename($_SERVER['PHP_SELF']) == 'create_tasks.php' ? 'active' : '' ?>">Create a Task</a></li>
-                <li><a href="pending_user_approvals.php" class="<?= basename($_SERVER['PHP_SELF']) == 'pending_user_approvals.php' ? 'active' : '' ?>">User Approvals</a></li>
-                <li><a href="#settings" class="<?= basename($_SERVER['PHP_SELF']) == 'settings.php' ? 'active' : '' ?>">Settings</a></li>
+                <!-- Common Links -->
+                <li>
+                    <a href="<?= $is_admin ? 'admin_page.php' : 'user_page.php'; ?>"
+                        class="<?= basename($_SERVER['PHP_SELF']) == ($is_admin ? 'admin_page.php' : 'user_page.php') ? 'active' : ''; ?>">Polls</a>
+                </li>
+                <li>
+                    <a href="jobs.php"
+                        class="<?= basename($_SERVER['PHP_SELF']) == 'jobs.php' ? 'active' : ''; ?>">Jobs</a>
+                </li>
+                <?php if (!$is_admin): ?>
+                <li>
+                    <a href="assigned_tasks.php"
+                        class="<?= basename($_SERVER['PHP_SELF']) === 'assigned_tasks.php' ? 'active' : ''; ?>">
+                        Assigned Tasks
+                    </a>
+                </li>
+                <?php endif; ?>
+                <li>
+                    <a href="Tasks.php"
+                        class="<?= basename($_SERVER['PHP_SELF']) == 'Tasks.php' ? 'active' : ''; ?>">Tasks</a>
+                </li>
+
+
+                <!-- Admin-Only Links -->
+                <?php if ($is_admin): ?>
+                <li>
+                    <a href="create_poll.php"
+                        class="<?= basename($_SERVER['PHP_SELF']) == 'create_poll.php' ? 'active' : ''; ?>">Create
+                        Poll</a>
+                </li>
+
+                <li>
+                    <a href="pending_user_approvals.php"
+                        class="<?= basename($_SERVER['PHP_SELF']) == 'pending_user_approvals.php' ? 'active' : ''; ?>">User
+                        Approvals</a>
+                </li>
+                <?php endif; ?>
+                <li>
+                    <a href="create_tasks.php"
+                        class="<?= basename($_SERVER['PHP_SELF']) == 'create_tasks.php' ? 'active' : ''; ?>">Create
+                        Task</a>
+                </li>
+                <li>
+                    <a href="writeAiChat.php"
+                        class="<?= basename($_SERVER['PHP_SELF']) == 'writeAiChat.php' ? 'active' : ''; ?>">ChatBot</a>
+                </li>
             </ul>
         </aside>
 
@@ -72,8 +112,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['title'], $_POST['desc
         <main class="dashboard-main">
             <div class="form-container-large">
                 <div style="text-align: right; margin-top: 5px;">
-                    <a href="admin_page.php" class="poll-button">Back to Admin Page</a>
-                </div>
+                <button onclick="window.history.back()" class="go-button" style="width: 10%">Go Back</button></div>
                 <h1>Create Task</h1>
                 <?php if (isset($success)): ?>
                     <div class="alert alert-success" role="alert">

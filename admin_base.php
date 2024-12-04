@@ -14,6 +14,9 @@ if (!isset($_SESSION['role']) || $_SESSION['role'] !== 'Admin') {
     exit();
 }
 
+$user_id = $_SESSION['user_id'];
+$is_admin = true;
+
 try {
     // Call the GetAllPolls stored procedure
     $polls = getAllPolls(); // Assuming getAllPolls() is defined in db_functions.php
@@ -112,15 +115,54 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['poll_id'])) {
     <div class="dashboard-container">
         <!-- Sidebar -->
         <aside class="sidebar">
-            <h3 class="sidebar-title" style="text-align: center;">Admin Dashboard</h3>
+        <h3 class="sidebar-title" style="text-align:center;"><?= $is_admin ? 'Admin Dashboard' : 'User Dashboard'; ?></h3>
             <ul class="sidebar-links">
-                <li><a href="admin_page.php" class="<?= basename($_SERVER['PHP_SELF']) == 'admin_page.php' ? 'active' : '' ?>">Polls</a></li>
-                <li><a href="jobs.php" class="<?= basename($_SERVER['PHP_SELF']) == 'jobs.php' ? 'active' : '' ?>">Jobs</a></li>
-                <li><a href="Tasks.php" class="<?= basename($_SERVER['PHP_SELF']) == 'Tasks.php' ? 'active' : '' ?>">Tasks</a></li>
-                <li><a href="writeAiChat.php" class="<?= basename($_SERVER['PHP_SELF']) == 'writeAiChat.php' ? 'active' : '' ?>">ChatBot</a></li>
-                <li><a href="create_poll.php" class="<?= basename($_SERVER['PHP_SELF']) == 'create_poll.php' ? 'active' : '' ?>">Create Poll</a></li>
-                <li><a href="create_tasks.php" class="<?= basename($_SERVER['PHP_SELF']) == 'create_tasks.php' ? 'active' : '' ?>">Create a Task</a></li>
-                <li><a href="pending_user_approvals.php" class="<?= basename($_SERVER['PHP_SELF']) == 'pending_user_approvals.php' ? 'active' : '' ?>">User Approvals</a></li>
+                <!-- Common Links -->
+                <li>
+                    <a href="<?= $is_admin ? 'admin_page.php' : 'user_page.php'; ?>"
+                        class="<?= basename($_SERVER['PHP_SELF']) == ($is_admin ? 'admin_page.php' : 'user_page.php') ? 'active' : ''; ?>">Polls</a>
+                </li>
+                <li>
+                    <a href="jobs.php"
+                        class="<?= basename($_SERVER['PHP_SELF']) == 'jobs.php' ? 'active' : ''; ?>">Jobs</a>
+                </li>
+                <?php if (!$is_admin): ?>
+                <li>
+                    <a href="assigned_tasks.php"
+                        class="<?= basename($_SERVER['PHP_SELF']) === 'assigned_tasks.php' ? 'active' : ''; ?>">
+                        Assigned Tasks
+                    </a>
+                </li>
+                <?php endif; ?>
+                <li>
+                    <a href="Tasks.php"
+                        class="<?= basename($_SERVER['PHP_SELF']) == 'Tasks.php' ? 'active' : ''; ?>">Tasks</a>
+                </li>
+
+
+                <!-- Admin-Only Links -->
+                <?php if ($is_admin): ?>
+                <li>
+                    <a href="create_poll.php"
+                        class="<?= basename($_SERVER['PHP_SELF']) == 'create_poll.php' ? 'active' : ''; ?>">Create
+                        Poll</a>
+                </li>
+
+                <li>
+                    <a href="pending_user_approvals.php"
+                        class="<?= basename($_SERVER['PHP_SELF']) == 'pending_user_approvals.php' ? 'active' : ''; ?>">User
+                        Approvals</a>
+                </li>
+                <?php endif; ?>
+                <li>
+                    <a href="create_tasks.php"
+                        class="<?= basename($_SERVER['PHP_SELF']) == 'create_tasks.php' ? 'active' : ''; ?>">Create
+                        Task</a>
+                </li>
+                <li>
+                    <a href="writeAiChat.php"
+                        class="<?= basename($_SERVER['PHP_SELF']) == 'writeAiChat.php' ? 'active' : ''; ?>">ChatBot</a>
+                </li>
             </ul>
             <div class="sidebar-bottom">
                 <a href="admin_easter_egg.html" class="sidebar-link">
@@ -227,6 +269,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['poll_id'])) {
             .append('g')
             .call(force.drag);
 
+        var urlMapping = {
+            "Polls": "admin_page.php",
+            "Jobs": "jobs.php",
+            "Tasks": "Tasks.php",
+            "ChatBot": "writeAiChat.php",
+            "Create Poll": "create_poll.php",
+            "Create a Task": "create_tasks.php",
+            "User Approvals": "pending_user_approvals.php",
+            "Settings": "settings.php"
+        };
+
         node.append('circle')
             .attr('r', function(d) {
                 return circleWidth + d.value + 20; // Scale size based on `value`
@@ -239,9 +292,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['poll_id'])) {
             })
             .attr('strokewidth', '2')
             .on('click', function(d) { // Add click event listener
-                const pageName = d.name.replace(/\s+/g, '_').toLowerCase() + '.php'; // Convert name to URL
-                window.location.href = pageName; // Redirect to the corresponding PHP page
-                exit();
+                const pageName = urlMapping[d.name]; // Get URL from the mapping
+                if (pageName) {
+                    window.location.href = pageName; // Redirect to the corresponding URL
+                } else {
+                    console.error(`No URL mapping found for ${d.name}`);
+                }
             });
 
         node.append('text')
@@ -253,9 +309,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['poll_id'])) {
             .attr('font-size', '.8em')
             .attr('dy', 4) // Center text inside the circle
             .style('cursor', 'pointer') // Add pointer cursor for better UX
-            .on('click', function(d) { // Fix: Use correct parameters
-                const pageName = d.name.replace(/\s+/g, '_').toLowerCase() + '.php'; // Convert name to URL
-                window.location.href = pageName; // Redirect to the corresponding PHP page
+            .on('click', function(event, d) { // Add click event listener for text
+                const pageName = urlMapping[d.name]; // Get URL from the mapping
+                if (pageName) {
+                    window.location.href = pageName; // Redirect to the corresponding URL
+                } else {
+                    console.error(`No URL mapping found for ${d.name}`);
+                }
             });
         force.on('tick', function(e) {
             node.attr('transform', function(d) {

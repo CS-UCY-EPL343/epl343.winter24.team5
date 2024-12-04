@@ -12,6 +12,8 @@ if (!isset($_GET['poll_id']) || !is_numeric($_GET['poll_id'])) {
     header("Location: admin_edit_polls.php");
     exit();
 }
+$user_id = $_SESSION['user_id'];
+$is_admin = true;
 
 $pollId = intval($_GET['poll_id']);
 $pollDetails = getPollDetails($pollId);
@@ -69,16 +71,55 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <body>
     <!-- Wrapper -->
     <div class="dashboard-container">
-        <aside class="sidebar">
-            <h3 class="sidebar-title">Admin Dashboard</h3>
+    <aside class="sidebar">
+        <h3 class="sidebar-title"><?= $is_admin ? 'Admin Dashboard' : 'User Dashboard'; ?></h3>
             <ul class="sidebar-links">
-                <li><a href="admin_page.php">Polls</a></li>
-                <li><a href="jobs.php">Jobs</a></li>
-                <li><a href="Tasks.php">Tasks</a></li>
-                <li><a href="writeAiChat.php">ChatBot</a></li>
-                <li><a href="create_poll.php">Create Poll</a></li>
-                <li><a href="create_tasks.php">Create a Task</a></li>
-                <li><a href="pending_user_approvals.php">User Approvals</a></li>
+                <!-- Common Links -->
+                <li>
+                    <a href="<?= $is_admin ? 'admin_page.php' : 'user_page.php'; ?>"
+                        class="<?= basename($_SERVER['PHP_SELF']) == ($is_admin ? 'admin_page.php' : 'user_page.php') ? 'active' : ''; ?>">Polls</a>
+                </li>
+                <li>
+                    <a href="jobs.php"
+                        class="<?= basename($_SERVER['PHP_SELF']) == 'jobs.php' ? 'active' : ''; ?>">Jobs</a>
+                </li>
+                <?php if (!$is_admin): ?>
+                <li>
+                    <a href="assigned_tasks.php"
+                        class="<?= basename($_SERVER['PHP_SELF']) === 'assigned_tasks.php' ? 'active' : ''; ?>">
+                        Assigned Tasks
+                    </a>
+                </li>
+                <?php endif; ?>
+                <li>
+                    <a href="Tasks.php"
+                        class="<?= basename($_SERVER['PHP_SELF']) == 'Tasks.php' ? 'active' : ''; ?>">Tasks</a>
+                </li>
+
+
+                <!-- Admin-Only Links -->
+                <?php if ($is_admin): ?>
+                <li>
+                    <a href="create_poll.php"
+                        class="<?= basename($_SERVER['PHP_SELF']) == 'create_poll.php' ? 'active' : ''; ?>">Create
+                        Poll</a>
+                </li>
+
+                <li>
+                    <a href="pending_user_approvals.php"
+                        class="<?= basename($_SERVER['PHP_SELF']) == 'pending_user_approvals.php' ? 'active' : ''; ?>">User
+                        Approvals</a>
+                </li>
+                <?php endif; ?>
+                <li>
+                    <a href="create_tasks.php"
+                        class="<?= basename($_SERVER['PHP_SELF']) == 'create_tasks.php' ? 'active' : ''; ?>">Create
+                        Task</a>
+                </li>
+                <li>
+                    <a href="writeAiChat.php"
+                        class="<?= basename($_SERVER['PHP_SELF']) == 'writeAiChat.php' ? 'active' : ''; ?>">ChatBot</a>
+                </li>
             </ul>
         </aside>
 
