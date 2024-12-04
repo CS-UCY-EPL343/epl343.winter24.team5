@@ -6,11 +6,15 @@ if (session_status() === PHP_SESSION_NONE) {
 // Include the navbar
 require_once 'navbar.php';
 require_once 'session_check.php';
+require_once 'db_functions.php';
 
-if (!isset($_SESSION['role']) || $_SESSION['role'] !== 'Admin') {
-    header("Location: index.php");
+if (!isset($_SESSION['user_id'])) {
+    header("Location: sign_in_account.php");
     exit();
 }
+
+$user_role = $_SESSION['role'] ?? 'User';
+$is_admin = $user_role === 'Admin';
 ?>
 
 <!DOCTYPE html>
@@ -28,16 +32,18 @@ if (!isset($_SESSION['role']) || $_SESSION['role'] !== 'Admin') {
     <div class="dashboard-container">
         <!-- Sidebar -->
         <aside class="sidebar">
-            <h3 class="sidebar-title">Admin Dashboard</h3>
+            <h3 class="sidebar-title"><?= $is_admin ? 'Admin Dashboard' : 'User Dashboard'; ?></h3>
             <ul class="sidebar-links">
-                <li><a href="create_poll.php">Create Poll</a></li>
-                <li><a href="create_tasks.php">Create a Task</a></li>
                 <li><a href="admin_page.php">Polls</a></li>
-                <li><a href="pending_user_approvals.php">User Approvals</a></li>
                 <li><a href="jobs.php">Jobs</a></li>
-                <li><a href="Tasks.php">Tasks</a></li>
-                <li><a href="writeAiChat.php" class="active">ChatBot</a></li>
+                <li><a href="writeAiChat.php">ChatBot</a></li>
                 <li><a href="#settings">Settings</a></li>
+                <?php if ($is_admin): ?>
+                    <li><a href="create_poll.php">Create Poll</a></li>
+                    <li><a href="create_tasks.php">Create a Task</a></li>
+                    <li><a href="pending_user_approvals.php">User Approvals</a></li>
+                    <li><a href="Tasks.php">Tasks</a></li>
+                <?php endif; ?>
             </ul>
         </aside>
 
