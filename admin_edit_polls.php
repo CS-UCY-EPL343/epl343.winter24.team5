@@ -79,7 +79,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <li><a href="create_poll.php">Create Poll</a></li>
                 <li><a href="create_tasks.php">Create a Task</a></li>
                 <li><a href="pending_user_approvals.php">User Approvals</a></li>
-                <li><a href="#settings">Settings</a></li>
             </ul>
         </aside>
 
@@ -91,15 +90,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 </div>
                 <h1>Edit Poll</h1>
                 <?php if (isset($success)): ?>
-                <div class="alert alert-success" role="alert">
-                    <?= htmlspecialchars($success) ?>
-                </div>
+                    <div class="alert alert-success" role="alert">
+                        <?= htmlspecialchars($success) ?>
+                    </div>
                 <?php endif; ?>
 
                 <?php if (isset($error)): ?>
-                <div class="alert alert-danger" role="alert">
-                    <?= htmlspecialchars($error) ?>
-                </div>
+                    <div class="alert alert-danger" role="alert">
+                        <?= htmlspecialchars($error) ?>
+                    </div>
                 <?php endif; ?>
 
                 <form method="post" action="">

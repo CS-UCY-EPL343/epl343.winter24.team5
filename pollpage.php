@@ -128,12 +128,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             class="<?= basename($_SERVER['PHP_SELF']) == 'create_tasks_user.php' ? 'active' : ''; ?>">Create Task</a>
                     </li>
                 <?php endif; ?>
-                <li>
-                    <a href="#settings"
-                        class="<?= basename($_SERVER['PHP_SELF']) === '#settings' ? 'active' : ''; ?>">
-                        Settings
-                    </a>
-                </li>
+
             </ul>
 
         </aside>

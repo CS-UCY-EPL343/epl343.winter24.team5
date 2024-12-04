@@ -5,6 +5,5 @@
         <li><a href="#">Polls</a></li>
         <li><a href="#users">Users</a></li>
         <li><a href="#reports">Reports</a></li>
-        <li><a href="#settings">Settings</a></li>
     </ul>
 </aside>
