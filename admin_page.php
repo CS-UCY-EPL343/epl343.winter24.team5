@@ -107,7 +107,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['poll_id'])) {
     <div class="dashboard-container">
         <!-- Sidebar -->
         <aside class="sidebar">
-            <h3 class="sidebar-title">Admin Dashboard</h3>
+            <h3 class="sidebar-title" style="text-align: center;">Admin Dashboard</h3>
             <ul class="sidebar-links">
                 <li><a href="admin_page.php">Polls</a></li>
                 <li><a href="jobs.php">Jobs</a></li>

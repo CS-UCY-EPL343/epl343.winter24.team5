@@ -57,12 +57,6 @@ $jobs = getJobListings();
 
             </ul>
 
-            <!-- SVG at the bottom -->
-            <div class="sidebar-bottom">
-                <a href="admin_easter_egg.html" class="sidebar-link">
-                    <img src="videos/dinoegg.png" alt="Dino Egg" class="sidebar-icon">
-                </a>
-            </div>
         </aside>
 
 
