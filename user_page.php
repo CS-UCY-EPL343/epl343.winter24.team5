@@ -85,7 +85,6 @@ try {
                         Settings
                     </a>
                 </li>
-
             </ul>
         </aside>
 
