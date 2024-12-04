@@ -90,11 +90,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['title'], $_POST['desc
                 <form method="post" action="">
                     <div class="form-group">
                         <label for="title">Title</label>
-                        <input type="text" name="title" id="title" class="form-control" maxlength="40" required>
+                        <input type="text" name="title" id="title" class="form-control" maxlength="100" required>
                     </div>
                     <div class="form-group">
                         <label for="description">Description</label>
-                        <textarea name="description" id="description" class="form-control" maxlength="255"
+                        <textarea name="description" id="description" class="form-control"
                             required></textarea>
                     </div>
                     <div class="form-group">

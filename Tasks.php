@@ -15,7 +15,7 @@ if (!isset($_SESSION['user_id'])) {
 }
 $user_role = $_SESSION['role'] ?? 'User';
 $is_admin = $user_role === 'Admin';
-
+$user_id = $_SESSION['user_id'];
 // Initialize variables
 $searchTerm = $_GET['search'] ?? ''; // Retrieve search term from the query string
 $tasks = [];
@@ -23,9 +23,9 @@ $tasks = [];
 // Retrieve tasks based on search term
 try {
     if ($searchTerm) {
-        $tasks = searchTasksByTitle($searchTerm); 
+        $tasks = searchTasksByTitle($user_id, $searchTerm);
     } else {
-        $tasks = getAllTasks(); // Retrieve all tasks if no search term
+        $tasks = getAllTasks($user_id); // Retrieve all tasks if no search term
     }
 } catch (PDOException $e) {
     $error = handleSqlError($e);
@@ -210,13 +210,13 @@ try {
                             User Approvals
                         </a>
                     </li>
-                    <?php else: ?>
-                        <li>
-                    <a href="create_tasks_user.php"
-                        class="<?= basename($_SERVER['PHP_SELF']) === 'create_tasks_user.php' ? 'active' : ''; ?>">
-                        Create Task
-                    </a>
-                </li>
+                <?php else: ?>
+                    <li>
+                        <a href="create_tasks_user.php"
+                            class="<?= basename($_SERVER['PHP_SELF']) === 'create_tasks_user.php' ? 'active' : ''; ?>">
+                            Create Task
+                        </a>
+                    </li>
                 <?php endif; ?>
 
                 <li>

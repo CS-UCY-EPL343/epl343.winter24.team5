@@ -3,7 +3,7 @@
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
 
-require 'vendor/autoload.php'; 
+require 'vendor/autoload.php';
 function getDatabaseConnection()
 {
     try {
@@ -541,24 +541,33 @@ function createTask($creatorId, $title, $description, $dateDue)
     }
 }
 
-function getAllTasks()
+function getAllTasks($user_id)
 {
     try {
+
         $pdo = getDatabaseConnection();
-        $stmt = $pdo->query("EXEC GetAllTasks"); // Call the stored procedure
+
+        $stmt = $pdo->prepare("EXEC GetAllTasks @User_ID=:user_id"); // Call the stored procedure
+
+        $stmt->bindParam(':user_id', $user_id, PDO::PARAM_INT);
+        $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_ASSOC); // Fetch results as an associative array
+
     } catch (PDOException $e) {
         handleSqlError($e); // Log and handle the error
         return []; // Return an empty array on error
     }
 }
 
-function searchTasksByTitle($searchTerm)
+function searchTasksByTitle($user_id, $searchTerm)
 {
     try {
         $pdo = getDatabaseConnection(); // Ensure this returns a valid PDO connection
-        $stmt = $pdo->prepare("EXEC SearchTasksByTitle :search");
+        $stmt = $pdo->prepare("EXEC SearchTasksByTitle :user_id,:search");
+        $stmt->bindParam(':user_id', $user_id, PDO::PARAM_STR);
         $stmt->bindParam(':search', $searchTerm, PDO::PARAM_STR);
+
+
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     } catch (PDOException $e) {
