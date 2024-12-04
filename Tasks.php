@@ -30,10 +30,120 @@ try {
 } catch (PDOException $e) {
     $error = handleSqlError($e);
 }
+
+
 ?>
 
 <!DOCTYPE html>
 <html lang="en">
+
+<style>
+    .dashboard-main {
+        padding: 20px;
+        background-color: #f4f4f9;
+    }
+
+    h1 {
+        text-align: center;
+        margin-bottom: 20px;
+        color: #333;
+    }
+
+    .search-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-bottom: 20px;
+    }
+
+    .search-form {
+        justify-content: center;
+        align-items: center;
+        gap: 5px;
+        /* Spacing between input and button */
+        background-color: #f9f9f9;
+        /* Optional background for form container */
+        padding: 10px;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    .search-form input[type="text"] {
+        padding: 6px;
+        width: 200px;
+        /* Smaller input box width */
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        font-size: 14px;
+    }
+
+    .search-form button {
+        padding: 6px 12px;
+        /* Smaller button size */
+        border: none;
+        background-color: #007bff;
+        color: white;
+        border-radius: 5px;
+        font-size: 14px;
+        cursor: pointer;
+        transition: background-color 0.3s ease, transform 0.2s ease;
+    }
+
+    .search-form button:hover {
+        background-color: #0056b3;
+        transform: scale(1.1);
+        /* Slight zoom effect on hover */
+    }
+
+    .task-list {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 20px;
+    }
+
+    .task-card {
+        background-color: #fff;
+        border: 1px solid #ccc;
+        border-radius: 10px;
+        width: 300px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .task-card:hover {
+        transform: scale(1.05);
+        box-shadow: 0 8px 12px rgba(0, 0, 0, 0.15);
+    }
+
+    .task-header {
+        background-color: #007bff;
+        color: white;
+        padding: 15px;
+        border-radius: 10px 10px 0 0;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .task-header h2 {
+        font-size: 1.2rem;
+        margin: 0;
+    }
+
+    .task-header .task-date {
+        font-size: 0.9rem;
+    }
+
+    .task-body {
+        padding: 15px;
+        color: #555;
+    }
+
+    .task-body p {
+        margin: 10px 0;
+    }
+</style>
 
 <head>
     <meta charset="UTF-8">
@@ -41,6 +151,7 @@ try {
     <title>View Tasks</title>
     <link rel="stylesheet" href="styles.css"> <!-- Include your styles.css -->
 </head>
+
 
 <body>
     <!-- Wrapper -->
@@ -74,11 +185,12 @@ try {
             <h1>View Tasks</h1>
 
             <!-- Search Form -->
-            <form method="GET" action="Tasks.php" class="search-form">
-                <input type="text" name="search" placeholder="Search by title..."
-                    value="<?= htmlspecialchars($searchTerm) ?>">
-                <button type="submit">Search</button>
-            </form>
+            <div class="search-container">
+                <form method="GET" action="Tasks.php" class="search-form">
+                    <input type="text" name="search" placeholder="Search by title..." value="<?= htmlspecialchars($searchTerm) ?>">
+                    <button type="submit">Search</button>
+                </form>
+            </div>
 
             <?php if (isset($error)): ?>
             <div class="alert alert-danger" role="alert">
@@ -87,34 +199,26 @@ try {
             <?php endif; ?>
 
             <?php if (!empty($tasks)): ?>
-            <div class="task-list">
-                <?php foreach ($tasks as $task): ?>
-                <table class="task-table">
-                    <tr>
-                        <th>Title</th>
-                        <td><?= htmlspecialchars($task['Title']) ?></td>
-                    </tr>
-                    <tr>
-                        <th>Description</th>
-                        <td><?= htmlspecialchars($task['Description']) ?></td>
-                    </tr>
-                    <tr>
-                        <th>Due Date</th>
-                        <td><?= htmlspecialchars($task['Date_Due']) ?></td>
-                    </tr>
-                    <tr>
-                        <th>Created By</th>
-                        <td><?= htmlspecialchars($task['Created_By']) ?></td>
-                    </tr>
-                </table>
-                <br>
-                <?php endforeach; ?>
-            </div>
+                <div class="task-list">
+                    <?php foreach ($tasks as $task): ?>
+                        <div class="task-card">
+                            <div class="task-header">
+                                <h2><?= htmlspecialchars($task['Title']) ?></h2>
+                                <span class="task-date">Due: <?= htmlspecialchars($task['Date_Due']) ?></span>
+                            </div>
+                            <div class="task-body">
+                                <p><strong>Description:</strong> <?= htmlspecialchars($task['Description']) ?></p>
+                                <p><strong>Created By:</strong> <?= htmlspecialchars($task['Created_By']) ?></p>
+                            </div>
+                        </div>
+                    <?php endforeach; ?>
+                </div>
             <?php else: ?>
             <p>No tasks available.</p>
             <?php endif; ?>
         </main>
     </div>
 </body>
+
 
 </html>
