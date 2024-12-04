@@ -589,9 +589,7 @@ function insertJobConfiguration(
     $jobId,
     $userId,
     $configName,
-    $parameters = null,
-    $scheduleTime = null,
-    $recurrence = null
+    $parameters = null
 ) {
     try {
         // Establish database connection
@@ -603,9 +601,7 @@ function insertJobConfiguration(
             @Job_ID = :job_id,
             @User_ID = :user_id,
             @Configuration_Name = :config_name,
-            @Parameters = :parameters,
-            @Schedule_Time = :schedule_time,
-            @Recurrence = :recurrence
+            @Parameters = :parameters
         ");
 
         // Bind parameters
@@ -613,15 +609,14 @@ function insertJobConfiguration(
         $stmt->bindParam(':user_id', $userId, PDO::PARAM_INT);
         $stmt->bindParam(':config_name', $configName);
         $stmt->bindParam(':parameters', $parameters);
-        $stmt->bindParam(':schedule_time', $scheduleTime);
-        $stmt->bindParam(':recurrence', $recurrence);
 
         // Execute the query
         $stmt->execute();
 
-        return null; // Return null for success
+        return true; // Return true for success
     } catch (PDOException $e) {
         handleSqlError($e); // Handle SQL errors
         return false; // Return false on failure
     }
 }
+
