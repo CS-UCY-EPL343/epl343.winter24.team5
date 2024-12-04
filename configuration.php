@@ -82,7 +82,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <div class="dashboard-container">
         <!-- Sidebar -->
         <aside class="sidebar">
-        <h3 class="sidebar-title"><?= $is_admin ? 'Admin Dashboard' : 'User Dashboard'; ?></h3>
+            <h3 class="sidebar-title"><?= $is_admin ? 'Admin Dashboard' : 'User Dashboard'; ?></h3>
             <ul class="sidebar-links">
                 <!-- Common Links -->
                 <li>
@@ -94,12 +94,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         class="<?= basename($_SERVER['PHP_SELF']) == 'jobs.php' ? 'active' : ''; ?>">Jobs</a>
                 </li>
                 <?php if (!$is_admin): ?>
-                <li>
-                    <a href="assigned_tasks.php"
-                        class="<?= basename($_SERVER['PHP_SELF']) === 'assigned_tasks.php' ? 'active' : ''; ?>">
-                        Assigned Tasks
-                    </a>
-                </li>
+                    <li>
+                        <a href="assigned_tasks.php"
+                            class="<?= basename($_SERVER['PHP_SELF']) === 'assigned_tasks.php' ? 'active' : ''; ?>">
+                            Assigned Tasks
+                        </a>
+                    </li>
                 <?php endif; ?>
                 <li>
                     <a href="Tasks.php"
@@ -109,17 +109,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                 <!-- Admin-Only Links -->
                 <?php if ($is_admin): ?>
-                <li>
-                    <a href="create_poll.php"
-                        class="<?= basename($_SERVER['PHP_SELF']) == 'create_poll.php' ? 'active' : ''; ?>">Create
-                        Poll</a>
-                </li>
+                    <li>
+                        <a href="create_poll.php"
+                            class="<?= basename($_SERVER['PHP_SELF']) == 'create_poll.php' ? 'active' : ''; ?>">Create
+                            Poll</a>
+                    </li>
 
-                <li>
-                    <a href="pending_user_approvals.php"
-                        class="<?= basename($_SERVER['PHP_SELF']) == 'pending_user_approvals.php' ? 'active' : ''; ?>">User
-                        Approvals</a>
-                </li>
+                    <li>
+                        <a href="pending_user_approvals.php"
+                            class="<?= basename($_SERVER['PHP_SELF']) == 'pending_user_approvals.php' ? 'active' : ''; ?>">User
+                            Approvals</a>
+                    </li>
                 <?php endif; ?>
                 <li>
                     <a href="create_tasks.php"
@@ -132,12 +132,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 </li>
             </ul>
 
-            <!-- SVG at the bottom -->
-            <div class="sidebar-bottom">
-                <a href="admin_easter_egg.html" class="sidebar-link">
-                    <img src="videos/dinoegg.png" alt="Dino Egg" class="sidebar-icon">
-                </a>
-            </div>
+
         </aside>
 
         <!-- Main Content -->
@@ -148,9 +143,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                     <!-- Display Success or Error Messages -->
                     <?php if (isset($successMessage)): ?>
-                    <div class="success-message" style="color: green;"><?= htmlspecialchars($successMessage); ?></div>
+                        <div class="success-message" style="color: green;"><?= htmlspecialchars($successMessage); ?></div>
                     <?php elseif (isset($errorMessage)): ?>
-                    <div class="error-message" style="color: red;"><?= htmlspecialchars($errorMessage); ?></div>
+                        <div class="error-message" style="color: red;"><?= htmlspecialchars($errorMessage); ?></div>
                     <?php endif; ?>
 
                     <!-- Job Configuration Form -->
@@ -164,16 +159,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             <!-- Dynamic Parameter Fields -->
                             <?php if (!empty($programs)): ?>
                                 <?php foreach ($programs as $index => $program): ?>
-                                <tr>
-                                    <td>
-                                        <label for="param<?= $index; ?>">
-                                            Parameter(s) for <?= htmlspecialchars($program['Program_Name']) . ' (' . htmlspecialchars($program['Language']) . ')'; ?>:
-                                        </label>
-                                    </td>
-                                    <td>
-                                        <input type="text" id="param<?= $index; ?>" name="param<?= $index; ?>">
-                                    </td>
-                                </tr>
+                                    <tr>
+                                        <td>
+                                            <label for="param<?= $index; ?>">
+                                                Parameter(s) for <?= htmlspecialchars($program['Program_Name']) . ' (' . htmlspecialchars($program['Language']) . ')'; ?>:
+                                            </label>
+                                        </td>
+                                        <td>
+                                            <input type="text" id="param<?= $index; ?>" name="param<?= $index; ?>">
+                                        </td>
+                                    </tr>
                                 <?php endforeach; ?>
                             <?php else: ?>
                                 <tr>
