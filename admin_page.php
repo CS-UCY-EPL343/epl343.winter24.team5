@@ -33,48 +33,48 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['poll_id'])) {
 <!DOCTYPE html>
 <html lang="en">
 <style>
-.sidebar {
-    display: flex;
-    flex-direction: column;
-    height: 100%;
-    justify-content: space-between;
-    background-color: #f8f9fa;
-    /* Adjust background as needed */
-    padding: 10px;
-}
+    .sidebar {
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+        justify-content: space-between;
+        background-color: #f8f9fa;
+        /* Adjust background as needed */
+        padding: 10px;
+    }
 
-.sidebar-title {
-    font-size: 1.5rem;
-    margin-bottom: 1rem;
-    text-align: left;
-}
+    .sidebar-title {
+        font-size: 1.5rem;
+        margin-bottom: 1rem;
+        text-align: left;
+    }
 
-.sidebar-links {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-}
+    .sidebar-links {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
 
-.sidebar-links li {
-    margin-bottom: 0.5rem;
-}
+    .sidebar-links li {
+        margin-bottom: 0.5rem;
+    }
 
-.sidebar-links a {
-    text-decoration: none;
-    color: #000;
-    font-size: 1rem;
-    transition: color 0.2s ease;
-}
+    .sidebar-links a {
+        text-decoration: none;
+        color: #000;
+        font-size: 1rem;
+        transition: color 0.2s ease;
+    }
 
-.sidebar-links a:hover {
-    color: #007bff;
-}
+    .sidebar-links a:hover {
+        color: #007bff;
+    }
 
-.sidebar-bottom {
-    text-align: center;
-    margin-top: auto;
-    /* Push to the bottom */
-}
+    .sidebar-bottom {
+        text-align: center;
+        margin-top: auto;
+        /* Push to the bottom */
+    }
 
     .sidebar-link {
         display: inline-block;
@@ -90,9 +90,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['poll_id'])) {
         transition: transform 0.2s ease;
     }
 
-.sidebar-link:hover .sidebar-icon {
-    transform: scale(1.2);
-}
+    .sidebar-link:hover .sidebar-icon {
+        transform: scale(1.2);
+    }
+
+    .sidebar-links a.active {
+        background-color: #6db4ff;
+    }
 </style>
 
 <head>
@@ -109,15 +113,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['poll_id'])) {
         <aside class="sidebar">
             <h3 class="sidebar-title" style="text-align: center;">Admin Dashboard</h3>
             <ul class="sidebar-links">
-                <li><a href="admin_page.php">Polls</a></li>
-                <li><a href="jobs.php">Jobs</a></li>
-                <li><a href="Tasks.php">Tasks</a></li>
-                <li><a href="writeAiChat.php">ChatBot</a></li>
-                <li><a href="create_poll.php">Create Poll</a></li>
-                <li><a href="create_tasks.php">Create a Task</a></li>
-                <li><a href="pending_user_approvals.php">User Approvals</a></li>
-                <li><a href="#settings">Settings</a></li>
+                <li><a href="admin_page.php" class="<?= basename($_SERVER['PHP_SELF']) == 'admin_page.php' ? 'active' : '' ?>">Polls</a></li>
+                <li><a href="jobs.php" class="<?= basename($_SERVER['PHP_SELF']) == 'jobs.php' ? 'active' : '' ?>">Jobs</a></li>
+                <li><a href="Tasks.php" class="<?= basename($_SERVER['PHP_SELF']) == 'Tasks.php' ? 'active' : '' ?>">Tasks</a></li>
+                <li><a href="writeAiChat.php" class="<?= basename($_SERVER['PHP_SELF']) == 'writeAiChat.php' ? 'active' : '' ?>">ChatBot</a></li>
+                <li><a href="create_poll.php" class="<?= basename($_SERVER['PHP_SELF']) == 'create_poll.php' ? 'active' : '' ?>">Create Poll</a></li>
+                <li><a href="create_tasks.php" class="<?= basename($_SERVER['PHP_SELF']) == 'create_tasks.php' ? 'active' : '' ?>">Create a Task</a></li>
+                <li><a href="pending_user_approvals.php" class="<?= basename($_SERVER['PHP_SELF']) == 'pending_user_approvals.php' ? 'active' : '' ?>">User Approvals</a></li>
+                <li><a href="#settings" class="<?= basename($_SERVER['PHP_SELF']) == 'settings.php' ? 'active' : '' ?>">Settings</a></li>
             </ul>
+
 
             <!-- SVG at the bottom -->
             <div class="sidebar-bottom">
@@ -134,42 +139,53 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['poll_id'])) {
             </div>
             <div class="poll-container">
                 <?php if (isset($error)): ?>
-                <div class="alert alert-danger" role="alert">
-                    <?= htmlspecialchars($error) ?>
-                </div>
-                <?php elseif (empty($polls)): ?>
-                <p>No polls available.</p>
-                <?php else: ?>
-                <?php foreach ($polls as $poll): ?>
-                <div class="poll-card1" style="position: relative;">
-                    <?php if ($poll['Status'] !== 'Finished'): ?>
-                    <!-- Add Users Button -->
-                    <a href="add_users_to_poll.php?poll_id=<?= htmlspecialchars($poll['Poll_ID']) ?>"
-                        style="position: absolute; top: 10px; right: 10px; font-size: 1.5rem; color: black; cursor: pointer;"
-                        title="Add Users to Poll">
-                        <i class="bi bi-person-fill-add"></i>
-                    </a>
-                    <h3 class="poll-title"><?= htmlspecialchars($poll['Title']) ?></h3>
-                    <p class="poll-description"><?= htmlspecialchars($poll['Description']) ?></p>
-                    <p class="poll-votes">Expiration: <?= htmlspecialchars($poll['Expiration_Date']) ?></p>
-                    <div class="poll-actions">
-                        <a href="admin_view_polls.php?poll_id=<?= htmlspecialchars($poll['Poll_ID']) ?>"
-                            class="poll-button">View</a>
-                        <a href="admin_edit_polls.php?poll_id=<?= htmlspecialchars($poll['Poll_ID']) ?>"
-                            class="poll-button-yellow">Edit</a>
-                        <form method="POST">
-                            <input type="hidden" name="poll_id" value="<?= htmlspecialchars($poll['Poll_ID']) ?>">
-                            <button type="submit" class="poll-button-red">Finish Poll</button>
-                        </form>
+                    <div class="alert alert-danger" role="alert">
+                        <?= htmlspecialchars($error) ?>
                     </div>
-                    <?php else: ?>
-                    <h3 class="poll-title"><?= htmlspecialchars($poll['Title']) ?></h3>
-                    <p class="poll-description"><?= htmlspecialchars($poll['Description']) ?></p>
-                    <p class="poll-votes">Expiration: <?= htmlspecialchars($poll['Expiration_Date']) ?></p>
-                    <span class="poll-status">Poll Finished</span>
-                    <?php endif; ?>
-                </div>
-                <?php endforeach; ?>
+                <?php elseif (empty($polls)): ?>
+                    <p>No polls available.</p>
+                <?php else: ?>
+                    <?php foreach ($polls as $poll): ?>
+                        <div class="poll-card1" style="position: relative;">
+                            <?php if ($poll['Status'] !== 'Finished'): ?>
+                                <!-- Add Users Button -->
+                                <a href="add_users_to_poll.php?poll_id=<?= htmlspecialchars($poll['Poll_ID']) ?>"
+                                    style="position: absolute; top: 10px; right: 10px; font-size: 1.5rem; color: black; cursor: pointer;"
+                                    title="Add Users to Poll">
+                                    <i class="bi bi-person-fill-add"></i>
+                                </a>
+                                <h3 class="poll-title"><?= htmlspecialchars($poll['Title']) ?></h3>
+                                <p class="poll-description"><?= htmlspecialchars($poll['Description']) ?></p>
+                                <p class="poll-votes">Expiration: <?= htmlspecialchars($poll['Expiration_Date']) ?></p>
+                                <div class="poll-actions">
+                                    <a href="admin_view_polls.php?poll_id=<?= htmlspecialchars($poll['Poll_ID']) ?>"
+                                        class="poll-button">View</a>
+                                    <a href="admin_edit_polls.php?poll_id=<?= htmlspecialchars($poll['Poll_ID']) ?>"
+                                        class="poll-button-yellow">Edit</a>
+                                    <form method="POST">
+                                        <input type="hidden" name="poll_id" value="<?= htmlspecialchars($poll['Poll_ID']) ?>">
+                                        <button type="submit" class="poll-button-red">Finish Poll.
+                                        </button>
+                                    </form>
+                                </div>
+                            <?php else: ?>
+                                <h3 class="poll-title"><?= htmlspecialchars($poll['Title']) ?></h3>
+                                <p class="poll-description"><?= htmlspecialchars($poll['Description']) ?></p>
+                                <p class="poll-votes">Expiration: <?= htmlspecialchars($poll['Expiration_Date']) ?></p>
+                                <span class="poll-status">Poll Finished. Result:
+                                    <?php if ($poll['Final_Verdict'] == 1): ?>
+                                        Decision Will Go Through
+                                    <?php else: ?>
+                                        Decision Will Not Go Through
+                                    <?php endif; ?>
+                                </span>
+                                <div style="margin-left: 90%;">
+                                    <a href=" admin_view_polls.php?poll_id=<?= htmlspecialchars($poll['Poll_ID']) ?>"
+                                        class="poll-button">View</a>
+                                </div>
+                            <?php endif; ?>
+                        </div>
+                    <?php endforeach; ?>
 
 
                 <?php endif; ?>

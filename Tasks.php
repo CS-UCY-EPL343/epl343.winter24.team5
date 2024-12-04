@@ -143,6 +143,10 @@ try {
     .task-body p {
         margin: 10px 0;
     }
+
+    .sidebar-links a.active {
+        background-color: #6db4ff;
+    }
 </style>
 
 <head>
@@ -162,21 +166,59 @@ try {
             <ul class="sidebar-links">
                 <!-- Common Links -->
                 <li>
-                    <a href="<?= $is_admin ? 'admin_page.php' : 'user_page.php'; ?>">Polls</a>
+                    <a href="<?= $is_admin ? 'admin_page.php' : 'user_page.php'; ?>"
+                        class="<?= basename($_SERVER['PHP_SELF']) === ($is_admin ? 'admin_page.php' : 'user_page.php') ? 'active' : ''; ?>">
+                        Polls
+                    </a>
                 </li>
-                <li><a href="jobs.php">Jobs</a></li>
-                <li><a href="Tasks.php">Tasks</a></li>
-                <li><a href="writeAiChat.php">ChatBot</a></li>
+                <li>
+                    <a href="jobs.php"
+                        class="<?= basename($_SERVER['PHP_SELF']) === 'jobs.php' ? 'active' : ''; ?>">
+                        Jobs
+                    </a>
+                </li>
+                <li>
+                    <a href="Tasks.php"
+                        class="<?= basename($_SERVER['PHP_SELF']) === 'Tasks.php' ? 'active' : ''; ?>">
+                        Tasks
+                    </a>
+                </li>
+                <li>
+                    <a href="writeAiChat.php"
+                        class="<?= basename($_SERVER['PHP_SELF']) === 'writeAiChat.php' ? 'active' : ''; ?>">
+                        ChatBot
+                    </a>
+                </li>
 
                 <!-- Admin-Only Links -->
                 <?php if ($is_admin): ?>
-                <li><a href="create_poll.php">Create Poll</a></li>
-                <li><a href="create_tasks.php">Create a Task</a></li>
-                <li><a href="pending_user_approvals.php">User Approvals</a></li>
+                    <li>
+                        <a href="create_poll.php"
+                            class="<?= basename($_SERVER['PHP_SELF']) === 'create_poll.php' ? 'active' : ''; ?>">
+                            Create Poll
+                        </a>
+                    </li>
+                    <li>
+                        <a href="create_tasks.php"
+                            class="<?= basename($_SERVER['PHP_SELF']) === 'create_tasks.php' ? 'active' : ''; ?>">
+                            Create a Task
+                        </a>
+                    </li>
+                    <li>
+                        <a href="pending_user_approvals.php"
+                            class="<?= basename($_SERVER['PHP_SELF']) === 'pending_user_approvals.php' ? 'active' : ''; ?>">
+                            User Approvals
+                        </a>
+                    </li>
                 <?php endif; ?>
-                <li><a href="#settings">Settings</a></li>
-
+                <li>
+                    <a href="#settings"
+                        class="<?= basename($_SERVER['PHP_SELF']) === '#settings' ? 'active' : ''; ?>">
+                        Settings
+                    </a>
+                </li>
             </ul>
+
         </aside>
 
 
@@ -193,9 +235,9 @@ try {
             </div>
 
             <?php if (isset($error)): ?>
-            <div class="alert alert-danger" role="alert">
-                <?= htmlspecialchars($error) ?>
-            </div>
+                <div class="alert alert-danger" role="alert">
+                    <?= htmlspecialchars($error) ?>
+                </div>
             <?php endif; ?>
 
             <?php if (!empty($tasks)): ?>
@@ -214,7 +256,7 @@ try {
                     <?php endforeach; ?>
                 </div>
             <?php else: ?>
-            <p>No tasks available.</p>
+                <p>No tasks available.</p>
             <?php endif; ?>
         </main>
     </div>

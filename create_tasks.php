@@ -36,6 +36,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['title'], $_POST['desc
 
 <!DOCTYPE html>
 <html lang="en">
+<style>
+    .sidebar-links a.active {
+        background-color: #6db4ff;
+    }
+</style>
 
 <head>
     <meta charset="UTF-8">
@@ -51,14 +56,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['title'], $_POST['desc
         <aside class="sidebar">
             <h3 class="sidebar-title">Admin Dashboard</h3>
             <ul class="sidebar-links">
-                <li><a href="admin_page.php">Polls</a></li>
-                <li><a href="jobs.php">Jobs</a></li>
-                <li><a href="Tasks.php">Tasks</a></li>
-                <li><a href="writeAiChat.php">ChatBot</a></li>
-                <li><a href="create_poll.php">Create Poll</a></li>
-                <li><a href="create_tasks.php">Create a Task</a></li>
-                <li><a href="pending_user_approvals.php">User Approvals</a></li>
-                <li><a href="#settings">Settings</a></li>
+                <li><a href="admin_page.php" class="<?= basename($_SERVER['PHP_SELF']) == 'admin_page.php' ? 'active' : '' ?>">Polls</a></li>
+                <li><a href="jobs.php" class="<?= basename($_SERVER['PHP_SELF']) == 'jobs.php' ? 'active' : '' ?>">Jobs</a></li>
+                <li><a href="Tasks.php" class="<?= basename($_SERVER['PHP_SELF']) == 'Tasks.php' ? 'active' : '' ?>">Tasks</a></li>
+                <li><a href="writeAiChat.php" class="<?= basename($_SERVER['PHP_SELF']) == 'writeAiChat.php' ? 'active' : '' ?>">ChatBot</a></li>
+                <li><a href="create_poll.php" class="<?= basename($_SERVER['PHP_SELF']) == 'create_poll.php' ? 'active' : '' ?>">Create Poll</a></li>
+                <li><a href="create_tasks.php" class="<?= basename($_SERVER['PHP_SELF']) == 'create_tasks.php' ? 'active' : '' ?>">Create a Task</a></li>
+                <li><a href="pending_user_approvals.php" class="<?= basename($_SERVER['PHP_SELF']) == 'pending_user_approvals.php' ? 'active' : '' ?>">User Approvals</a></li>
+                <li><a href="#settings" class="<?= basename($_SERVER['PHP_SELF']) == 'settings.php' ? 'active' : '' ?>">Settings</a></li>
             </ul>
         </aside>
 
@@ -71,15 +76,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['title'], $_POST['desc
                 </div>
                 <h1>Create Task</h1>
                 <?php if (isset($success)): ?>
-                <div class="alert alert-success" role="alert">
-                    <?= htmlspecialchars($success) ?>
-                </div>
+                    <div class="alert alert-success" role="alert">
+                        <?= htmlspecialchars($success) ?>
+                    </div>
                 <?php endif; ?>
 
                 <?php if (isset($error)): ?>
-                <div class="alert alert-danger" role="alert">
-                    <?= htmlspecialchars($error) ?>
-                </div>
+                    <div class="alert alert-danger" role="alert">
+                        <?= htmlspecialchars($error) ?>
+                    </div>
                 <?php endif; ?>
 
                 <form method="post" action="">

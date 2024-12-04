@@ -20,7 +20,7 @@ $pollId = intval($_GET['poll_id']); // Get the selected poll ID
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['user_id'])) {
     $userId = intval($_POST['user_id']);
 
-  
+
     try {
         if (addUserToPoll($pollId, $userId)) {
             // Get poll title and user details
@@ -54,6 +54,11 @@ try {
 
 <!DOCTYPE html>
 <html lang="en">
+<style>
+    .sidebar-links a.active {
+        background-color: #6db4ff;
+    }
+</style>
 
 <head>
     <meta charset="UTF-8">
@@ -68,15 +73,14 @@ try {
         <aside class="sidebar">
             <h3 class="sidebar-title">Admin Dashboard</h3>
             <ul class="sidebar-links">
-                <!-- Common Links -->
-                <li><a href="admin_page.php">Polls</a></li>
-                <li><a href="jobs.php">Jobs</a></li>
-                <li><a href="Tasks.php">Tasks</a></li>
-                <li><a href="writeAiChat.php">ChatBot</a></li>
-                <li><a href="create_poll.php">Create Poll</a></li>
-                <li><a href="create_tasks.php">Create a Task</a></li>
-                <li><a href="pending_user_approvals.php">User Approvals</a></li>
-                <li><a href="#settings">Settings</a></li>
+                <li><a href="admin_page.php" class="active">Polls</a></li>
+                <li><a href="jobs.php" class="<?= basename($_SERVER['PHP_SELF']) == 'jobs.php' ? 'active' : '' ?>">Jobs</a></li>
+                <li><a href="Tasks.php" class="<?= basename($_SERVER['PHP_SELF']) == 'Tasks.php' ? 'active' : '' ?>">Tasks</a></li>
+                <li><a href="writeAiChat.php" class="<?= basename($_SERVER['PHP_SELF']) == 'writeAiChat.php' ? 'active' : '' ?>">ChatBot</a></li>
+                <li><a href="create_poll.php" class="<?= basename($_SERVER['PHP_SELF']) == 'create_poll.php' ? 'active' : '' ?>">Create Poll</a></li>
+                <li><a href="create_tasks.php" class="<?= basename($_SERVER['PHP_SELF']) == 'create_tasks.php' ? 'active' : '' ?>">Create a Task</a></li>
+                <li><a href="pending_user_approvals.php" class="<?= basename($_SERVER['PHP_SELF']) == 'pending_user_approvals.php' ? 'active' : '' ?>">User Approvals</a></li>
+                <li><a href="#settings" class="<?= basename($_SERVER['PHP_SELF']) == 'settings.php' ? 'active' : '' ?>">Settings</a></li>
             </ul>
         </aside>
         <!-- Main Content -->
@@ -87,10 +91,10 @@ try {
 
                 <!-- Success/Error Messages -->
                 <?php if (isset($success)): ?>
-                <p style="color: green;"><?= htmlspecialchars($success) ?></p>
+                    <p style="color: green;"><?= htmlspecialchars($success) ?></p>
                 <?php endif; ?>
                 <?php if (isset($error)): ?>
-                <p style="color: red;"><?= htmlspecialchars($error) ?></p>
+                    <p style="color: red;"><?= htmlspecialchars($error) ?></p>
                 <?php endif; ?>
 
                 <!-- Poll Information -->
@@ -102,9 +106,9 @@ try {
                         <label for="user_id" class="poll-description">Select User:</label>
                         <select name="user_id" id="user_id" class="form-control" required>
                             <?php foreach ($users as $user): ?>
-                            <option value="<?= htmlspecialchars($user['User_ID']) ?>">
-                                <?= htmlspecialchars($user['First_Name'] . ' ' . $user['Last_Name'] . ' (' . $user['Username'] . ')') ?>
-                            </option>
+                                <option value="<?= htmlspecialchars($user['User_ID']) ?>">
+                                    <?= htmlspecialchars($user['First_Name'] . ' ' . $user['Last_Name'] . ' (' . $user['Username'] . ')') ?>
+                                </option>
                             <?php endforeach; ?>
                         </select>
                     </div>
