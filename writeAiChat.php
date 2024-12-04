@@ -38,70 +38,24 @@ $is_admin = $user_role === 'Admin';
         <!-- Sidebar -->
         <aside class="sidebar">
             <h3 class="sidebar-title"><?= $is_admin ? 'Admin Dashboard' : 'User Dashboard'; ?></h3>
+            <aside class="sidebar">
+            <h3 class="sidebar-title"><?= $is_admin ? 'Admin Dashboard' : 'User Dashboard'; ?></h3>
             <ul class="sidebar-links">
                 <!-- Common Links -->
                 <li>
-                    <a href="<?= $is_admin ? 'admin_page.php' : 'user_page.php'; ?>"
-                        class="<?= basename($_SERVER['PHP_SELF']) === ($is_admin ? 'admin_page.php' : 'user_page.php') ? 'active' : ''; ?>">
-                        Polls
-                    </a>
+                    <a href="<?= $is_admin ? 'admin_page.php' : 'user_page.php'; ?>">Polls</a>
                 </li>
-                <li>
-                    <a href="jobs.php"
-                        class="<?= basename($_SERVER['PHP_SELF']) === 'jobs.php' ? 'active' : ''; ?>">
-                        Jobs
-                    </a>
-                </li>
-                <li>
-                    <a href="Tasks.php"
-                        class="<?= basename($_SERVER['PHP_SELF']) === 'Tasks.php' ? 'active' : ''; ?>">
-                        Tasks
-                    </a>
-                </li>
-                <li>
-                    <a href="writeAiChat.php"
-                        class="<?= basename($_SERVER['PHP_SELF']) === 'writeAiChat.php' ? 'active' : ''; ?>">
-                        ChatBot
-                    </a>
-                </li>
-
+                <li><a href="jobs.php">Jobs</a></li>
+                <li><a href="Tasks.php">Tasks</a></li>
+                <li><a href="writeAiChat.php">ChatBot</a></li>
+                <li><a href="create_tasks.php">Create a Task</a></li>
                 <!-- Admin-Only Links -->
                 <?php if ($is_admin): ?>
-                    <li>
-                        <a href="create_poll.php"
-                            class="<?= basename($_SERVER['PHP_SELF']) === 'create_poll.php' ? 'active' : ''; ?>">
-                            Create Poll
-                        </a>
-                    </li>
-                    <li>
-                        <a href="create_tasks.php"
-                            class="<?= basename($_SERVER['PHP_SELF']) === 'create_tasks.php' ? 'active' : ''; ?>">
-                            Create a Task
-                        </a>
-                    </li>
-                    <li>
-                        <a href="pending_user_approvals.php"
-                            class="<?= basename($_SERVER['PHP_SELF']) === 'pending_user_approvals.php' ? 'active' : ''; ?>">
-                            User Approvals
-                        </a>
-                    </li>
-                    <?php else: ?>
-                        <li>
-                    <a href="create_tasks_user.php"
-                        class="<?= basename($_SERVER['PHP_SELF']) === 'create_tasks_user.php' ? 'active' : ''; ?>">
-                        Create Task
-                    </a>
-                </li>
+                <li><a href="create_poll.php">Create Poll</a></li>
+                <li><a href="pending_user_approvals.php">User Approvals</a></li>
                 <?php endif; ?>
-
-                <li>
-                    <a href="#settings"
-                        class="<?= basename($_SERVER['PHP_SELF']) === '#settings' ? 'active' : ''; ?>">
-                        Settings
-                    </a>
-                </li>
+                <li><a href="#settings">Settings</a></li>
             </ul>
-
         </aside>
 
 

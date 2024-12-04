@@ -82,15 +82,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <li><a href="jobs.php">Jobs</a></li>
                 <li><a href="Tasks.php">Tasks</a></li>
                 <li><a href="writeAiChat.php">ChatBot</a></li>
-
+                <li><a href="create_tasks.php">Create a Task</a></li>
                 <!-- Admin-Only Links -->
                 <?php if ($is_admin): ?>
                 <li><a href="create_poll.php">Create Poll</a></li>
-                <li><a href="create_tasks.php">Create a Task</a></li>
                 <li><a href="pending_user_approvals.php">User Approvals</a></li>
                 <?php endif; ?>
                 <li><a href="#settings">Settings</a></li>
-
             </ul>
         </aside>
 
