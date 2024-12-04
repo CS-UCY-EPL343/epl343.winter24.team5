@@ -13,6 +13,8 @@ if (!isset($_SESSION['user_id'])) {
     header("Location: index.php");
     exit();
 }
+$user_role = $_SESSION['role'] ?? 'User';
+$is_admin = $user_role === 'Admin';
 
 // Initialize variables
 $searchTerm = $_GET['search'] ?? ''; // Retrieve search term from the query string
@@ -32,74 +34,87 @@ try {
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>View Tasks</title>
     <link rel="stylesheet" href="styles.css"> <!-- Include your styles.css -->
 </head>
+
 <body>
     <!-- Wrapper -->
     <div class="dashboard-container">
         <!-- Sidebar -->
         <aside class="sidebar">
-            <h3 class="sidebar-title">Admin Dashboard</h3>
+            <h3 class="sidebar-title"><?= $is_admin ? 'Admin Dashboard' : 'User Dashboard'; ?></h3>
             <ul class="sidebar-links">
-            <li><a href="create_poll.php">Create Poll</a></li>
-                <li><a href="create_tasks.php">Create a Task</a></li>
-                <li><a href="admin_page.php">Polls</a></li>
-                <li><a href="pending_user_approvals.php" class="active">User Approvals</a></li>
+                <!-- Common Links -->
+                <li>
+                    <a href="<?= $is_admin ? 'admin_page.php' : 'user_page.php'; ?>">Polls</a>
+                </li>
                 <li><a href="jobs.php">Jobs</a></li>
                 <li><a href="Tasks.php">Tasks</a></li>
                 <li><a href="writeAiChat.php">ChatBot</a></li>
+
+                <!-- Admin-Only Links -->
+                <?php if ($is_admin): ?>
+                <li><a href="create_poll.php">Create Poll</a></li>
+                <li><a href="create_tasks.php">Create a Task</a></li>
+                <li><a href="pending_user_approvals.php">User Approvals</a></li>
+                <?php endif; ?>
                 <li><a href="#settings">Settings</a></li>
+
             </ul>
         </aside>
+
 
         <!-- Main Content -->
         <main class="dashboard-main">
             <h1>View Tasks</h1>
-            
+
             <!-- Search Form -->
             <form method="GET" action="Tasks.php" class="search-form">
-                <input type="text" name="search" placeholder="Search by title..." value="<?= htmlspecialchars($searchTerm) ?>">
+                <input type="text" name="search" placeholder="Search by title..."
+                    value="<?= htmlspecialchars($searchTerm) ?>">
                 <button type="submit">Search</button>
             </form>
 
             <?php if (isset($error)): ?>
-                <div class="alert alert-danger" role="alert">
-                    <?= htmlspecialchars($error) ?>
-                </div>
+            <div class="alert alert-danger" role="alert">
+                <?= htmlspecialchars($error) ?>
+            </div>
             <?php endif; ?>
 
             <?php if (!empty($tasks)): ?>
-                <div class="task-list">
-                    <?php foreach ($tasks as $task): ?>
-                        <table class="task-table">
-                            <tr>
-                                <th>Title</th>
-                                <td><?= htmlspecialchars($task['Title']) ?></td>
-                            </tr>
-                            <tr>
-                                <th>Description</th>
-                                <td><?= htmlspecialchars($task['Description']) ?></td>
-                            </tr>
-                            <tr>
-                                <th>Due Date</th>
-                                <td><?= htmlspecialchars($task['Date_Due']) ?></td>
-                            </tr>
-                            <tr>
-                                <th>Created By</th>
-                                <td><?= htmlspecialchars($task['Created_By']) ?></td>
-                            </tr>
-                        </table>
-                        <br>
-                    <?php endforeach; ?>
-                </div>
+            <div class="task-list">
+                <?php foreach ($tasks as $task): ?>
+                <table class="task-table">
+                    <tr>
+                        <th>Title</th>
+                        <td><?= htmlspecialchars($task['Title']) ?></td>
+                    </tr>
+                    <tr>
+                        <th>Description</th>
+                        <td><?= htmlspecialchars($task['Description']) ?></td>
+                    </tr>
+                    <tr>
+                        <th>Due Date</th>
+                        <td><?= htmlspecialchars($task['Date_Due']) ?></td>
+                    </tr>
+                    <tr>
+                        <th>Created By</th>
+                        <td><?= htmlspecialchars($task['Created_By']) ?></td>
+                    </tr>
+                </table>
+                <br>
+                <?php endforeach; ?>
+            </div>
             <?php else: ?>
-                <p>No tasks available.</p>
+            <p>No tasks available.</p>
             <?php endif; ?>
         </main>
     </div>
 </body>
+
 </html>

@@ -10,7 +10,7 @@ if (!isset($_SESSION['role']) || $_SESSION['role'] !== 'Admin') {
 
 // Get the poll ID from the GET parameter
 if (!isset($_GET['poll_id']) || !is_numeric($_GET['poll_id'])) {
-    header("Location: polls.php"); // Redirect to polls list if no poll ID is provided
+    header("Location: admin_page.php"); // Redirect to polls list if no poll ID is provided
     exit();
 }
 $pollId = intval($_GET['poll_id']);
@@ -36,6 +36,7 @@ if (!$pollDetails) {
 
 <body>
     <div class="container">
+        
         <h2 class="mb-4"><?= htmlspecialchars($pollDetails['Title']) ?></h2>
         <p class="mb-4"><?= htmlspecialchars($pollDetails['Description']) ?></p>
 

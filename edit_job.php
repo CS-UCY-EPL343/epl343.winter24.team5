@@ -97,58 +97,65 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Edit Job</title>
     <link rel="stylesheet" href="styles.css">
 </head>
+
 <body>
     <div class="dashboard-container">
-    <aside class="sidebar">
+        <aside class="sidebar">
             <h3 class="sidebar-title">Admin Dashboard</h3>
             <ul class="sidebar-links">
-            <li><a href="create_poll.php">Create Poll</a></li>
-                <li><a href="create_tasks.php">Create a Task</a></li>
                 <li><a href="admin_page.php">Polls</a></li>
-                <li><a href="pending_user_approvals.php" class="active">User Approvals</a></li>
                 <li><a href="jobs.php">Jobs</a></li>
                 <li><a href="Tasks.php">Tasks</a></li>
                 <li><a href="writeAiChat.php">ChatBot</a></li>
+                <li><a href="create_poll.php">Create Poll</a></li>
+                <li><a href="create_tasks.php">Create a Task</a></li>
+                <li><a href="pending_user_approvals.php">User Approvals</a></li>
                 <li><a href="#settings">Settings</a></li>
             </ul>
         </aside>
+
         <main class="dashboard-main">
             <div class="dashboard-header">
                 <h1>Edit Job</h1>
             </div>
             <div class="form-container-large">
                 <?php if (!empty($message)): ?>
-                    <p style="color: <?= strpos($message, 'success') !== false ? 'green' : 'red'; ?>;">
-                        <?= htmlspecialchars($message); ?>
-                    </p>
+                <p style="color: <?= strpos($message, 'success') !== false ? 'green' : 'red'; ?>;">
+                    <?= htmlspecialchars($message); ?>
+                </p>
                 <?php endif; ?>
                 <form method="POST" enctype="multipart/form-data">
                     <div class="form-group">
                         <label for="job_name">Job Name</label>
-                        <input type="text" id="job_name" name="job_name" class="form-control" value="<?= htmlspecialchars($job['Job_Name']) ?>" required>
+                        <input type="text" id="job_name" name="job_name" class="form-control"
+                            value="<?= htmlspecialchars($job['Job_Name']) ?>" required>
                     </div>
                     <div class="form-group">
                         <label for="job_description">Job Description</label>
-                        <textarea id="job_description" name="job_description" class="form-control" rows="4" required><?= htmlspecialchars($job['Job_Description']) ?></textarea>
+                        <textarea id="job_description" name="job_description" class="form-control" rows="4"
+                            required><?= htmlspecialchars($job['Job_Description']) ?></textarea>
                     </div>
                     <div class="form-group">
                         <label>Current Programs</label>
                         <ul>
                             <?php foreach ($programs as $program): ?>
-                                <li><?= htmlspecialchars($program['Program_Name']) ?> (<?= htmlspecialchars($program['Language']) ?>)</li>
+                            <li><?= htmlspecialchars($program['Program_Name']) ?>
+                                (<?= htmlspecialchars($program['Language']) ?>)</li>
                             <?php endforeach; ?>
                         </ul>
                     </div>
                     <div class="form-group">
                         <label for="program_files">Upload New Program Files</label>
                         <input type="file" id="program_files" name="program_files[]" class="form-control" multiple>
-                        <small>Allowed file types: .java, .py, .js, .cs, .cpp, .c, .rb, .go, .ts, .php, .pl, .sh, .r, .sql, .html, .css, .json, .xml</small>
+                        <small>Allowed file types: .java, .py, .js, .cs, .cpp, .c, .rb, .go, .ts, .php, .pl, .sh, .r,
+                            .sql, .html, .css, .json, .xml</small>
                     </div>
                     <div class="form-actions">
                         <button type="submit" class="configure-button">Save Changes</button>
@@ -158,4 +165,5 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         </main>
     </div>
 </body>
+
 </html>

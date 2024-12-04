@@ -40,18 +40,24 @@ $jobs = getJobListings();
         <aside class="sidebar">
             <h3 class="sidebar-title"><?= $is_admin ? 'Admin Dashboard' : 'User Dashboard'; ?></h3>
             <ul class="sidebar-links">
-                <li><a href="admin_page.php">Polls</a></li>
+                <!-- Common Links -->
+                <li>
+                    <a href="<?= $is_admin ? 'admin_page.php' : 'user_page.php'; ?>">Polls</a>
+                </li>
                 <li><a href="jobs.php">Jobs</a></li>
+                <li><a href="Tasks.php">Tasks</a></li>
                 <li><a href="writeAiChat.php">ChatBot</a></li>
-                <li><a href="#settings">Settings</a></li>
+                <!-- Admin-Only Links -->
                 <?php if ($is_admin): ?>
-                    <li><a href="create_poll.php">Create Poll</a></li>
-                    <li><a href="create_tasks.php">Create a Task</a></li>
-                    <li><a href="pending_user_approvals.php">User Approvals</a></li>
-                    <li><a href="Tasks.php">Tasks</a></li>
+                <li><a href="create_poll.php">Create Poll</a></li>
+                <li><a href="create_tasks.php">Create a Task</a></li>
+                <li><a href="pending_user_approvals.php">User Approvals</a></li>
                 <?php endif; ?>
+                <li><a href="#settings">Settings</a></li>
+
             </ul>
         </aside>
+
 
         <!-- Main Content -->
         <main class="dashboard-main">
@@ -60,11 +66,11 @@ $jobs = getJobListings();
 
                 <!-- Create New Job Button (Visible to Admins Only) -->
                 <?php if ($is_admin): ?>
-                    <div style="display: flex; justify-content: center; gap: 10px; margin-bottom: 15px;">
-                        <form method="GET" action="create_job.php" style="display:inline;">
-                            <button type="submit" class="configure-button">Create New Job</button>
-                        </form>
-                    </div>
+                <div style="display: flex; justify-content: center; gap: 10px; margin-bottom: 15px;">
+                    <form method="GET" action="create_job.php" style="display:inline;">
+                        <button type="submit" class="configure-button">Create New Job</button>
+                    </form>
+                </div>
                 <?php endif; ?>
             </div>
             <div class="job-wrapper">
@@ -82,36 +88,36 @@ $jobs = getJobListings();
                         </thead>
                         <tbody>
                             <?php if (!empty($jobs)): ?>
-                                <?php foreach ($jobs as $job): ?>
-                                    <tr>
-                                        <td><?= htmlspecialchars($job['Job_ID']); ?></td>
-                                        <td><?= htmlspecialchars($job['Creator_ID']); ?></td>
-                                        <td><?= htmlspecialchars($job['Job_Name']); ?></td>
-                                        <td><?= htmlspecialchars($job['Job_Description']); ?></td>
-                                        <td><?= htmlspecialchars($job['Creation_Date']); ?></td>
-                                        <td>
-                                            <div style="display: flex; justify-content: center; gap: 10px;">
-                                                <!-- Configure Button -->
-                                                <form action="configuration.php" method="GET">
-                                                    <input type="hidden" name="Job_ID" value="<?= $job['Job_ID']; ?>">
-                                                    <button type="submit" name="submit_config" class="button">Configure</button>
-                                                </form>
+                            <?php foreach ($jobs as $job): ?>
+                            <tr>
+                                <td><?= htmlspecialchars($job['Job_ID']); ?></td>
+                                <td><?= htmlspecialchars($job['Creator_ID']); ?></td>
+                                <td><?= htmlspecialchars($job['Job_Name']); ?></td>
+                                <td><?= htmlspecialchars($job['Job_Description']); ?></td>
+                                <td><?= htmlspecialchars($job['Creation_Date']); ?></td>
+                                <td>
+                                    <div style="display: flex; justify-content: center; gap: 10px;">
+                                        <!-- Configure Button -->
+                                        <form action="configuration.php" method="GET">
+                                            <input type="hidden" name="Job_ID" value="<?= $job['Job_ID']; ?>">
+                                            <button type="submit" name="submit_config" class="button">Configure</button>
+                                        </form>
 
-                                                <!-- Edit Job Button (Visible to Admins Only) -->
-                                                <?php if ($is_admin): ?>
-                                                    <form method="GET" action="edit_job.php" style="display:inline;">
-                                                        <input type="hidden" name="Job_ID" value="<?= $job['Job_ID']; ?>">
-                                                        <button type="submit" class="button">Edit Job</button>
-                                                    </form>
-                                                <?php endif; ?>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                <?php endforeach; ?>
+                                        <!-- Edit Job Button (Visible to Admins Only) -->
+                                        <?php if ($is_admin): ?>
+                                        <form method="GET" action="edit_job.php" style="display:inline;">
+                                            <input type="hidden" name="Job_ID" value="<?= $job['Job_ID']; ?>">
+                                            <button type="submit" class="button">Edit Job</button>
+                                        </form>
+                                        <?php endif; ?>
+                                    </div>
+                                </td>
+                            </tr>
+                            <?php endforeach; ?>
                             <?php else: ?>
-                                <tr>
-                                    <td colspan="6">No job postings available.</td>
-                                </tr>
+                            <tr>
+                                <td colspan="6">No job postings available.</td>
+                            </tr>
                             <?php endif; ?>
                         </tbody>
                     </table>

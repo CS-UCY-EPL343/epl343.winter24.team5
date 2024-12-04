@@ -11,7 +11,8 @@ if (!isset($_SESSION['user_id'])) {
     header("Location: sign_in_account.php"); // Redirect to login if not authenticated
     exit();
 }
-
+$user_role = $_SESSION['role'] ?? 'User';
+$is_admin = $user_role === 'Admin';
 // Retrieve Job_ID from GET request
 $jobID = $_GET['Job_ID'] ?? null;
 
@@ -63,16 +64,23 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <div class="dashboard-container">
         <!-- Sidebar -->
         <aside class="sidebar">
-            <h3 class="sidebar-title">Admin Dashboard</h3>
+            <h3 class="sidebar-title"><?= $is_admin ? 'Admin Dashboard' : 'User Dashboard'; ?></h3>
             <ul class="sidebar-links">
-                <li><a href="create_poll.php">Create Poll</a></li>
-                <li><a href="create_tasks.php">Create a Task</a></li>
-                <li><a href="admin_page.php">Polls</a></li>
-                <li><a href="pending_user_approvals.php" class="active">User Approvals</a></li>
+                <!-- Common Links -->
+                <li>
+                    <a href="<?= $is_admin ? 'admin_page.php' : 'user_page.php'; ?>">Polls</a>
+                </li>
                 <li><a href="jobs.php">Jobs</a></li>
                 <li><a href="Tasks.php">Tasks</a></li>
                 <li><a href="writeAiChat.php">ChatBot</a></li>
+                <!-- Admin-Only Links -->
+                <?php if ($is_admin): ?>
+                <li><a href="create_poll.php">Create Poll</a></li>
+                <li><a href="create_tasks.php">Create a Task</a></li>
+                <li><a href="pending_user_approvals.php">User Approvals</a></li>
+                <?php endif; ?>
                 <li><a href="#settings">Settings</a></li>
+
             </ul>
         </aside>
 
@@ -84,9 +92,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                     <!-- Display Success or Error Messages -->
                     <?php if (isset($successMessage)): ?>
-                        <div class="success-message"><?= htmlspecialchars($successMessage); ?></div>
+                    <div class="success-message"><?= htmlspecialchars($successMessage); ?></div>
                     <?php elseif (isset($errorMessage)): ?>
-                        <div class="error-message"><?= htmlspecialchars($errorMessage); ?></div>
+                    <div class="error-message"><?= htmlspecialchars($errorMessage); ?></div>
                     <?php endif; ?>
 
                     <!-- Job Configuration Form -->

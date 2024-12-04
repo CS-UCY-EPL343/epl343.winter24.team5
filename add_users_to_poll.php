@@ -54,6 +54,7 @@ try {
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -67,13 +68,14 @@ try {
         <aside class="sidebar">
             <h3 class="sidebar-title">Admin Dashboard</h3>
             <ul class="sidebar-links">
-            <li><a href="create_poll.php">Create Poll</a></li>
-                <li><a href="create_tasks.php">Create a Task</a></li>
+                <!-- Common Links -->
                 <li><a href="admin_page.php">Polls</a></li>
-                <li><a href="pending_user_approvals.php" class="active">User Approvals</a></li>
                 <li><a href="jobs.php">Jobs</a></li>
                 <li><a href="Tasks.php">Tasks</a></li>
                 <li><a href="writeAiChat.php">ChatBot</a></li>
+                <li><a href="create_poll.php">Create Poll</a></li>
+                <li><a href="create_tasks.php">Create a Task</a></li>
+                <li><a href="pending_user_approvals.php">User Approvals</a></li>
                 <li><a href="#settings">Settings</a></li>
             </ul>
         </aside>
@@ -85,10 +87,10 @@ try {
 
                 <!-- Success/Error Messages -->
                 <?php if (isset($success)): ?>
-                    <p style="color: green;"><?= htmlspecialchars($success) ?></p>
+                <p style="color: green;"><?= htmlspecialchars($success) ?></p>
                 <?php endif; ?>
                 <?php if (isset($error)): ?>
-                    <p style="color: red;"><?= htmlspecialchars($error) ?></p>
+                <p style="color: red;"><?= htmlspecialchars($error) ?></p>
                 <?php endif; ?>
 
                 <!-- Poll Information -->
@@ -100,9 +102,9 @@ try {
                         <label for="user_id" class="poll-description">Select User:</label>
                         <select name="user_id" id="user_id" class="form-control" required>
                             <?php foreach ($users as $user): ?>
-                                <option value="<?= htmlspecialchars($user['User_ID']) ?>">
-                                    <?= htmlspecialchars($user['First_Name'] . ' ' . $user['Last_Name'] . ' (' . $user['Username'] . ')') ?>
-                                </option>
+                            <option value="<?= htmlspecialchars($user['User_ID']) ?>">
+                                <?= htmlspecialchars($user['First_Name'] . ' ' . $user['Last_Name'] . ' (' . $user['Username'] . ')') ?>
+                            </option>
                             <?php endforeach; ?>
                         </select>
                     </div>
@@ -115,4 +117,5 @@ try {
     </div>
     <?php require_once 'footer.php'; ?>
 </body>
+
 </html>

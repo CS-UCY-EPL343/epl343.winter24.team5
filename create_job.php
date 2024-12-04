@@ -99,19 +99,20 @@ if (isset($_SESSION['message'])) {
 
 <body>
     <div class="dashboard-container">
-    <aside class="sidebar">
+        <aside class="sidebar">
             <h3 class="sidebar-title">Admin Dashboard</h3>
             <ul class="sidebar-links">
-            <li><a href="create_poll.php">Create Poll</a></li>
-                <li><a href="create_tasks.php">Create a Task</a></li>
                 <li><a href="admin_page.php">Polls</a></li>
-                <li><a href="pending_user_approvals.php" class="active">User Approvals</a></li>
                 <li><a href="jobs.php">Jobs</a></li>
                 <li><a href="Tasks.php">Tasks</a></li>
                 <li><a href="writeAiChat.php">ChatBot</a></li>
+                <li><a href="create_poll.php">Create Poll</a></li>
+                <li><a href="create_tasks.php">Create a Task</a></li>
+                <li><a href="pending_user_approvals.php">User Approvals</a></li>
                 <li><a href="#settings">Settings</a></li>
             </ul>
         </aside>
+
         <main class="dashboard-main">
 
             <div class="dashboard-header">
@@ -119,9 +120,9 @@ if (isset($_SESSION['message'])) {
             </div>
             <div class="form-container-large">
                 <?php if (!empty($message)): ?>
-                    <p style="color: <?= strpos($message, 'successfully') !== false ? 'green' : 'red'; ?>;">
-                        <?= nl2br(htmlspecialchars($message)); ?>
-                    </p>
+                <p style="color: <?= strpos($message, 'successfully') !== false ? 'green' : 'red'; ?>;">
+                    <?= nl2br(htmlspecialchars($message)); ?>
+                </p>
                 <?php endif; ?>
                 <form method="POST" enctype="multipart/form-data">
                     <div class="form-group">
@@ -130,12 +131,15 @@ if (isset($_SESSION['message'])) {
                     </div>
                     <div class="form-group">
                         <label for="job_description">Job Description</label>
-                        <textarea id="job_description" name="job_description" class="form-control" rows="4" required></textarea>
+                        <textarea id="job_description" name="job_description" class="form-control" rows="4"
+                            required></textarea>
                     </div>
                     <div class="form-group">
                         <label for="program_files">Upload Program Files</label>
-                        <input type="file" id="program_files" name="program_files[]" class="form-control" multiple required>
-                        <small>Allowed file types: .java, .py, .js, .cs, .cpp, .c, .rb, .go, .ts, .php, .pl, .sh, .r, .sql, .html, .css, .json, .xml</small>
+                        <input type="file" id="program_files" name="program_files[]" class="form-control" multiple
+                            required>
+                        <small>Allowed file types: .java, .py, .js, .cs, .cpp, .c, .rb, .go, .ts, .php, .pl, .sh, .r,
+                            .sql, .html, .css, .json, .xml</small>
                     </div>
                     <div class="form-actions">
                         <button type="submit" class="configure-button">Create Job</button>
