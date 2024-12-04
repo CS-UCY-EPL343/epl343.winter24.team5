@@ -16,8 +16,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     $_SESSION['user_id'] = getUserId($username);
     $user_id = $_SESSION['user_id'];
-   
-    $role = userLogin($username,$password);
+
+    $role = userLogin($username, $password);
 
     // Save necessary data in session
     $_SESSION['username'] = $username;
@@ -25,17 +25,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     // Redirect based on role
     if ($role === 'Admin') {
-        header("Location: admin_page.php");
+        header("Location: admin_base.php");
         exit();
     } else if ($role === 'User') {
         header("Location: user_page.php");
         exit();
-    } 
+    }
 }
 ?>
 
 <!DOCTYPE html>
 <html>
+
 <head>
     <title>Sign in Page</title>
     <link rel="stylesheet" href="styles.css"> <!-- Link to external stylesheet -->
@@ -64,4 +65,5 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         </div>
     </div>
 </body>
+
 </html>

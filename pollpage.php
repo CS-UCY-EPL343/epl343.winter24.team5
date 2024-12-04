@@ -72,66 +72,111 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <body>
     <div class="dashboard-container">
         <!-- Sidebar -->
+        <!-- Sidebar -->
         <aside class="sidebar">
             <h3 class="sidebar-title"><?= $is_admin ? 'Admin Dashboard' : 'User Dashboard'; ?></h3>
             <ul class="sidebar-links">
                 <!-- Common Links -->
                 <li>
-                    <a href="<?= $is_admin ? 'admin_page.php' : 'user_page.php'; ?>">Polls</a>
+                    <a href="<?= $is_admin ? 'admin_page.php' : 'user_page.php'; ?>"
+                        class="<?= basename($_SERVER['PHP_SELF']) === ($is_admin ? 'admin_page.php' : 'user_page.php') ? 'active' : ''; ?>">
+                        Polls
+                    </a>
                 </li>
-                <li><a href="jobs.php">Jobs</a></li>
-                <li><a href="Tasks.php">Tasks</a></li>
-                <li><a href="writeAiChat.php">ChatBot</a></li>
-                <li><a href="create_tasks.php">Create a Task</a></li>
+                <li>
+                    <a href="jobs.php"
+                        class="<?= basename($_SERVER['PHP_SELF']) === 'jobs.php' ? 'active' : ''; ?>">
+                        Jobs
+                    </a>
+                </li>
+                <li>
+                    <a href="Tasks.php"
+                        class="<?= basename($_SERVER['PHP_SELF']) === 'Tasks.php' ? 'active' : ''; ?>">
+                        Tasks
+                    </a>
+                </li>
+                <li>
+                    <a href="writeAiChat.php"
+                        class="<?= basename($_SERVER['PHP_SELF']) === 'writeAiChat.php' ? 'active' : ''; ?>">
+                        ChatBot
+                    </a>
+                </li>
+
                 <!-- Admin-Only Links -->
                 <?php if ($is_admin): ?>
-                <li><a href="create_poll.php">Create Poll</a></li>
-                <li><a href="pending_user_approvals.php">User Approvals</a></li>
+                    <li>
+                        <a href="create_poll.php"
+                            class="<?= basename($_SERVER['PHP_SELF']) === 'create_poll.php' ? 'active' : ''; ?>">
+                            Create Poll
+                        </a>
+                    </li>
+                    <li>
+                        <a href="create_tasks.php"
+                            class="<?= basename($_SERVER['PHP_SELF']) === 'create_tasks.php' ? 'active' : ''; ?>">
+                            Create a Task
+                        </a>
+                    </li>
+                    <li>
+                        <a href="pending_user_approvals.php"
+                            class="<?= basename($_SERVER['PHP_SELF']) === 'pending_user_approvals.php' ? 'active' : ''; ?>">
+                            User Approvals
+                        </a>
+                    </li>
+                <?php else: ?>
+                    <li>
+                        <a href="create_tasks_user.php"
+                            class="<?= basename($_SERVER['PHP_SELF']) == 'create_tasks_user.php' ? 'active' : ''; ?>">Create Task</a>
+                    </li>
                 <?php endif; ?>
-                <li><a href="#settings">Settings</a></li>
+                <li>
+                    <a href="#settings"
+                        class="<?= basename($_SERVER['PHP_SELF']) === '#settings' ? 'active' : ''; ?>">
+                        Settings
+                    </a>
+                </li>
             </ul>
-        </aside>
 
+        </aside>
         <!-- Main Content -->
         <main class="dashboard-main">
             <?php if (isset($error)): ?>
-            <div class="alert alert-danger">
-                <?= htmlspecialchars($error) ?>
-            </div>
-            <?php elseif ($poll): ?>
-            <div class="content-box2">
-                <!-- Poll Title -->
-                <h2 class="poll-title"><?= htmlspecialchars($poll['Title']) ?></h2>
-
-                <!-- Poll Description -->
-                <p class="poll-description">
-                    <?= htmlspecialchars($poll['Description']) ?>
-                </p>
-
-                <!-- Poll Vote Results -->
-                <div class="poll-results">
-                    <h5>Vote Results</h5>
-                    <p><strong>Yes:</strong> <?= htmlspecialchars($poll['Votes_For']) ?> votes</p>
-                    <p><strong>No:</strong> <?= htmlspecialchars($poll['Votes_Against']) ?> votes</p>
+                <div class="alert alert-danger">
+                    <?= htmlspecialchars($error) ?>
                 </div>
+            <?php elseif ($poll): ?>
+                <div class="content-box2">
+                    <!-- Poll Title -->
+                    <h2 class="poll-title"><?= htmlspecialchars($poll['Title']) ?></h2>
 
-                <!-- Voting Form -->
-                <form method="POST">
-                    <div class="poll-option-group">
-                        <div class="poll-option">
-                            <input class="custom-radio" type="radio" name="vote" id="voteYes" value="yes" required>
-                            <label for="voteYes">Yes</label>
-                        </div>
-                        <div class="poll-option">
-                            <input class="custom-radio" type="radio" name="vote" id="voteNo" value="no" required>
-                            <label for="voteNo">No</label>
-                        </div>
+                    <!-- Poll Description -->
+                    <p class="poll-description">
+                        <?= htmlspecialchars($poll['Description']) ?>
+                    </p>
+
+                    <!-- Poll Vote Results -->
+                    <div class="poll-results">
+                        <h5>Vote Results</h5>
+                        <p><strong>Yes:</strong> <?= htmlspecialchars($poll['Votes_For']) ?> votes</p>
+                        <p><strong>No:</strong> <?= htmlspecialchars($poll['Votes_Against']) ?> votes</p>
                     </div>
-                    <button type="submit" class="btn-submit">Submit Vote</button>
-                </form>
-            </div>
+
+                    <!-- Voting Form -->
+                    <form method="POST">
+                        <div class="poll-option-group">
+                            <div class="poll-option">
+                                <input class="custom-radio" type="radio" name="vote" id="voteYes" value="yes" required>
+                                <label for="voteYes">Yes</label>
+                            </div>
+                            <div class="poll-option">
+                                <input class="custom-radio" type="radio" name="vote" id="voteNo" value="no" required>
+                                <label for="voteNo">No</label>
+                            </div>
+                        </div>
+                        <button type="submit" class="btn-submit">Submit Vote</button>
+                    </form>
+                </div>
             <?php else: ?>
-            <p>Poll not found.</p>
+                <p>Poll not found.</p>
             <?php endif; ?>
         </main>
     </div>

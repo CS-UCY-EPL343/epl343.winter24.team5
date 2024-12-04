@@ -55,8 +55,29 @@ try {
                 <li><a href="create_tasks.php">Create a Task</a></li>
                 <!-- Admin-Only Links -->
                 <?php if ($is_admin): ?>
-                <li><a href="create_poll.php">Create Poll</a></li>
-                <li><a href="pending_user_approvals.php">User Approvals</a></li>
+                    <li>
+                        <a href="create_poll.php"
+                            class="<?= basename($_SERVER['PHP_SELF']) === 'create_poll.php' ? 'active' : ''; ?>">
+                            Create Poll
+                        </a>
+                    </li>
+                    <li>
+                        <a href="create_tasks.php"
+                            class="<?= basename($_SERVER['PHP_SELF']) === 'create_tasks.php' ? 'active' : ''; ?>">
+                            Create a Task
+                        </a>
+                    </li>
+                    <li>
+                        <a href="pending_user_approvals.php"
+                            class="<?= basename($_SERVER['PHP_SELF']) === 'pending_user_approvals.php' ? 'active' : ''; ?>">
+                            User Approvals
+                        </a>
+                    </li>
+                <?php else: ?>
+                    <li>
+                        <a href="create_tasks_user.php"
+                            class="<?= basename($_SERVER['PHP_SELF']) == 'create_tasks_user.php' ? 'active' : ''; ?>">Create Task</a>
+                    </li>
                 <?php endif; ?>
                 <li><a href="#settings">Settings</a></li>
             </ul>
@@ -79,8 +100,8 @@ try {
                         <div class="poll-card1">
                             <h3 class="poll-title"><?= htmlspecialchars($poll['Title']) ?></h3>
                             <p class="poll-description"><?= htmlspecialchars($poll['Description']) ?></p>
-                            <p class="poll-votes">Votes: Yes <?= htmlspecialchars($poll['Votes_For']) ?> | No
-                                <?= htmlspecialchars($poll['Votes_Against']) ?></p>
+                            <!-- <p class="poll-votes">Votes: Yes <?= htmlspecialchars($poll['Votes_For']) ?> | No
+                                <?= htmlspecialchars($poll['Votes_Against']) ?></p> -->
                             <?php if ($poll['Status'] === "Finished"): ?>
                                 <p class="poll-status">Poll has concluded. Final Result: <?php if ($poll['Final_Verdict'] == 1): ?>
                                         Decision Will Go Through
