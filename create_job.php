@@ -20,18 +20,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $job_name = $_POST['job_name'] ?? '';
     $job_description = $_POST['job_description'] ?? '';
 
-    // Check if files are uploaded
+    $programs = []; // Array to hold program details
+    $unsupported_files = []; // Array to collect unsupported file names
+
+    // Allowed file extensions
+    $allowed_extensions = [
+        'java', 'py', 'js', 'cs', 'cpp', 'c', 'rb', 'go', 'ts', 'php',
+        'pl', 'sh', 'r', 'sql', 'html', 'css', 'json', 'xml'
+    ];
+
     if (!empty($_FILES['program_files']['name'][0])) {
-        $programs = []; // Array to hold program details
-        $unsupported_files = []; // Array to collect unsupported file names
-
-        // Allowed file extensions
-        $allowed_extensions = [
-            'java', 'py', 'js', 'cs', 'cpp', 'c', 'rb', 'go', 'ts', 'php',
-            'pl', 'sh', 'r', 'sql', 'html', 'css', 'json', 'xml'
-        ];
-
-
         foreach ($_FILES['program_files']['name'] as $index => $file_name) {
             $file_tmp_path = $_FILES['program_files']['tmp_name'][$index];
             $file_extension = pathinfo($file_name, PATHINFO_EXTENSION);
@@ -49,35 +47,36 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 'Version' => '1.0'
             ];
         }
+    }
 
-        // If there are unsupported files, display them in the message
-        if (!empty($unsupported_files)) {
-            $message = "Unsupported file types:\n" . implode("\n", $unsupported_files);
-        } elseif (empty($message)) {
-            try {
-                $pdo = getDatabaseConnection();
+    // If there are unsupported files, display them in the message
+    if (!empty($unsupported_files)) {
+        $message = "Unsupported file types:\n" . implode("\n", $unsupported_files);
+    }
 
-                // Prepare the programs JSON string
-                $programs_json = json_encode($programs);
+    // Proceed with job insertion
+    if (empty($message)) {
+        try {
+            $pdo = getDatabaseConnection();
 
-                // Prepare and execute the stored procedure
-                $stmt = $pdo->prepare("EXEC InsertJobWithPrograms :Creator_ID, :Job_Name, :Job_Description, :Programs");
-                $stmt->bindParam(':Creator_ID', $creator_id, PDO::PARAM_INT);
-                $stmt->bindParam(':Job_Name', $job_name, PDO::PARAM_STR);
-                $stmt->bindParam(':Job_Description', $job_description, PDO::PARAM_STR);
-                $stmt->bindParam(':Programs', $programs_json, PDO::PARAM_STR);
-                $stmt->execute();
+            // Prepare the programs JSON string (empty array if no programs uploaded)
+            $programs_json = json_encode($programs);
 
-                // Set success message in session and redirect
-                $_SESSION['message'] = 'Job and programs inserted successfully!';
-                header('Location: create_job.php'); 
-                exit();
-            } catch (PDOException $e) {
-                $message = 'Error inserting job: ' . $e->getMessage();
-            }
+            // Prepare and execute the stored procedure
+            $stmt = $pdo->prepare("EXEC InsertJobWithPrograms :Creator_ID, :Job_Name, :Job_Description, :Programs");
+            $stmt->bindParam(':Creator_ID', $creator_id, PDO::PARAM_INT);
+            $stmt->bindParam(':Job_Name', $job_name, PDO::PARAM_STR);
+            $stmt->bindParam(':Job_Description', $job_description, PDO::PARAM_STR);
+            $stmt->bindParam(':Programs', $programs_json, PDO::PARAM_STR);
+            $stmt->execute();
+
+            // Set success message in session and redirect
+            $_SESSION['message'] = 'Job created successfully! Programs were uploaded if provided.';
+            header('Location: create_job.php');
+            exit();
+        } catch (PDOException $e) {
+            $message = 'Error inserting job: ' . $e->getMessage();
         }
-    } else {
-        $message = 'Please upload at least one program file.';
     }
 }
 
@@ -135,9 +134,8 @@ if (isset($_SESSION['message'])) {
                             required></textarea>
                     </div>
                     <div class="form-group">
-                        <label for="program_files">Upload Program Files</label>
-                        <input type="file" id="program_files" name="program_files[]" class="form-control" multiple
-                            required>
+                        <label for="program_files">Upload Program Files (Optional)</label>
+                        <input type="file" id="program_files" name="program_files[]" class="form-control" multiple>
                         <small>Allowed file types: .java, .py, .js, .cs, .cpp, .c, .rb, .go, .ts, .php, .pl, .sh, .r,
                             .sql, .html, .css, .json, .xml</small>
                     </div>
