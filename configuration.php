@@ -11,8 +11,10 @@ if (!isset($_SESSION['user_id'])) {
     header("Location: sign_in_account.php"); // Redirect to login if not authenticated
     exit();
 }
+
 $user_role = $_SESSION['role'] ?? 'User';
 $is_admin = $user_role === 'Admin';
+
 // Retrieve Job_ID from GET request
 $jobID = $_GET['Job_ID'] ?? null;
 
@@ -22,34 +24,54 @@ if ($jobID) {
 }
 
 $user_id = $_SESSION['user_id'];
+$programs = [];
+
+// Fetch programs linked to the Job_ID
+if ($jobID) {
+    $pdo = getDatabaseConnection();
+    $stmt = $pdo->prepare("SELECT Program_ID, Program_Name, Language FROM PROGRAMS WHERE Job_ID = :Job_ID");
+    $stmt->bindParam(':Job_ID', $jobID, PDO::PARAM_INT);
+    $stmt->execute();
+    $programs = $stmt->fetchAll(PDO::FETCH_ASSOC);
+}
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    // Retrieve Job_ID and user_id from POST request
     // Retrieve Job_ID from the POST request or session
     $jobID = $_POST['Job_ID'] ?? $_SESSION['job_id'] ?? null;
 
-    // Retrieve user_id from session
-    $user_id = $_SESSION['user_id'];
-    $scheduleTime = DateTime::createFromFormat('Y-m-d\TH:i', $_POST['schedule_time'])->format('Y-m-d H:i:s'); // Convert to SQL DATETIME$_POST['schedule_time'] ?? null;
-    $recurrence = $_POST['recurrence'] ?? null;
+    // Retrieve configuration details from the form
     $configName = $_POST['config_name'] ?? null;
-    $param1 = $_POST['param1'] ?? ''; // Get param1 or default to empty string
-    $param2 = $_POST['param2'] ?? ''; // Get param2 or default to empty string
 
-    // Check if both parameters are not empty
-    if (!empty($param1) && !empty($param2)) {
-        // Concatenate both parameters with a delimiter (e.g., comma or space)
-        $parameters = $param1 . ' , ' . $param2; // Concatenate with a space, or use another delimiter
-    } else {
-        // If one or both parameters are empty, use only the non-empty one
-        $parameters = !empty($param1) ? $param1 : $param2;
-    }
-
-
-    // Call the function to insert the job configuration
-    $result = insertJobConfiguration($jobID, $user_id, $configName, $parameters, $scheduleTime, $recurrence);
+    // Concatenate parameters based on dynamic input
+    $parameters = [];
+    foreach ($programs as $index => $program) {
+        $param_key = 'param' . $index;
+            if (!empty($_POST[$param_key])) {
+                $parameters[] = $program['Program_Name'] . ' (' . $program['Language'] . '): ' . $_POST[$param_key];
+            }
 }
 
+// Join parameters only if the array is not empty
+$parameters_string = !empty($parameters) ? implode('; ', $parameters) : null;
+
+    $parameters_string = implode('; ', $parameters); // Join parameters with a semicolon and space
+
+    // Call the function to insert the job configuration (pass single string for parameters)
+    if (empty($parameters_string)) {
+        $errorMessage = "Please provide parameters for at least one program.";
+    } else {
+        // Call the function to insert the job configuration
+        $result = insertJobConfiguration($jobID, $user_id, $configName, $parameters_string);
+    
+        if ($result) {
+            $successMessage = "Job configuration saved successfully.";
+        } else {
+            $errorMessage = "Failed to save job configuration.";
+        }
+    }    
+}
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -127,9 +149,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                     <!-- Display Success or Error Messages -->
                     <?php if (isset($successMessage)): ?>
-                    <div class="success-message"><?= htmlspecialchars($successMessage); ?></div>
+                    <div class="success-message" style="color: green;"><?= htmlspecialchars($successMessage); ?></div>
                     <?php elseif (isset($errorMessage)): ?>
-                    <div class="error-message"><?= htmlspecialchars($errorMessage); ?></div>
+                    <div class="error-message" style="color: red;"><?= htmlspecialchars($errorMessage); ?></div>
                     <?php endif; ?>
 
                     <!-- Job Configuration Form -->
@@ -139,34 +161,25 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                 <td><label for="config_name">Configuration Name:</label></td>
                                 <td><input type="text" id="config_name" name="config_name" required></td>
                             </tr>
+
+                            <!-- Dynamic Parameter Fields -->
+                            <?php foreach ($programs as $index => $program): ?>
                             <tr>
-                                <td><label for="param1">Parameter 1:</label></td>
-                                <td><input type="text" id="param1" name="param1"></td>
-                            </tr>
-                            <tr>
-                                <td><label for="param2">Parameter 2:</label></td>
-                                <td><input type="text" id="param2" name="param2"></td>
-                            </tr>
-                            <tr>
-                                <td><label for="schedule_time">Schedule Time:</label></td>
-                                <td><input type="datetime-local" id="schedule_time" name="schedule_time"></td>
-                            </tr>
-                            <tr>
-                                <td><label for="recurrence">Recurrence:</label></td>
                                 <td>
-                                    <select id="recurrence" name="recurrence">
-                                        <option value="">None</option>
-                                        <option value="Daily">Daily</option>
-                                        <option value="Weekly">Weekly</option>
-                                        <option value="Monthly">Monthly</option>
-                                    </select>
+                                    <label for="param<?= $index; ?>">
+                                        Parameter(s) for <?= htmlspecialchars($program['Program_Name']) . ' (' . htmlspecialchars($program['Language']) . ')'; ?>:
+                                    </label>
+                                </td>
+                                <td>
+                                    <input type="text" id="param<?= $index; ?>" name="param<?= $index; ?>">
                                 </td>
                             </tr>
+                            <?php endforeach; ?>
                         </table>
 
+                        <input type="hidden" name="Job_ID" value="<?= htmlspecialchars($jobID); ?>">
                         <button type="submit" name="submit_config">Submit Configuration</button>
                     </form>
-
                 </div>
             </div>
         </main>
