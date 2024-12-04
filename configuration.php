@@ -8,7 +8,7 @@ if (session_status() === PHP_SESSION_NONE) {
 }
 
 if (!isset($_SESSION['user_id'])) {
-    header("Location: sign_in_account.php"); // Redirect to login if not authenticated
+    header("Location: login.php"); // Redirect to login if not authenticated
     exit();
 }
 
@@ -25,6 +25,7 @@ if ($jobID) {
 
 $user_id = $_SESSION['user_id'];
 $programs = [];
+$configurations = [];
 
 // Fetch programs linked to the Job_ID
 if ($jobID) {
@@ -33,6 +34,9 @@ if ($jobID) {
     $stmt->bindParam(':Job_ID', $jobID, PDO::PARAM_INT);
     $stmt->execute();
     $programs = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+    // Fetch configurations for the current user and job
+    $configurations = getJobConfigurations($jobID, $user_id);
 }
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -47,7 +51,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $result = insertJobConfiguration($jobID, $user_id, $configName, $parameters);
 
     if ($result) {
-        header("Location: jobs.php"); // Redirect to jobs page after success
+        header("Location: configuration.php?Job_ID=" . htmlspecialchars($jobID)); // Redirect to view configurations
         exit();
     } else {
         $errorMessage = "Failed to save job configuration.";
@@ -64,7 +68,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <title>Configure Job</title>
     <link rel="stylesheet" href="styles.css">
     <style>
-        /* Make the parameters box non-resizable and styled like the config_name box */
+        /* Styling for the parameters box */
         textarea#parameters {
             width: 100%;
             height: 2em;
@@ -84,6 +88,22 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         ul.program-list li {
             margin-bottom: 5px;
         }
+
+        .configurations-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        .configurations-table th, .configurations-table td {
+            border: 1px solid #ddd;
+            padding: 10px;
+            text-align: left;
+        }
+
+        .configurations-table th {
+            background-color: #f4f4f4;
+        }
     </style>
 </head>
 
@@ -91,56 +111,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <div class="dashboard-container">
         <!-- Sidebar -->
         <aside class="sidebar">
-        <h3 class="sidebar-title"><?= $is_admin ? 'Admin Dashboard' : 'User Dashboard'; ?></h3>
+            <h3 class="sidebar-title"><?= $is_admin ? 'Admin Dashboard' : 'User Dashboard'; ?></h3>
             <ul class="sidebar-links">
-                <!-- Common Links -->
-                <li>
-                    <a href="<?= $is_admin ? 'admin_page.php' : 'user_page.php'; ?>"
-                        class="<?= basename($_SERVER['PHP_SELF']) == ($is_admin ? 'admin_page.php' : 'user_page.php') ? 'active' : ''; ?>">Polls</a>
-                </li>
-                <li>
-                    <a href="jobs.php"
-                        class="<?= basename($_SERVER['PHP_SELF']) == 'jobs.php' ? 'active' : ''; ?>">Jobs</a>
-                </li>
-                <?php if (!$is_admin): ?>
-                <li>
-                    <a href="assigned_tasks.php"
-                        class="<?= basename($_SERVER['PHP_SELF']) === 'assigned_tasks.php' ? 'active' : ''; ?>">
-                        Assigned Tasks
-                    </a>
-                </li>
-                <?php endif; ?>
-                <li>
-                    <a href="Tasks.php"
-                        class="<?= basename($_SERVER['PHP_SELF']) == 'Tasks.php' ? 'active' : ''; ?>">Tasks</a>
-                </li>
-
-
-                <!-- Admin-Only Links -->
+                <li><a href="<?= $is_admin ? 'admin_page.php' : 'user_page.php'; ?>">Polls</a></li>
+                <li><a href="jobs.php">Jobs</a></li>
+                <li><a href="Tasks.php">Tasks</a></li>
                 <?php if ($is_admin): ?>
-                <li>
-                    <a href="create_poll.php"
-                        class="<?= basename($_SERVER['PHP_SELF']) == 'create_poll.php' ? 'active' : ''; ?>">Create
-                        Poll</a>
-                </li>
-
-                <li>
-                    <a href="pending_user_approvals.php"
-                        class="<?= basename($_SERVER['PHP_SELF']) == 'pending_user_approvals.php' ? 'active' : ''; ?>">User
-                        Approvals</a>
-                </li>
+                    <li><a href="create_poll.php">Create Poll</a></li>
+                    <li><a href="pending_user_approvals.php">User Approvals</a></li>
                 <?php endif; ?>
-                <li>
-                    <a href="create_tasks.php"
-                        class="<?= basename($_SERVER['PHP_SELF']) == 'create_tasks.php' ? 'active' : ''; ?>">Create
-                        Task</a>
-                </li>
-                <li>
-                    <a href="writeAiChat.php"
-                        class="<?= basename($_SERVER['PHP_SELF']) == 'writeAiChat.php' ? 'active' : ''; ?>">ChatBot</a>
-                </li>
             </ul>
-</aside>
+        </aside>
 
         <!-- Main Content -->
         <main class="dashboard-main">
@@ -150,11 +131,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                     <!-- Display Success or Error Messages -->
                     <?php if (isset($errorMessage)): ?>
-                    <div class="error-message" style="color: red;"><?= htmlspecialchars($errorMessage); ?></div>
+                        <div class="error-message" style="color: red;"><?= htmlspecialchars($errorMessage); ?></div>
                     <?php endif; ?>
 
                     <!-- Job Configuration Form -->
-                    <form action="configuration.php" method="POST">
+                    <form action="configuration.php?Job_ID=<?= htmlspecialchars($jobID); ?>" method="POST">
                         <table class="config-table">
                             <tr>
                                 <td><label for="config_name">Configuration Name:</label></td>
@@ -180,6 +161,37 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         <input type="hidden" name="Job_ID" value="<?= htmlspecialchars($jobID); ?>">
                         <button type="submit" name="submit_config" class="configure-button">Submit Configuration</button>
                     </form>
+                </div>
+
+                <!-- Existing Configurations Section -->
+                <div class="existing-configurations">
+                    <h2>Existing Configurations</h2>
+                    <?php if (!empty($configurations)): ?>
+                        <table class="configurations-table">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Configuration Name</th>
+                                    <th>Parameters</th>
+                                    <th>Created At</th>
+                                    <th>Last Modified</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <?php foreach ($configurations as $config): ?>
+                                    <tr>
+                                        <td><?= htmlspecialchars($config['Job_Configuration_ID']); ?></td>
+                                        <td><?= htmlspecialchars($config['Configuration_Name']); ?></td>
+                                        <td><?= htmlspecialchars($config['Parameters']); ?></td>
+                                        <td><?= htmlspecialchars($config['Created_At']); ?></td>
+                                        <td><?= htmlspecialchars($config['Last_Modified']); ?></td>
+                                    </tr>
+                                <?php endforeach; ?>
+                            </tbody>
+                        </table>
+                    <?php else: ?>
+                        <p>No configurations found for this job.</p>
+                    <?php endif; ?>
                 </div>
             </div>
         </main>
