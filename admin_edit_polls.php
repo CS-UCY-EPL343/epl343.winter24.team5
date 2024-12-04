@@ -27,6 +27,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $title = $_POST['title'] ?? $pollDetails['Title'];
     $description = $_POST['description'] ?? $pollDetails['Description'];
     $expirationDate = null;
+    $status = $_POST['status'] ?? $pollDetails['Status'];
+
 
     // Validate and parse the expiration date
     if (isset($_POST['expiration_date']) && !empty($_POST['expiration_date'])) {
@@ -44,7 +46,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (!isset($error)) {
         try {
             // Update the poll
-            editPoll($pollId, $title, $description, $expirationDate);
+            editPoll($pollId, $title, $description, $expirationDate, $status);
             $success = "Poll updated successfully!";
         } catch (Exception $e) {
             $error = "Error updating poll: " . $e->getMessage();
@@ -72,9 +74,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <h3 class="sidebar-title">Admin Dashboard</h3>
             <ul class="sidebar-links">
                 <li><a href="create_poll.php">Create Poll</a></li>
+                <li><a href="create_tasks.php">Create a Task</a></li>
                 <li><a href="admin_page.php">Polls</a></li>
                 <li><a href="pending_user_approvals.php" class="active">User Approvals</a></li>
                 <li><a href="jobs.php">Jobs</a></li>
+                <li><a href="Tasks.php">Tasks</a></li>
                 <li><a href="#settings">Settings</a></li>
             </ul>
         </aside>
@@ -82,7 +86,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <!-- Main Content -->
         <main class="dashboard-main">
             <div class="form-container-large">
-            <div class="form-actions" style="text-align: right;">
+                <div class="form-actions" style="text-align: right;">
                     <a href="admin_page.php" class="poll-button">Back to Admin Page</a>
                 </div>
                 <h1>Edit Poll</h1>
@@ -107,8 +111,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                     <div class="form-group">
                         <label for="description">Description</label>
-                        <textarea name="description" id="description" class="form-control" maxlength="255"
-                            required><?= htmlspecialchars($pollDetails['Description']) ?></textarea>
+                        <input type="text" name="description" id="description" class="form-control"
+                            style="height: 70px; padding-bottom: 45px;" maxlength="40" required
+                            value="<?= htmlspecialchars($pollDetails['Description']) ?>">
                     </div>
 
                     <div class="form-group">
@@ -117,6 +122,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             required
                             value="<?= isset($pollDetails['Expiration_Date']) ? date('Y-m-d\TH:i', strtotime($pollDetails['Expiration_Date'])) : '' ?>">
                     </div>
+                    <div class="form-group">
+                        <label for="status">Status</label>
+                        <select name="status" id="status" class="form-control" required>
+                            <option value="" disabled selected>Select...</option> <!-- Placeholder option -->
+                            <option value="Active">Active</option>
+                            <option value="Inactive">Inactive</option>
+                        </select>
+                    </div>
+
 
                     <div class="form-actions">
                         <button type="submit">Update Poll</button>
