@@ -13,29 +13,31 @@ if (!isset($_SESSION['user_id'])) {
     header("Location: index.php");
     exit();
 }
+
 $user_role = $_SESSION['role'] ?? 'User';
 $is_admin = $user_role === 'Admin';
 $user_id = $_SESSION['user_id'];
+
 // Initialize variables
-$searchTerm = $_GET['search'] ?? ''; // Retrieve search term from the query string
 $tasks = [];
 
-// Retrieve tasks based on search term
 try {
-    if ($searchTerm) {
-        $tasks = searchTasksByTitle($user_id, $searchTerm);
-    } else {
-        $tasks = getAllTasks($user_id); // Retrieve all tasks if no search term
-    }
+    // Retrieve assigned tasks
+    $tasks = getAssignedTasks($user_id);
 } catch (PDOException $e) {
     $error = handleSqlError($e);
 }
-
-
 ?>
 
 <!DOCTYPE html>
 <html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Assigned Tasks</title>
+    <link rel="stylesheet" href="styles.css"> <!-- Include your styles.css -->
+</head>
 
 <style>
     .dashboard-main {
@@ -47,52 +49,6 @@ try {
         text-align: center;
         margin-bottom: 20px;
         color: #333;
-    }
-
-    .search-container {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        margin-bottom: 20px;
-    }
-
-    .search-form {
-        justify-content: center;
-        align-items: center;
-        gap: 5px;
-        /* Spacing between input and button */
-        background-color: #f9f9f9;
-        /* Optional background for form container */
-        padding: 10px;
-        border-radius: 8px;
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    }
-
-    .search-form input[type="text"] {
-        padding: 6px;
-        width: 200px;
-        /* Smaller input box width */
-        border: 1px solid #ccc;
-        border-radius: 5px;
-        font-size: 14px;
-    }
-
-    .search-form button {
-        padding: 6px 12px;
-        /* Smaller button size */
-        border: none;
-        background-color: #007bff;
-        color: white;
-        border-radius: 5px;
-        font-size: 14px;
-        cursor: pointer;
-        transition: background-color 0.3s ease, transform 0.2s ease;
-    }
-
-    .search-form button:hover {
-        background-color: #0056b3;
-        transform: scale(1.1);
-        /* Slight zoom effect on hover */
     }
 
     .task-list {
@@ -149,14 +105,6 @@ try {
     }
 </style>
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>View Tasks</title>
-    <link rel="stylesheet" href="styles.css"> <!-- Include your styles.css -->
-</head>
-
-
 <body>
     <!-- Wrapper -->
     <div class="dashboard-container">
@@ -166,33 +114,46 @@ try {
             <ul class="sidebar-links">
                 <!-- Common Links -->
                 <li>
-                    <a href="<?= $is_admin ? 'admin_page.php' : 'user_page.php'; ?>">Polls</a>
+                    <a href="<?= $is_admin ? 'admin_page.php' : 'user_page.php'; ?>"
+                        class="<?= basename($_SERVER['PHP_SELF']) === ($is_admin ? 'admin_page.php' : 'user_page.php') ? 'active' : ''; ?>">
+                        Polls
+                    </a>
                 </li>
-                <li><a href="jobs.php">Jobs</a></li>
-                <li><a href="Tasks.php">Tasks</a></li>
-                <li><a href="writeAiChat.php">ChatBot</a></li>
-                <li><a href="create_tasks.php">Create a Task</a></li>
-                <!-- Admin-Only Links -->
-                <?php if ($is_admin): ?>
-                <li><a href="create_poll.php">Create Poll</a></li>
-                <li><a href="pending_user_approvals.php">User Approvals</a></li>
-                <?php endif; ?>
-                <li><a href="#settings">Settings</a></li>
-            </ul>
+                <li>
+                    <a href="jobs.php"
+                        class="<?= basename($_SERVER['PHP_SELF']) === 'jobs.php' ? 'active' : ''; ?>">
+                        Jobs
+                    </a>
+                </li>
+                <li>
+                    <a href="Tasks.php"
+                        class="<?= basename($_SERVER['PHP_SELF']) === 'Tasks.php' ? 'active' : ''; ?>">
+                        Tasks
+                    </a>
+                </li>
+                <li>
+                    <a href="assigned_tasks.php"
+                        class="<?= basename($_SERVER['PHP_SELF']) === 'assigned_tasks.php' ? 'active' : ''; ?>">
+                        Assigned Tasks
+                    </a>
+                </li>
+                <li>
+                    <a href="create_tasks.php"
+                        class="<?= basename($_SERVER['PHP_SELF']) === 'create_tasks.php' ? 'active' : ''; ?>">
+                        Create a Task
+                    </a>
+                </li>
+                <li>
+                    <a href="writeAiChat.php"
+                        class="<?= basename($_SERVER['PHP_SELF']) === 'writeAiChat.php' ? 'active' : ''; ?>">
+                        ChatBot
+                    </a>
+                </li>
         </aside>
-
 
         <!-- Main Content -->
         <main class="dashboard-main">
-            <h1>View Tasks</h1>
-
-            <!-- Search Form -->
-            <div class="search-container">
-                <form method="GET" action="Tasks.php" class="search-form">
-                    <input type="text" name="search" placeholder="Search by title..." value="<?= htmlspecialchars($searchTerm) ?>">
-                    <button type="submit">Search</button>
-                </form>
-            </div>
+            <h1>Assigned Tasks</h1>
 
             <?php if (isset($error)): ?>
                 <div class="alert alert-danger" role="alert">
@@ -210,16 +171,16 @@ try {
                             </div>
                             <div class="task-body">
                                 <p><strong>Description:</strong> <?= htmlspecialchars($task['Description']) ?></p>
+                                <p><strong>Assigned By:</strong> <?= htmlspecialchars($task['AssignedBy']) ?></p>
                             </div>
                         </div>
                     <?php endforeach; ?>
                 </div>
             <?php else: ?>
-                <p>No tasks available.</p>
+                <p>No assigned tasks available.</p>
             <?php endif; ?>
         </main>
     </div>
 </body>
-
 
 </html>

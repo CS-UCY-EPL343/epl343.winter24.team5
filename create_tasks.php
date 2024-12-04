@@ -13,19 +13,26 @@ if (!isset($_SESSION['user_id'])) {
     header("Location: index.php");
     exit();
 }
-
+$role = $_SESSION['role'];
+$users = getUsers();
+$user_id = $_SESSION['user_id'];
 // Handle POST request for creating a task
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['title'], $_POST['description'], $_POST['date_due'])) {
     $creatorId = $_SESSION['user_id']; // Assuming user_id is stored in the session
     $title = $_POST['title'];
     $description = $_POST['description'];
     $dateDue = DateTime::createFromFormat('Y-m-d\TH:i', $_POST['date_due'])->format('Y-m-d H:i:s'); // Convert to SQL DATETIME
-
+    $usertaskid = $_POST['user_id'];
     try {
-        if (createTask($creatorId, $title, $description, $dateDue)) {
+        if ($usertaskid == "-1" || $role = 'User')
+            if (createTask($creatorId, $title, $description, $dateDue)) {
+                $success = "Task successfully created!";
+            } else {
+                $error = "Failed to create the task.";
+            }
+        else {
+            createTaskForUser($usertaskid, $title, $description, $dateDue, $user_id);
             $success = "Task successfully created!";
-        } else {
-            $error = "Failed to create the task.";
         }
     } catch (PDOException $e) {
         $error = handleSqlError($e);
@@ -54,7 +61,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['title'], $_POST['desc
     <div class="dashboard-container">
         <!-- Sidebar -->
         <aside class="sidebar">
-            <h3 class="sidebar-title">Admin Dashboard</h3>
+            <h3 class="sidebar-title"><?= $is_admin ? 'Admin Dashboard' : 'User Dashboard'; ?></h3>
             <ul class="sidebar-links">
                 <li><a href="admin_page.php" class="<?= basename($_SERVER['PHP_SELF']) == 'admin_page.php' ? 'active' : '' ?>">Polls</a></li>
                 <li><a href="jobs.php" class="<?= basename($_SERVER['PHP_SELF']) == 'jobs.php' ? 'active' : '' ?>">Jobs</a></li>
@@ -100,6 +107,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['title'], $_POST['desc
                         <label for="date_due">Due Date</label>
                         <input type="datetime-local" name="date_due" id="date_due" class="form-control" required>
                     </div>
+                    <?php if ($role == 'Admin'): ?>
+                        <div class="form-group">
+                            <select name="user_id" id="user_id" class="form-control" required>
+                                <?php foreach ($users as $user): ?>
+                                    <option value="<?= htmlspecialchars($user['User_ID']) ?>">
+                                        <?= htmlspecialchars($user['First_Name'] . ' ' . $user['Last_Name'] . ' (' . $user['Username'] . ')') ?>
+                                    </option>
+                                <?php endforeach; ?>
+                                <option value="-1">
+                                    Personal(Task To Self)
+                                </option>
+                            </select>
+                        </div>
+                    <?php endif; ?>
                     <div class="form-actions">
                         <button type="submit">Create Task</button>
                     </div>
