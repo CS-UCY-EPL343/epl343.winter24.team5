@@ -16,7 +16,7 @@ if (!isset($_SESSION['user_id'])) {
 
 // Handle POST request for creating a task
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['title'], $_POST['description'], $_POST['date_due'])) {
-    $creatorId = $_SESSION['user_id']; // Assuming user_id is stored in the session
+    $creatorId = $_SESSION['user_id']; 
     $title = $_POST['title'];
     $description = $_POST['description'];
     $dateDue = DateTime::createFromFormat('Y-m-d\TH:i', $_POST['date_due'])->format('Y-m-d H:i:s'); // Convert to SQL DATETIME
@@ -54,15 +54,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['title'], $_POST['desc
     <div class="dashboard-container">
         <!-- Sidebar -->
         <aside class="sidebar">
-            <h3 class="sidebar-title">Admin Dashboard</h3>
+            <h3 class="sidebar-title">User Dashboard</h3>
             <ul class="sidebar-links">
-                <li><a href="admin_page.php" class="<?= basename($_SERVER['PHP_SELF']) == 'admin_page.php' ? 'active' : '' ?>">Polls</a></li>
+                <li><a href="user_page.php" class="<?= basename($_SERVER['PHP_SELF']) == 'user_page.php' ? 'active' : '' ?>">Polls</a></li>
                 <li><a href="jobs.php" class="<?= basename($_SERVER['PHP_SELF']) == 'jobs.php' ? 'active' : '' ?>">Jobs</a></li>
                 <li><a href="Tasks.php" class="<?= basename($_SERVER['PHP_SELF']) == 'Tasks.php' ? 'active' : '' ?>">Tasks</a></li>
                 <li><a href="writeAiChat.php" class="<?= basename($_SERVER['PHP_SELF']) == 'writeAiChat.php' ? 'active' : '' ?>">ChatBot</a></li>
-                <li><a href="create_poll.php" class="<?= basename($_SERVER['PHP_SELF']) == 'create_poll.php' ? 'active' : '' ?>">Create Poll</a></li>
-                <li><a href="create_tasks.php" class="<?= basename($_SERVER['PHP_SELF']) == 'create_tasks.php' ? 'active' : '' ?>">Create a Task</a></li>
-                <li><a href="pending_user_approvals.php" class="<?= basename($_SERVER['PHP_SELF']) == 'pending_user_approvals.php' ? 'active' : '' ?>">User Approvals</a></li>
+                <li><a href="create_tasks_user.php" class="<?= basename($_SERVER['PHP_SELF']) == 'create_tasks_for_users.php' ? 'active' : '' ?>">Create Task</a></li>
+                <li><a href="#settings" class="<?= basename($_SERVER['PHP_SELF']) == 'settings.php' ? 'active' : '' ?>">Settings</a></li>
             </ul>
         </aside>
 
@@ -71,7 +70,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['title'], $_POST['desc
         <main class="dashboard-main">
             <div class="form-container-large">
                 <div style="text-align: right; margin-top: 5px;">
-                    <a href="admin_page.php" class="poll-button">Back to Admin Page</a>
+                    <a href="user_page.php" class="poll-button">Back to User Page</a>
                 </div>
                 <h1>Create Task</h1>
                 <?php if (isset($success)): ?>
@@ -89,11 +88,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['title'], $_POST['desc
                 <form method="post" action="">
                     <div class="form-group">
                         <label for="title">Title</label>
-                        <input type="text" name="title" id="title" class="form-control" maxlength="100" required>
+                        <input type="text" name="title" id="title" class="form-control" maxlength="40" required>
                     </div>
                     <div class="form-group">
                         <label for="description">Description</label>
-                        <textarea name="description" id="description" class="form-control"
+                        <textarea name="description" id="description" class="form-control" maxlength="255"
                             required></textarea>
                     </div>
                     <div class="form-group">
