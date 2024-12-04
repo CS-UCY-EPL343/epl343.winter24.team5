@@ -229,7 +229,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['poll_id'])) {
 
         node.append('circle')
             .attr('r', function(d) {
-                return circleWidth + d.value; // Scale size based on `value`
+                return circleWidth + d.value + 20; // Scale size based on `value`
             })
             .attr('fill', function(d, i) {
                 return colors(i); // Assign unique color
@@ -237,7 +237,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['poll_id'])) {
             .attr('stroke', function(d, i) {
                 return 'black'; // Add a black border to circles
             })
-            .attr('strokewidth', '1');
+            .attr('strokewidth', '2');
 
         node.append('text')
             .text(function(d) {
