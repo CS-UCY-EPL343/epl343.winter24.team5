@@ -148,12 +148,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         <?= htmlspecialchars($poll['Description']) ?>
                     </p>
 
-                    <!-- Poll Vote Results -->
+                    <!-- Poll Vote Results
                     <div class="poll-results">
                         <h5>Vote Results</h5>
                         <p><strong>Yes:</strong> <?= htmlspecialchars($poll['Votes_For']) ?> votes</p>
                         <p><strong>No:</strong> <?= htmlspecialchars($poll['Votes_Against']) ?> votes</p>
-                    </div>
+                    </div> -->
 
                     <!-- Voting Form -->
                     <form method="POST">
