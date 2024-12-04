@@ -681,3 +681,17 @@ function insertJobConfiguration(
     }
 }
 
+
+function getJobConfigurations($jobId, $userId) {
+    try {
+        $pdo = getDatabaseConnection();
+        $stmt = $pdo->prepare("EXEC GetJobConfigurations :Job_ID, :User_ID");
+        $stmt->bindParam(':Job_ID', $jobId, PDO::PARAM_INT);
+        $stmt->bindParam(':User_ID', $userId, PDO::PARAM_INT);
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    } catch (PDOException $e) {
+        handleSqlError($e); // Handle SQL errors appropriately
+        return [];
+    }
+}
