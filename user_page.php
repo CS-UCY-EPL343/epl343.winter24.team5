@@ -91,7 +91,7 @@ try {
                             User Approvals
                         </a>
                     </li>
-                    <?php else: ?>
+                <?php else: ?>
                     <li>
                         <a href="create_tasks_user.php"
                             class="<?= basename($_SERVER['PHP_SELF']) == 'create_tasks_user.php' ? 'active' : ''; ?>">Create Task</a>
