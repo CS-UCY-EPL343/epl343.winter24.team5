@@ -559,6 +559,67 @@ function getAllTasks($user_id)
     }
 }
 
+function createTaskForUser($userTaskID, $title, $description, $dateDue, $userID)
+{
+    try {
+        // Prepare and execute the stored procedure
+        $conn = getDatabaseConnection();
+        $sql = "EXEC CreateTaskForUser :UserTaskID, :Title, :Description, :DateDue, :UserID, :CreatorID";
+        $stmt = $conn->prepare($sql);
+
+        $stmt->bindParam(':UserTaskID', $userTaskID, PDO::PARAM_INT);
+        $stmt->bindParam(':Title', $title, PDO::PARAM_STR);
+        $stmt->bindParam(':Description', $description, PDO::PARAM_STR);
+        $stmt->bindParam(':DateDue', $dateDue, PDO::PARAM_STR); // Ensure $dateDue is in 'YYYY-MM-DD HH:MM:SS' format
+        $stmt->bindParam(':UserID', $userTaskID, PDO::PARAM_INT); // Storing $userTaskID in User_ID
+        $stmt->bindParam(':CreatorID', $userID, PDO::PARAM_INT);  // Storing $userID in Creator_ID
+
+        $stmt->execute();
+
+        return;
+    } catch (PDOException $e) {
+        handleSqlError($e);
+    }
+}
+
+function getAssignedTasks($userID)
+{
+    try {
+
+        $conn = getDatabaseConnection();
+        $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+
+        // Prepare and execute the stored procedure
+        $sql = "EXEC GetAssignedTasks :UserID";
+        $stmt = $conn->prepare($sql);
+        $stmt->bindParam(':UserID', $userID, PDO::PARAM_INT);
+        $stmt->execute();
+
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    } catch (PDOException $e) {
+        return handleSqlError($e);
+    }
+}
+
+function getUsers()
+{
+    try {
+
+        $pdo = getDatabaseConnection();
+
+        $stmt = $pdo->prepare("EXEC GetUsers"); // Call the stored procedure
+
+
+        $stmt->execute();
+
+        return $stmt->fetchAll(PDO::FETCH_ASSOC); // Fetch results as an associative array
+
+    } catch (PDOException $e) {
+        handleSqlError($e); // Log and handle the error
+        return []; // Return an empty array on error
+    }
+}
+
 function searchTasksByTitle($user_id, $searchTerm)
 {
     try {

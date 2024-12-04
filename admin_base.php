@@ -237,7 +237,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['poll_id'])) {
             .attr('stroke', function(d, i) {
                 return 'black'; // Add a black border to circles
             })
-            .attr('strokewidth', '2');
+            .attr('strokewidth', '2')
+            .on('click', function(d) { // Add click event listener
+                const pageName = d.name.replace(/\s+/g, '_').toLowerCase() + '.php'; // Convert name to URL
+                window.location.href = pageName; // Redirect to the corresponding PHP page
+                exit();
+            });
 
         node.append('text')
             .text(function(d) {
@@ -246,8 +251,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['poll_id'])) {
             .attr('font-family', 'Helvetica')
             .attr('text-anchor', 'middle')
             .attr('font-size', '.8em')
-            .attr('dy', 4); // Center text inside the circle
-
+            .attr('dy', 4) // Center text inside the circle
+            .style('cursor', 'pointer') // Add pointer cursor for better UX
+            .on('click', function(d) { // Fix: Use correct parameters
+                const pageName = d.name.replace(/\s+/g, '_').toLowerCase() + '.php'; // Convert name to URL
+                window.location.href = pageName; // Redirect to the corresponding PHP page
+            });
         force.on('tick', function(e) {
             node.attr('transform', function(d) {
                 return 'translate(' + d.x + ',' + d.y + ')';

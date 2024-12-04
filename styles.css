@@ -718,14 +718,15 @@ tr:hover {
 }
 
 .poll-button {
-  align-self: flex-start;
-  background-color: #020625;
-  color: white;
-  text-decoration: none;
-  padding: 10px 20px;
-  border-radius: 5px;
-  font-size: 1em;
-  transition: background-color 0.3s;
+    align-self: center;
+    position: center; /* Position relative to the parent card */
+    bottom: 10px;       /* Place 10px from the bottom of the card */
+    left: 10px;         /* Optional: Adjust horizontal positioning */
+    padding: 10px 15px; /* Optional: Button padding */
+    background-color: #007bff; /* Optional: Button background color */
+    color: #fff;        /* Optional: Button text color */
+    text-decoration: none; /* Remove underline */
+    border-radius: 5px; /* Optional: Rounded corners */
 }
 
 .poll-button:hover {

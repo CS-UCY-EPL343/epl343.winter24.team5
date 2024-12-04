@@ -47,30 +47,12 @@ try {
             <ul class="sidebar-links">
                 <!-- Common Links -->
                 <li>
-                    <a href="<?= $is_admin ? 'admin_page.php' : 'user_page.php'; ?>"
-                        class="<?= basename($_SERVER['PHP_SELF']) === ($is_admin ? 'admin_page.php' : 'user_page.php') ? 'active' : ''; ?>">
-                        Polls
-                    </a>
+                    <a href="<?= $is_admin ? 'admin_page.php' : 'user_page.php'; ?>">Polls</a>
                 </li>
-                <li>
-                    <a href="jobs.php"
-                        class="<?= basename($_SERVER['PHP_SELF']) === 'jobs.php' ? 'active' : ''; ?>">
-                        Jobs
-                    </a>
-                </li>
-                <li>
-                    <a href="Tasks.php"
-                        class="<?= basename($_SERVER['PHP_SELF']) === 'Tasks.php' ? 'active' : ''; ?>">
-                        Tasks
-                    </a>
-                </li>
-                <li>
-                    <a href="writeAiChat.php"
-                        class="<?= basename($_SERVER['PHP_SELF']) === 'writeAiChat.php' ? 'active' : ''; ?>">
-                        ChatBot
-                    </a>
-                </li>
-
+                <li><a href="jobs.php">Jobs</a></li>
+                <li><a href="Tasks.php">Tasks</a></li>
+                <li><a href="writeAiChat.php">ChatBot</a></li>
+                <li><a href="create_tasks.php">Create a Task</a></li>
                 <!-- Admin-Only Links -->
                 <?php if ($is_admin): ?>
                     <li>
@@ -91,20 +73,14 @@ try {
                             User Approvals
                         </a>
                     </li>
-                    <?php else: ?>
+                <?php else: ?>
                     <li>
                         <a href="create_tasks_user.php"
                             class="<?= basename($_SERVER['PHP_SELF']) == 'create_tasks_user.php' ? 'active' : ''; ?>">Create Task</a>
                     </li>
                 <?php endif; ?>
-                <li>
-                    <a href="#settings"
-                        class="<?= basename($_SERVER['PHP_SELF']) === '#settings' ? 'active' : ''; ?>">
-                        Settings
-                    </a>
-                </li>
-            </ul>
 
+            </ul>
         </aside>
 
         <!-- Main Content -->
@@ -124,8 +100,8 @@ try {
                         <div class="poll-card1">
                             <h3 class="poll-title"><?= htmlspecialchars($poll['Title']) ?></h3>
                             <p class="poll-description"><?= htmlspecialchars($poll['Description']) ?></p>
-                            <p class="poll-votes">Votes: Yes <?= htmlspecialchars($poll['Votes_For']) ?> | No
-                                <?= htmlspecialchars($poll['Votes_Against']) ?></p>
+                            <!-- <p class="poll-votes">Votes: Yes <?= htmlspecialchars($poll['Votes_For']) ?> | No
+                                <?= htmlspecialchars($poll['Votes_Against']) ?></p> -->
                             <?php if ($poll['Status'] === "Finished"): ?>
                                 <p class="poll-status">Poll has concluded. Final Result: <?php if ($poll['Final_Verdict'] == 1): ?>
                                         Decision Will Go Through
