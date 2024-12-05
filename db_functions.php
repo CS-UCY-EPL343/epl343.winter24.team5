@@ -717,3 +717,25 @@ function updateJobConfiguration($configID, $configName, $parameters)
         return false;
     }
 }
+
+function insertJobInstance($jobConfigurationID, $creatorID, $scheduleTime, $recurrence, $triggeredBy) {
+    try {
+        $pdo = getDatabaseConnection();
+        $stmt = $pdo->prepare("EXEC InsertJobInstance :Job_Configuration_ID, :Creator_ID, :Schedule_Time, :Recurrence, :Triggered_By");
+
+        // Bind parameters
+        $stmt->bindParam(':Job_Configuration_ID', $jobConfigurationID, PDO::PARAM_INT);
+        $stmt->bindParam(':Creator_ID', $creatorID, PDO::PARAM_INT);
+        $stmt->bindParam(':Schedule_Time', $scheduleTime, PDO::PARAM_STR);
+        $stmt->bindParam(':Recurrence', $recurrence, PDO::PARAM_STR);
+        $stmt->bindParam(':Triggered_By', $triggeredBy, PDO::PARAM_STR);
+
+        // Execute the stored procedure
+        $stmt->execute();
+        return true; // Return success
+    } catch (PDOException $e) {
+        // Handle error
+        error_log("Error inserting job instance: " . $e->getMessage());
+        return false; // Return failure
+    }
+}

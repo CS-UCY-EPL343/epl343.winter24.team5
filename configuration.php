@@ -41,20 +41,7 @@ if ($jobID) {
 // Handle Create Request
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && $_POST['action'] === 'create') {
     $configName = $_POST['config_name'] ?? null;
-
-    // Concatenate parameters based on dynamic input (if programs exist)
-    $parameters = [];
-    if (!empty($programs)) {
-        foreach ($programs as $index => $program) {
-            $param_key = 'param' . $index;
-            if (isset($_POST[$param_key]) && trim($_POST[$param_key]) !== '') {
-                $parameters[] = $program['Program_Name'] . ' (' . $program['Language'] . '): ' . $_POST[$param_key];
-            }
-        }
-    }
-
-    // Join parameters only if there are programs and parameters are provided
-    $parameters_string = !empty($parameters) ? implode('; ', $parameters) : null;
+    $parameters = $_POST['parameters'] ?? null;
 
     $result = insertJobConfiguration($jobID, $user_id, $configName, $parameters);
 
@@ -95,7 +82,24 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $_POST['action'] === 'create') {
 
         .go-back-container {
             margin-top: 10px;
-            margin-left: 0; /* Align the button to the left */
+            margin-left: 0;
+        }
+
+        .job-instances-button {
+            display: inline-block;
+            margin-left: 15px;
+            padding: 10px 15px;
+            background-color: #28a745;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            text-decoration: none;
+            font-size: 14px;
+            cursor: pointer;
+        }
+
+        .job-instances-button:hover {
+            background-color: #218838;
         }
     </style>
 </head>
@@ -104,12 +108,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $_POST['action'] === 'create') {
         <main class="dashboard-main">
             <!-- Go Back Button -->
             <div class="go-back-container">
-                <a href="javascript:history.back()" class="go-back-button">Go Back</a>
+                <a href="jobs.php" class="go-back-button">Go Back</a>
             </div>
 
             <div class="config-container">
                 <div class="config-box">
-                    <h1>Configure Job</h1>
+                    <h1>Create New Job Configuration</h1>
 
                     <?php if ($errorMessage): ?>
                         <div class="error-message" style="color: red;"><?= htmlspecialchars($errorMessage); ?></div>
@@ -157,10 +161,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $_POST['action'] === 'create') {
                                     <td><?= htmlspecialchars($config['Parameters']); ?></td>
                                     <td><?= htmlspecialchars($config['Created_At']); ?></td>
                                     <td><?= htmlspecialchars($config['Last_Modified']); ?></td>
-                                    <td>
-                                        <form action="edit_configuration.php" method="GET">
+                                    <td>                            
+                                        <form action="job_instance.php" method="GET" style="display:inline;">
                                             <input type="hidden" name="Job_Configuration_ID" value="<?= htmlspecialchars($config['Job_Configuration_ID']); ?>">
-                                            <button type="submit">Edit</button>
+                                            <button type="submit">Job Instances</button>
+                                        </form>
+                                        <form action="edit_configuration.php" method="GET" style="display:inline;">
+                                            <input type="hidden" name="Job_Configuration_ID" value="<?= htmlspecialchars($config['Job_Configuration_ID']); ?>">
+                                            <button type="submit">Edit Job Configuration</button>
                                         </form>
                                     </td>
                                 </tr>
