@@ -32,21 +32,46 @@ if ($configurationID) {
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['action'] === 'create_instance') {
     $scheduleTime = $_POST['schedule_time'] ?? null;
     $recurrence = $_POST['recurrence'] ?? null;
+    $recurrenceTime = $_POST['recurrence_time'] ?? null;
     $triggeredBy = $_POST['triggered_by'] ?? null;
 
-    try {
-        $stmt = $pdo->prepare("EXEC InsertJobInstance :Job_Configuration_ID, :Creator_ID, :Schedule_Time, :Recurrence, :Triggered_By");
-        $stmt->bindParam(':Job_Configuration_ID', $configurationID, PDO::PARAM_INT);
-        $stmt->bindParam(':Creator_ID', $user_id, PDO::PARAM_INT);
-        $stmt->bindParam(':Schedule_Time', $scheduleTime, PDO::PARAM_STR);
-        $stmt->bindParam(':Recurrence', $recurrence, PDO::PARAM_STR);
-        $stmt->bindParam(':Triggered_By', $triggeredBy, PDO::PARAM_STR);
-        $stmt->execute();
-        $successMessage = "Job instance created successfully.";
-        header("Location: job_instance.php?Job_Configuration_ID=" . htmlspecialchars($configurationID));
-        exit();
-    } catch (PDOException $e) {
-        $errorMessage = "Failed to create job instance: " . $e->getMessage();
+    // Validate inputs
+    $scheduleTime = !empty($scheduleTime) ? date('Y-m-d H:i:s', strtotime($scheduleTime)) : null;
+    $recurrenceTime = !empty($recurrenceTime) ? date('Y-m-d H:i:s', strtotime($recurrenceTime)) : null;
+
+    if (empty($scheduleTime) && empty($recurrenceTime)) {
+        $errorMessage = "Please provide either a schedule time or a recurrence time.";
+    } elseif (!empty($scheduleTime) && !empty($recurrenceTime)) {
+        $errorMessage = "Both Schedule_Time and Recurrence_Time cannot be provided simultaneously.";
+    } else {
+        try {
+            $stmt = $pdo->prepare("EXEC InsertJobInstance :Job_Configuration_ID, :Creator_ID, :Schedule_Time, :Recurrence, :Recurrence_Time, :Triggered_By");
+            $stmt->bindParam(':Job_Configuration_ID', $configurationID, PDO::PARAM_INT);
+            $stmt->bindParam(':Creator_ID', $user_id, PDO::PARAM_INT);
+
+            // Bind parameters, explicitly passing NULL if the field is empty
+            if ($scheduleTime) {
+                $stmt->bindParam(':Schedule_Time', $scheduleTime, PDO::PARAM_STR);
+            } else {
+                $stmt->bindValue(':Schedule_Time', null, PDO::PARAM_NULL);
+            }
+
+            if ($recurrenceTime) {
+                $stmt->bindParam(':Recurrence_Time', $recurrenceTime, PDO::PARAM_STR);
+            } else {
+                $stmt->bindValue(':Recurrence_Time', null, PDO::PARAM_NULL);
+            }
+
+            $stmt->bindParam(':Recurrence', $recurrence, PDO::PARAM_STR);
+            $stmt->bindParam(':Triggered_By', $triggeredBy, PDO::PARAM_STR);
+            $stmt->execute();
+
+            $successMessage = "Job instance created successfully.";
+            header("Location: job_instance.php?Job_Configuration_ID=" . htmlspecialchars($configurationID));
+            exit();
+        } catch (PDOException $e) {
+            $errorMessage = "Failed to create job instance: " . $e->getMessage();
+        }
     }
 }
 ?>
@@ -106,18 +131,22 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
                         <table class="config-table">
                             <tr>
                                 <td><label for="schedule_time">Schedule Time:</label></td>
-                                <td><input type="datetime-local" id="schedule_time" name="schedule_time" required></td>
+                                <td><input type="datetime-local" id="schedule_time" name="schedule_time"></td>
                             </tr>
                             <tr>
                                 <td><label for="recurrence">Recurrence:</label></td>
                                 <td>
-                                    <select id="recurrence" name="recurrence" required>
+                                    <select id="recurrence" name="recurrence">
                                         <option value="None">None</option>
                                         <option value="Daily">Daily</option>
                                         <option value="Weekly">Weekly</option>
                                         <option value="Monthly">Monthly</option>
                                     </select>
                                 </td>
+                            </tr>
+                            <tr>
+                                <td><label for="recurrence_time">Recurrence Time:</label></td>
+                                <td><input type="datetime-local" id="recurrence_time" name="recurrence_time"></td>
                             </tr>
                             <tr>
                                 <td><label for="triggered_by">Triggered By:</label></td>
@@ -146,6 +175,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
                                 <th>Triggered By</th>
                                 <th>Schedule Time</th>
                                 <th>Recurrence</th>
+                                <th>Recurrence Time</th>
                                 <th>Created At</th>
                             </tr>
                         </thead>
@@ -158,6 +188,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
                                     <td><?= htmlspecialchars($instance['Triggered_By']); ?></td>
                                     <td><?= htmlspecialchars($instance['Schedule_Time']); ?></td>
                                     <td><?= htmlspecialchars($instance['Recurrence']); ?></td>
+                                    <td><?= htmlspecialchars($instance['Recurrence_Time']); ?></td>
                                     <td><?= htmlspecialchars($instance['Created_At']); ?></td>
                                 </tr>
                             <?php endforeach; ?>
