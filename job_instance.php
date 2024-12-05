@@ -31,20 +31,49 @@ if ($configurationID) {
 // Handle Create Job Instance Form Submission
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['action'] === 'create_instance') {
     $scheduleTime = $_POST['schedule_time'] ?? null;
-    $recurrence = $_POST['recurrence'] ?? null;
+    $recurrence = $_POST['recurrence'] ?? 'None'; // Default to 'None' if not set
     $recurrenceTime = $_POST['recurrence_time'] ?? null;
     $triggeredBy = $_POST['triggered_by'] ?? null;
 
-    // Validate inputs
+    // Convert inputs to desired formats or null
     $scheduleTime = !empty($scheduleTime) ? date('Y-m-d H:i:s', strtotime($scheduleTime)) : null;
     $recurrenceTime = !empty($recurrenceTime) ? date('Y-m-d H:i:s', strtotime($recurrenceTime)) : null;
 
-    if (empty($recurrence) && empty($recurrenceTime)) {
-        $errorMessage = "Please provide both the reccurunce rate and recurrence time.";
-    } elseif (!empty($scheduleTime) && !empty($recurrence)) {
-        $errorMessage = "Both Schedule Time and recurrence rate cannot be provided simultaneously.";
-    } elseif (!empty($scheduleTime) && !empty($recurrenceTime)) {
-        $errorMessage = "Both schedule time and recurrence time cannot be provided simultaneously.";
+    // If recurrence is 'None', ensure recurrenceTime is null
+    if ($recurrence === 'None') {
+        $recurrenceTime = null;
+    }
+
+    // Initialize an array to collect error messages
+    $errors = [];
+
+    // Validation Rules
+
+    // Rule 1: Both schedule time and recurrence (other than 'None') cannot be set simultaneously
+    if (!empty($scheduleTime) && $recurrence !== 'None') {
+        $errors[] = "Both schedule time and recurrence cannot be provided simultaneously.";
+    }
+
+    // Rule 2: Both schedule time and recurrence time cannot be set simultaneously
+    if (!empty($scheduleTime) && !empty($recurrenceTime)) {
+        $errors[] = "Both schedule time and recurrence time cannot be provided simultaneously.";
+    }
+
+    // Rule 3: If recurrence is not 'None', recurrence time must be provided
+    if ($recurrence !== 'None' && empty($recurrenceTime)) {
+        $errors[] = "Recurrence time must be provided when recurrence is set.";
+    }
+
+    // Rule 4: If recurrence is 'None', recurrence time should not be set
+    if ($recurrence === 'None' && !empty($recurrenceTime)) {
+        $errors[] = "Recurrence time should not be provided when recurrence is set to 'None'.";
+    }
+
+    // Additional validations can be added here as needed
+
+    if (count($errors) > 0) {
+        // Concatenate all error messages
+        $errorMessage = implode("<br>", $errors);
     } else {
         try {
             $stmt = $pdo->prepare("EXEC InsertJobInstance :Job_Configuration_ID, :Creator_ID, :Schedule_Time, :Recurrence, :Recurrence_Time, :Triggered_By");
@@ -68,11 +97,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
             $stmt->bindParam(':Triggered_By', $triggeredBy, PDO::PARAM_STR);
             $stmt->execute();
 
+            // Retrieve the last inserted Job_Instance_ID
+            $lastJobInstanceID = $pdo->lastInsertId();
+
+            // Log the creation
+            $logTitle = "Job Instance Created";
+            $logDescription = "Job Instance ID {$lastJobInstanceID} was created by User ID {$user_id}.";
+
+            // Insert log entry
+            insertJobInstanceLog($pdo, $lastJobInstanceID, $logTitle, $logDescription);
+
             $successMessage = "Job instance created successfully.";
             header("Location: job_instance.php?Job_Configuration_ID=" . htmlspecialchars($configurationID));
             exit();
         } catch (PDOException $e) {
-            $errorMessage = "Failed to create job instance: " . $e->getMessage();
+            $errorMessage = "Failed to create job instance: " . htmlspecialchars($e->getMessage());
         }
     }
 }
@@ -82,11 +121,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
 <html lang="en">
 
 <head>
+    <!-- Existing head content... -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Job Instances</title>
     <link rel="stylesheet" href="styles.css">
     <style>
+        /* Existing styles... */
         .go-back-button {
             display: inline-block;
             margin: 15px 0;
@@ -109,6 +150,28 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
             margin-left: 0;
         }
     </style>
+    <script>
+        // JavaScript to handle conditional display and clearing of recurrence_time
+        document.addEventListener('DOMContentLoaded', function() {
+            const recurrenceSelect = document.getElementById('recurrence');
+            const recurrenceTimeRow = document.getElementById('recurrence_time_row');
+            const recurrenceTimeInput = document.getElementById('recurrence_time');
+
+            function toggleRecurrenceTime() {
+                if (recurrenceSelect.value === 'None') {
+                    recurrenceTimeRow.style.display = 'none';
+                    recurrenceTimeInput.value = ''; // Clear the value
+                } else {
+                    recurrenceTimeRow.style.display = 'table-row';
+                }
+            }
+
+            recurrenceSelect.addEventListener('change', toggleRecurrenceTime);
+
+            // Initialize on page load
+            toggleRecurrenceTime();
+        });
+    </script>
 </head>
 
 <body>
@@ -124,10 +187,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
                     <h1>Create Job Instance</h1>
 
                     <?php if (!empty($errorMessage)): ?>
-                        <div class="error-message" style="color: red;"><?= htmlspecialchars($errorMessage); ?></div>
+                        <div class="error-message"><?= htmlspecialchars($errorMessage); ?></div>
                     <?php endif; ?>
                     <?php if (!empty($successMessage)): ?>
-                        <div class="success-message" style="color: green;"><?= htmlspecialchars($successMessage); ?></div>
+                        <div class="success-message"><?= htmlspecialchars($successMessage); ?></div>
                     <?php endif; ?>
 
                     <form action="job_instance.php?Job_Configuration_ID=<?= htmlspecialchars($configurationID); ?>" method="POST">
@@ -135,29 +198,29 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
                         <table class="config-table">
                             <tr>
                                 <td><label for="schedule_time">Schedule Time:</label></td>
-                                <td><input type="datetime-local" id="schedule_time" name="schedule_time"></td>
+                                <td><input type="datetime-local" id="schedule_time" name="schedule_time" value="<?= htmlspecialchars(!empty($_POST['schedule_time']) ? date('Y-m-d\TH:i', strtotime($_POST['schedule_time'])) : ''); ?>"></td>
                             </tr>
                             <tr>
                                 <td><label for="recurrence">Recurrence:</label></td>
                                 <td>
                                     <select id="recurrence" name="recurrence">
-                                        <option value="None">None</option>
-                                        <option value="Daily">Daily</option>
-                                        <option value="Weekly">Weekly</option>
-                                        <option value="Monthly">Monthly</option>
+                                        <option value="None" <?= (isset($_POST['recurrence']) && $_POST['recurrence'] === 'None') ? 'selected' : ''; ?>>None</option>
+                                        <option value="Daily" <?= (isset($_POST['recurrence']) && $_POST['recurrence'] === 'Daily') ? 'selected' : ''; ?>>Daily</option>
+                                        <option value="Weekly" <?= (isset($_POST['recurrence']) && $_POST['recurrence'] === 'Weekly') ? 'selected' : ''; ?>>Weekly</option>
+                                        <option value="Monthly" <?= (isset($_POST['recurrence']) && $_POST['recurrence'] === 'Monthly') ? 'selected' : ''; ?>>Monthly</option>
                                     </select>
                                 </td>
                             </tr>
-                            <tr>
+                            <tr id="recurrence_time_row">
                                 <td><label for="recurrence_time">Recurrence Time:</label></td>
-                                <td><input type="datetime-local" id="recurrence_time" name="recurrence_time"></td>
+                                <td><input type="datetime-local" id="recurrence_time" name="recurrence_time" value="<?= htmlspecialchars(!empty($_POST['recurrence_time']) ? date('Y-m-d\TH:i', strtotime($_POST['recurrence_time'])) : ''); ?>"></td>
                             </tr>
                             <tr>
                                 <td><label for="triggered_by">Triggered By:</label></td>
                                 <td>
                                     <select id="triggered_by" name="triggered_by" required>
-                                        <option value="System">System (Automatically)</option>
-                                        <option value="User">User (Manually)</option>
+                                        <option value="System" <?= (isset($_POST['triggered_by']) && $_POST['triggered_by'] === 'System') ? 'selected' : ''; ?>>System (Automatically)</option>
+                                        <option value="User" <?= (isset($_POST['triggered_by']) && $_POST['triggered_by'] === 'User') ? 'selected' : ''; ?>>User (Manually)</option>
                                     </select>
                                 </td>
                             </tr>
@@ -169,11 +232,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
 
             <div class="existing-instances">
                 <h2>Existing Job Instances</h2>
+                <?php if (!empty($_SESSION['run_message'])): ?>
+                    <div class="success-message"><?= htmlspecialchars($_SESSION['run_message']); ?></div>
+                    <?php unset($_SESSION['run_message']); ?>
+                <?php endif; ?>
                 <?php if (!empty($jobInstances)): ?>
-                    <?php if (!empty($_SESSION['run_message'])): ?>
-                        <div class="success-message" style="color: green;"><?= htmlspecialchars($_SESSION['run_message']); ?></div>
-                        <?php unset($_SESSION['run_message']); ?>
-                    <?php endif; ?>
                     <table class="instances-table">
                         <thead>
                             <tr>
@@ -191,14 +254,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
                             <?php foreach ($jobInstances as $instance): ?>
                                 <tr>
                                     <td><?= htmlspecialchars($instance['Job_Instance_ID']); ?></td>
-                                    <td><?= htmlspecialchars($instance['Previous_Completion_Time']); ?></td>
+                                    <td><?= htmlspecialchars($instance['Previous_Completion_Time'] ?? 'N/A'); ?></td>
                                     <td><?= htmlspecialchars($instance['Previous_Run_Status'] ?? 'Not Run'); ?></td>
                                     <td><?= htmlspecialchars($instance['Triggered_By']); ?></td>
-                                    <td><?= htmlspecialchars($instance['Schedule_Time']); ?></td>
-                                    <td><?= htmlspecialchars($instance['Recurrence']); ?></td>
-                                    <td><?= htmlspecialchars($instance['Recurrence_Time']); ?></td>
+                                    <td><?= htmlspecialchars($instance['Schedule_Time'] ?? 'N/A'); ?></td>
+                                    <td><?= htmlspecialchars($instance['Recurrence'] ?? 'None'); ?></td>
+                                    <td><?= htmlspecialchars($instance['Recurrence_Time'] ?? 'N/A'); ?></td>
                                     <td>
-                                        <form action="edit_instance.php" method="GET">
+                                        <form action="edit_instance.php" method="GET" style="display:inline;">
                                             <input type="hidden" name="Job_Instance_ID" value="<?= htmlspecialchars($instance['Job_Instance_ID']); ?>">
                                             <button type="submit" class="action-button edit-button">Edit</button>
                                         </form>
@@ -207,7 +270,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
                                             <input type="hidden" name="Job_Configuration_ID" value="<?= htmlspecialchars($configurationID); ?>">
                                             <button type="submit" class="action-button">Run Instance</button>
                                         </form>
-
                                     </td>
                                 </tr>
                             <?php endforeach; ?>
@@ -217,8 +279,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
                     <p>No job instances found for this configuration.</p>
                 <?php endif; ?>
             </div>
-
-
         </main>
     </div>
     <?php require_once 'footer.php'; ?>
