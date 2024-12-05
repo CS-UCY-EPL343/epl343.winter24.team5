@@ -681,3 +681,61 @@ function insertJobConfiguration(
     }
 }
 
+
+function getJobConfigurations($jobId, $userId) {
+    try {
+        $pdo = getDatabaseConnection();
+        $stmt = $pdo->prepare("EXEC GetJobConfigurations :Job_ID, :User_ID");
+        $stmt->bindParam(':Job_ID', $jobId, PDO::PARAM_INT);
+        $stmt->bindParam(':User_ID', $userId, PDO::PARAM_INT);
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    } catch (PDOException $e) {
+        handleSqlError($e); // Handle SQL errors appropriately
+        return [];
+    }
+}
+
+function updateJobConfiguration($configID, $configName, $parameters)
+{
+    try {
+        $pdo = getDatabaseConnection();
+        $stmt = $pdo->prepare("
+            EXEC UpdateJobConfiguration 
+            @Job_Configuration_ID = :configID,
+            @Configuration_Name = :configName,
+            @Parameters = :parameters
+        ");
+        $stmt->bindParam(':configID', $configID, PDO::PARAM_INT);
+        $stmt->bindParam(':configName', $configName, PDO::PARAM_STR);
+        $stmt->bindParam(':parameters', $parameters, PDO::PARAM_STR);
+        $stmt->execute();
+
+        return true;
+    } catch (PDOException $e) {
+        handleSqlError($e);
+        return false;
+    }
+}
+
+function insertJobInstance($jobConfigurationID, $creatorID, $scheduleTime, $recurrence, $recurrenceTime, $triggeredBy) {
+    try {
+        $pdo = getDatabaseConnection();
+        $stmt = $pdo->prepare("EXEC InsertJobInstance :Job_Configuration_ID, :Creator_ID, :Schedule_Time, :Recurrence, :Recurrence_Time, :Triggered_By");
+
+        // Bind parameters
+        $stmt->bindParam(':Job_Configuration_ID', $jobConfigurationID, PDO::PARAM_INT);
+        $stmt->bindParam(':Creator_ID', $creatorID, PDO::PARAM_INT);
+        $stmt->bindParam(':Schedule_Time', $scheduleTime, PDO::PARAM_STR);
+        $stmt->bindParam(':Recurrence', $recurrence, PDO::PARAM_STR);
+        $stmt->bindParam(':Recurrence_Time', $recurrenceTime, PDO::PARAM_STR);
+        $stmt->bindParam(':Triggered_By', $triggeredBy, PDO::PARAM_STR);
+
+        // Execute the stored procedure
+        $stmt->execute();
+        return true; // Return success
+    } catch (PDOException $e) {
+        error_log("Error inserting job instance: " . $e->getMessage());
+        return false; // Return failure
+    }
+}

@@ -140,7 +140,7 @@ $jobs = getJobListings();
                                         <td><?= htmlspecialchars($job['Job_Description']); ?></td>
                                         <td><?= htmlspecialchars($job['Creation_Date']); ?></td>
                                         <td>
-                                            <div style="display: flex; justify-content: center; gap: 10px;">
+                                            <div style="display: column; justify-content: center; gap: 10px;">
                                                 <!-- Configure Button -->
                                                 <form action="configuration.php" method="GET">
                                                     <input type="hidden" name="Job_ID" value="<?= $job['Job_ID']; ?>">
