@@ -739,3 +739,18 @@ function insertJobInstance($jobConfigurationID, $creatorID, $scheduleTime, $recu
         return false; // Return failure
     }
 }
+
+function insertJobInstanceLog($jobInstanceId, $logTitle, $logDescription) {
+    $pdo = getDatabaseConnection();
+
+    try {
+        $stmt = $pdo->prepare("EXEC InsertJobInstanceLog :Job_Instance_ID, :Log_Title, :Log_Description");
+        $stmt->bindParam(':Job_Instance_ID', $jobInstanceId, PDO::PARAM_INT);
+        $stmt->bindParam(':Log_Title', $logTitle, PDO::PARAM_STR);
+        $stmt->bindParam(':Log_Description', $logDescription, PDO::PARAM_STR);
+        $stmt->execute();
+    } catch (PDOException $e) {
+        error_log("Failed to insert job instance log: " . $e->getMessage());
+        throw new Exception("Failed to insert job instance log.");
+    }
+}

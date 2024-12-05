@@ -75,6 +75,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
             $errorMessage = "Failed to create job instance: " . $e->getMessage();
         }
     }
+
+    
 }
 ?>
 
