@@ -19,7 +19,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     $role = userLogin($username, $password);
 
-    // Save necessary data in session
     $_SESSION['username'] = $username;
     $_SESSION['role'] = $role;
 
@@ -39,12 +38,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 <head>
     <title>Sign in Page</title>
-    <link rel="stylesheet" href="styles.css"> <!-- Link to external stylesheet -->
+    <link rel="stylesheet" href="styles.css">
 </head>
 
 <body>
 
-    <!-- Sign In Form -->
     <div class="login-container">
         <h2>Sign in to your Account</h2>
         <?php if (!empty($error_message)): ?>

@@ -177,7 +177,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
 <body>
     <div class="dashboard-container">
         <main class="dashboard-main">
-            <!-- Go Back Button -->
             <div class="go-back-container">
                 <a href="configuration.php?Job_ID=<?= htmlspecialchars($_SESSION['job_id'] ?? ''); ?>" class="go-back-button">Go Back</a>
             </div>

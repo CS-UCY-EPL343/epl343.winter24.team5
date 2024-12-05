@@ -38,7 +38,6 @@ if ($instanceID) {
 
 // Handle the form submission for updating the instance
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && !$errorMessage) {
-    // Retrieve and sanitize POST data
     $scheduleTimeInput = $_POST['schedule_time'] ?? null;
     $recurrence = $_POST['recurrence'] ?? 'None'; // Default to 'None' if not set
     $recurrenceTimeInput = $_POST['recurrence_time'] ?? null;
@@ -48,15 +47,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && !$errorMessage) {
     $scheduleTime = !empty($scheduleTimeInput) ? date('Y-m-d H:i:s', strtotime($scheduleTimeInput)) : null;
     $recurrenceTime = !empty($recurrenceTimeInput) ? date('Y-m-d H:i:s', strtotime($recurrenceTimeInput)) : null;
 
-    // If recurrence is 'None', ensure recurrenceTime is null
     if ($recurrence === 'None') {
         $recurrenceTime = null;
     }
 
     // Initialize an array to collect error messages
     $errors = [];
-
-    // Validation Rules
 
     // Rule 1: Both schedule time and recurrence (other than 'None') cannot be set simultaneously
     if (!empty($scheduleTime) && $recurrence !== 'None') {
@@ -130,13 +126,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && !$errorMessage) {
 <html lang="en">
 
 <head>
-    <!-- Existing head content... -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Edit Job Instance</title>
     <link rel="stylesheet" href="styles.css">
     <style>
-        /* Existing styles... */
         .go-back-button {
             display: inline-block;
             margin: 15px 0;
@@ -186,7 +180,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && !$errorMessage) {
 <body>
     <div class="dashboard-container">
         <main class="dashboard-main">
-            <!-- Go Back Button -->
             <div class="go-back-container">
                 <a href="job_instance.php?Job_Configuration_ID=<?= htmlspecialchars($instance['Job_Configuration_ID'] ?? ''); ?>" class="go-back-button">Go Back</a>
             </div>
