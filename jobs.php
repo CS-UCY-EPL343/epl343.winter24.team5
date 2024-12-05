@@ -30,7 +30,11 @@ $jobs = getJobListings();
 <html lang="en">
 <style>
     .sidebar-links a.active {
-        background-color: #6db4ff;
+        background-color: #175494;
+    }
+
+    .sidebar-links a.active:hover {
+        background-color: #175494;
     }
 </style>
 
@@ -57,12 +61,12 @@ $jobs = getJobListings();
                         class="<?= basename($_SERVER['PHP_SELF']) == 'jobs.php' ? 'active' : ''; ?>">Jobs</a>
                 </li>
                 <?php if (!$is_admin): ?>
-                <li>
-                    <a href="assigned_tasks.php"
-                        class="<?= basename($_SERVER['PHP_SELF']) === 'assigned_tasks.php' ? 'active' : ''; ?>">
-                        Assigned Tasks
-                    </a>
-                </li>
+                    <li>
+                        <a href="assigned_tasks.php"
+                            class="<?= basename($_SERVER['PHP_SELF']) === 'assigned_tasks.php' ? 'active' : ''; ?>">
+                            Assigned Tasks
+                        </a>
+                    </li>
                 <?php endif; ?>
                 <li>
                     <a href="Tasks.php"
@@ -76,18 +80,18 @@ $jobs = getJobListings();
                         <a href="create_poll.php"
                             class="<?= basename($_SERVER['PHP_SELF']) == 'create_poll.php' ? 'active' : ''; ?>">Create Poll</a>
                     </li>
-                
+
                     <li>
                         <a href="pending_user_approvals.php"
                             class="<?= basename($_SERVER['PHP_SELF']) == 'pending_user_approvals.php' ? 'active' : ''; ?>">User Approvals</a>
                     </li>
-                    <?php endif; ?>                
+                <?php endif; ?>
 
-                    <li>
-                        <a href="create_tasks.php"
-                            class="<?= basename($_SERVER['PHP_SELF']) == 'create_tasks.php' ? 'active' : ''; ?>">Create Task</a>
-                    </li>
-                    <li>
+                <li>
+                    <a href="create_tasks.php"
+                        class="<?= basename($_SERVER['PHP_SELF']) == 'create_tasks.php' ? 'active' : ''; ?>">Create Task</a>
+                </li>
+                <li>
                     <a href="writeAiChat.php"
                         class="<?= basename($_SERVER['PHP_SELF']) == 'writeAiChat.php' ? 'active' : ''; ?>">ChatBot</a>
                 </li>
