@@ -47,6 +47,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -72,10 +73,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         .go-back-container {
             margin-top: 10px;
-            margin-left: 0; /* Align the button to the left */
+            margin-left: 0;
+            /* Align the button to the left */
         }
     </style>
 </head>
+
 <body>
     <div class="dashboard-container">
         <main class="dashboard-main">
@@ -103,7 +106,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             </tr>
                             <tr>
                                 <td><label for="parameters">Parameters:</label></td>
-                                <td><textarea id="parameters" name="parameters" required><?= htmlspecialchars($configuration['Parameters'] ?? ''); ?></textarea></td>
+                                <td><input type="text" id="parameters" name="parameters"
+                                        value="<?= htmlspecialchars($configuration['Parameters'] ?? ''); ?>" vrequired></td>
                             </tr>
                         </table>
                         <button type="submit" class="configure-button">Update Configuration</button>
@@ -112,5 +116,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             </div>
         </main>
     </div>
+    <?php require_once 'footer.php'; ?>
+
 </body>
+
 </html>

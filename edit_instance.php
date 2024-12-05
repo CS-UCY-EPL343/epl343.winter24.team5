@@ -121,6 +121,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && !$errorMessage) {
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -148,53 +149,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && !$errorMessage) {
             margin-top: 10px;
             margin-left: 0;
         }
-
-        .config-container {
-            max-width: 600px;
-            margin: 0 auto;
-            padding: 20px;
-        }
-
-        .config-box {
-            background-color: #f9f9f9;
-            padding: 20px;
-            border-radius: 5px;
-        }
-
-        .config-table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-
-        .config-table td {
-            padding: 10px;
-            vertical-align: top;
-        }
-
-        .configure-button {
-            margin-top: 20px;
-            padding: 10px 20px;
-            background-color: #28a745;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 16px;
-        }
-
-        .configure-button:hover {
-            background-color: #218838;
-        }
-
-        .error-message {
-            margin-bottom: 15px;
-            color: red;
-        }
-
-        .success-message {
-            margin-bottom: 15px;
-            color: green;
-        }
     </style>
     <script>
         // JavaScript to handle conditional display and clearing of recurrence_time
@@ -219,6 +173,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && !$errorMessage) {
         });
     </script>
 </head>
+
 <body>
     <div class="dashboard-container">
         <main class="dashboard-main">
@@ -279,5 +234,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && !$errorMessage) {
             </div>
         </main>
     </div>
+    <?php require_once 'footer.php'; ?>
+
 </body>
+
 </html>

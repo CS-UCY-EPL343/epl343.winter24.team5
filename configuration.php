@@ -85,23 +85,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $_POST['action'] === 'create') {
             margin-top: 10px;
             margin-left: 0;
         }
-
-        .job-instances-button {
-            display: inline-block;
-            margin-left: 15px;
-            padding: 10px 15px;
-            background-color: #28a745;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            text-decoration: none;
-            font-size: 14px;
-            cursor: pointer;
-        }
-
-        .job-instances-button:hover {
-            background-color: #218838;
-        }
     </style>
 </head>
 

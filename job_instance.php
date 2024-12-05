@@ -75,13 +75,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
             $errorMessage = "Failed to create job instance: " . $e->getMessage();
         }
     }
-
-    
 }
 ?>
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -109,32 +108,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
             margin-top: 10px;
             margin-left: 0;
         }
-
-        .action-button {
-            display: inline-block;
-            padding: 10px 15px;
-            background-color: #28a745;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            font-size: 14px;
-            text-decoration: none;
-            cursor: pointer;
-        }
-
-        .action-button:hover {
-            background-color: #218838;
-        }
-
-        .edit-button {
-            background-color: #ffc107;
-        }
-
-        .edit-button:hover {
-            background-color: #e0a800;
-        }
     </style>
 </head>
+
 <body>
     <div class="dashboard-container">
         <main class="dashboard-main">
@@ -192,58 +168,61 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
             </div>
 
             <div class="existing-instances">
-    <h2>Existing Job Instances</h2>
-    <?php if (!empty($jobInstances)): ?>
-        <?php if (!empty($_SESSION['run_message'])): ?>
-            <div class="success-message" style="color: green;"><?= htmlspecialchars($_SESSION['run_message']); ?></div>
-            <?php unset($_SESSION['run_message']); ?>
-        <?php endif; ?>
-        <table class="instances-table">
-            <thead>
-                <tr>
-                    <th>Instance ID</th>
-                    <th>Previous Completion Time</th>
-                    <th>Previous Run Status</th>
-                    <th>Triggered By</th>
-                    <th>Schedule Time</th>
-                    <th>Recurrence</th>
-                    <th>Recurrence Time</th>
-                    <th>Actions</th>
-                </tr>
-            </thead>
-            <tbody>
-                <?php foreach ($jobInstances as $instance): ?>
-                    <tr>
-                        <td><?= htmlspecialchars($instance['Job_Instance_ID']); ?></td>
-                        <td><?= htmlspecialchars($instance['Previous_Completion_Time']); ?></td>
-                        <td><?= htmlspecialchars($instance['Previous_Run_Status'] ?? 'Not Run'); ?></td>
-                        <td><?= htmlspecialchars($instance['Triggered_By']); ?></td>
-                        <td><?= htmlspecialchars($instance['Schedule_Time']); ?></td>
-                        <td><?= htmlspecialchars($instance['Recurrence']); ?></td>
-                        <td><?= htmlspecialchars($instance['Recurrence_Time']); ?></td>
-                        <td>
-                            <form action="edit_instance.php" method="GET" style="display:inline;">
-                                <input type="hidden" name="Job_Instance_ID" value="<?= htmlspecialchars($instance['Job_Instance_ID']); ?>">
-                                <button type="submit" class="action-button edit-button">Edit</button>
-                            </form>
-                            <form action="run_instance.php" method="POST" style="display:inline;">
-    <input type="hidden" name="Job_Instance_ID" value="<?= htmlspecialchars($instance['Job_Instance_ID']); ?>">
-    <input type="hidden" name="Job_Configuration_ID" value="<?= htmlspecialchars($configurationID); ?>">
-    <button type="submit" class="action-button">Run Instance</button>
-</form>
+                <h2>Existing Job Instances</h2>
+                <?php if (!empty($jobInstances)): ?>
+                    <?php if (!empty($_SESSION['run_message'])): ?>
+                        <div class="success-message" style="color: green;"><?= htmlspecialchars($_SESSION['run_message']); ?></div>
+                        <?php unset($_SESSION['run_message']); ?>
+                    <?php endif; ?>
+                    <table class="instances-table">
+                        <thead>
+                            <tr>
+                                <th>Instance ID</th>
+                                <th>Previous Completion Time</th>
+                                <th>Previous Run Status</th>
+                                <th>Triggered By</th>
+                                <th>Schedule Time</th>
+                                <th>Recurrence</th>
+                                <th>Recurrence Time</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php foreach ($jobInstances as $instance): ?>
+                                <tr>
+                                    <td><?= htmlspecialchars($instance['Job_Instance_ID']); ?></td>
+                                    <td><?= htmlspecialchars($instance['Previous_Completion_Time']); ?></td>
+                                    <td><?= htmlspecialchars($instance['Previous_Run_Status'] ?? 'Not Run'); ?></td>
+                                    <td><?= htmlspecialchars($instance['Triggered_By']); ?></td>
+                                    <td><?= htmlspecialchars($instance['Schedule_Time']); ?></td>
+                                    <td><?= htmlspecialchars($instance['Recurrence']); ?></td>
+                                    <td><?= htmlspecialchars($instance['Recurrence_Time']); ?></td>
+                                    <td>
+                                        <form action="edit_instance.php" method="GET">
+                                            <input type="hidden" name="Job_Instance_ID" value="<?= htmlspecialchars($instance['Job_Instance_ID']); ?>">
+                                            <button type="submit" class="action-button edit-button">Edit</button>
+                                        </form>
+                                        <form action="run_instance.php" method="POST" style="display:inline;">
+                                            <input type="hidden" name="Job_Instance_ID" value="<?= htmlspecialchars($instance['Job_Instance_ID']); ?>">
+                                            <input type="hidden" name="Job_Configuration_ID" value="<?= htmlspecialchars($configurationID); ?>">
+                                            <button type="submit" class="action-button">Run Instance</button>
+                                        </form>
 
-                        </td>
-                    </tr>
-                <?php endforeach; ?>
-            </tbody>
-        </table>
-    <?php else: ?>
-        <p>No job instances found for this configuration.</p>
-    <?php endif; ?>
-</div>
+                                    </td>
+                                </tr>
+                            <?php endforeach; ?>
+                        </tbody>
+                    </table>
+                <?php else: ?>
+                    <p>No job instances found for this configuration.</p>
+                <?php endif; ?>
+            </div>
 
 
         </main>
     </div>
+    <?php require_once 'footer.php'; ?>
+
 </body>
+
 </html>
