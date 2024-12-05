@@ -134,8 +134,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['title'], $_POST['desc
                     </div>
                     <div class="form-group">
                         <label for="description">Description</label>
-                        <input type="text" name="description" id="description" class="form-control" maxlength="255"
-                            required>
+                        <input type="text" name="description" id="description" class="form-control"
+                            style="height: 70px; padding-bottom: 45px;" maxlength="255" required>
                     </div>
                     <div class="form-group">
                         <label for="expiration_date">Expiration Date</label>
@@ -156,6 +156,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['title'], $_POST['desc
             </div>
         </main>
     </div>
+    <?php require_once 'footer.php'; ?>
+
 </body>
 
 </html>
