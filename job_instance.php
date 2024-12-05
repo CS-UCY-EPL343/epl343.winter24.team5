@@ -261,7 +261,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
                                     <td><?= htmlspecialchars($instance['Recurrence'] ?? 'None'); ?></td>
                                     <td><?= htmlspecialchars($instance['Recurrence_Time'] ?? 'N/A'); ?></td>
                                     <td>
-                                        <form action="edit_instance.php" method="GET" style="display:inline;">
+                                        <form action="edit_instance.php" method="GET">
                                             <input type="hidden" name="Job_Instance_ID" value="<?= htmlspecialchars($instance['Job_Instance_ID']); ?>">
                                             <button type="submit" class="action-button edit-button">Edit</button>
                                         </form>
