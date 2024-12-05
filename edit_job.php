@@ -129,7 +129,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <aside class="sidebar">
             <h3 class="sidebar-title"><?= $is_admin ? 'Admin Dashboard' : 'User Dashboard'; ?></h3>
             <ul class="sidebar-links">
-                <!-- Common Links -->
                 <li>
                     <a href="<?= $is_admin ? 'admin_page.php' : 'user_page.php'; ?>"
                         class="<?= basename($_SERVER['PHP_SELF']) == ($is_admin ? 'admin_page.php' : 'user_page.php') ? 'active' : ''; ?>">Polls</a>
@@ -151,8 +150,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         class="<?= basename($_SERVER['PHP_SELF']) == 'Tasks.php' ? 'active' : ''; ?>">Tasks</a>
                 </li>
 
-
-                <!-- Admin-Only Links -->
                 <?php if ($is_admin): ?>
                     <li>
                         <a href="create_poll.php"
