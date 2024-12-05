@@ -153,12 +153,10 @@ footer {
 }
 
 .poll-card {
-  width: calc(
-    33.333% - 20px
-  ); /* Three cards per row with a little space between */
-  height: 300px; /* Slightly longer cards */
-  margin-bottom: 20px; /* Space between rows */
-  flex-shrink: 0; /* Ensure consistent sizing */
+  width: calc(33.333% - 20px);
+  height: 300px;
+  margin-bottom: 20px;
+  flex-shrink: 0;
 }
 .poll-card .card-body {
   display: flex;
@@ -174,7 +172,14 @@ footer {
 .poll-container {
   display: flex;
   flex-wrap: wrap;
-  gap: 20px; /* Space between cards */
+  gap: 20px;
+}
+.poll-container2 {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 15px;
+  margin-left: 40px;
+  margin-bottom: 10px;
 }
 .navbar .users-link {
   margin-right: auto;
@@ -686,7 +691,7 @@ tr:hover {
   background-color: white;
   border-radius: 15px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  width: calc(50% - 50px);
+  width: calc(50% - 60px);
   padding: 20px 20px 10px 20px;
   height: 200px;
   display: flex;
@@ -739,6 +744,23 @@ tr:hover {
 }
 .poll-button2:hover {
   background-color: #92bbfa;
+}
+.poll-button3 {
+  display: inline-block;
+  align-self: center;
+  position: center;
+  bottom: 10px;
+  left: 10px;
+  font-size: 1em;
+  padding: 10px 15px;
+  margin-top: 50%;
+  background-color: #020625;
+  color: #fff;
+  text-decoration: none;
+  border-radius: 5px;
+}
+.poll-button3:hover {
+  background-color: #2d5591;
 }
 .poll-button-red {
   align-self: flex-start;
