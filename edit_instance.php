@@ -106,6 +106,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && !$errorMessage) {
             // Execute the statement
             $stmt->execute();
 
+            // Log the modification
+            $logTitle = "Job Instance Modified";
+            $logDescription = "Job Instance ID {$instanceID} was modified by User ID {$user_id}.";
+
+            // Insert log entry
+            insertJobInstanceLog($pdo, $instanceID, $logTitle, $logDescription);
+
             // Update was successful
             $successMessage = "Job instance updated successfully.";
 
@@ -122,11 +129,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && !$errorMessage) {
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <!-- Existing head content... -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Edit Job Instance</title>
     <link rel="stylesheet" href="styles.css">
     <style>
+        /* Existing styles... */
         .go-back-button {
             display: inline-block;
             margin: 15px 0;
