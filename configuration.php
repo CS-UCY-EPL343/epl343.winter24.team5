@@ -48,7 +48,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $_POST['action'] === 'create') {
         foreach ($programs as $index => $program) {
             $param_key = 'param' . $index;
             if (isset($_POST[$param_key]) && trim($_POST[$param_key]) !== '') {
-                // Add program name (prefix) with language in parentheses and parameter as "Program_Name (Language): Parameter"
                 $parameters[] = $program['Program_Name'] . ' (' . $program['Language'] . '): ' . $_POST[$param_key];
             }
         }
@@ -76,10 +75,38 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $_POST['action'] === 'create') {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Configure Job</title>
     <link rel="stylesheet" href="styles.css">
+    <style>
+        .go-back-button {
+            display: inline-block;
+            margin: 15px 0;
+            padding: 10px 15px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            text-decoration: none;
+            font-size: 14px;
+            cursor: pointer;
+        }
+
+        .go-back-button:hover {
+            background-color: #0056b3;
+        }
+
+        .go-back-container {
+            margin-top: 10px;
+            margin-left: 0; /* Align the button to the left */
+        }
+    </style>
 </head>
 <body>
     <div class="dashboard-container">
         <main class="dashboard-main">
+            <!-- Go Back Button -->
+            <div class="go-back-container">
+                <a href="javascript:history.back()" class="go-back-button">Go Back</a>
+            </div>
+
             <div class="config-container">
                 <div class="config-box">
                     <h1>Configure Job</h1>
@@ -96,7 +123,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $_POST['action'] === 'create') {
                         <table class="config-table">
                             <tr>
                                 <td><label for="config_name">Configuration Name:</label></td>
-                                <td><input type="text" id="config_name" name="config_name" required></td>
                                 <td><input type="text" id="config_name" name="config_name" required></td>
                             </tr>
                             <tr>
