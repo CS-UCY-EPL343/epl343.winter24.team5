@@ -20,50 +20,105 @@ $instance = [];
 
 // Fetch the existing instance details
 if ($instanceID) {
-    $pdo = getDatabaseConnection();
-    $stmt = $pdo->prepare("SELECT * FROM JOB_INSTANCE WHERE Job_Instance_ID = :InstanceID AND Creator_ID = :CreatorID");
-    $stmt->bindParam(':InstanceID', $instanceID, PDO::PARAM_INT);
-    $stmt->bindParam(':CreatorID', $user_id, PDO::PARAM_INT);
-    $stmt->execute();
-    $instance = $stmt->fetch(PDO::FETCH_ASSOC);
-
-    if (!$instance) {
-        $errorMessage = "Job instance not found or you do not have permission to edit it.";
-    }
-}
-
-// Handle the form submission for updating the instance
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $scheduleTime = $_POST['schedule_time'] ?? null;
-    $recurrence = $_POST['recurrence'] ?? null;
-    $recurrenceTime = $_POST['recurrence_time'] ?? null;
-    $triggeredBy = $_POST['triggered_by'] ?? null;
-
-    // Validate inputs
-    $scheduleTime = !empty($scheduleTime) ? $scheduleTime : null;
-    $recurrenceTime = !empty($recurrenceTime) ? $recurrenceTime : null;
-
     try {
-        $stmt = $pdo->prepare("EXEC UpdateJobInstance :Job_Instance_ID, :Schedule_Time, :Recurrence, :Recurrence_Time, :Triggered_By");
-        $stmt->bindParam(':Job_Instance_ID', $instanceID, PDO::PARAM_INT);
-        $stmt->bindParam(':Schedule_Time', $scheduleTime, PDO::PARAM_STR);
-        $stmt->bindParam(':Recurrence', $recurrence, PDO::PARAM_STR);
-        $stmt->bindParam(':Recurrence_Time', $recurrenceTime, PDO::PARAM_STR);
-        $stmt->bindParam(':Triggered_By', $triggeredBy, PDO::PARAM_STR);
-        $stmt->execute();
-
-        $successMessage = "Job instance updated successfully.";
-        // Fetch the updated instance details
+        $pdo = getDatabaseConnection();
         $stmt = $pdo->prepare("SELECT * FROM JOB_INSTANCE WHERE Job_Instance_ID = :InstanceID AND Creator_ID = :CreatorID");
         $stmt->bindParam(':InstanceID', $instanceID, PDO::PARAM_INT);
         $stmt->bindParam(':CreatorID', $user_id, PDO::PARAM_INT);
         $stmt->execute();
         $instance = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        if (!$instance) {
+            $errorMessage = "Job instance not found or you do not have permission to edit it.";
+        }
     } catch (PDOException $e) {
-        $errorMessage = "Failed to update job instance: " . $e->getMessage();
+        $errorMessage = "Database error: " . htmlspecialchars($e->getMessage());
+    }
+}
+
+// Handle the form submission for updating the instance
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && !$errorMessage) {
+    // Retrieve and sanitize POST data
+    $scheduleTimeInput = $_POST['schedule_time'] ?? null;
+    $recurrence = $_POST['recurrence'] ?? 'None'; // Default to 'None' if not set
+    $recurrenceTimeInput = $_POST['recurrence_time'] ?? null;
+    $triggeredBy = $_POST['triggered_by'] ?? null;
+
+    // Convert inputs to desired formats or null
+    $scheduleTime = !empty($scheduleTimeInput) ? date('Y-m-d H:i:s', strtotime($scheduleTimeInput)) : null;
+    $recurrenceTime = !empty($recurrenceTimeInput) ? date('Y-m-d H:i:s', strtotime($recurrenceTimeInput)) : null;
+
+    // If recurrence is 'None', ensure recurrenceTime is null
+    if ($recurrence === 'None') {
+        $recurrenceTime = null;
+    }
+
+    // Initialize an array to collect error messages
+    $errors = [];
+
+    // Validation Rules
+
+    // Rule 1: Both schedule time and recurrence (other than 'None') cannot be set simultaneously
+    if (!empty($scheduleTime) && $recurrence !== 'None') {
+        $errors[] = "Both schedule time and recurrence cannot be provided simultaneously.";
+    }
+
+    // Rule 2: Both schedule time and recurrence time cannot be set simultaneously
+    if (!empty($scheduleTime) && !empty($recurrenceTime)) {
+        $errors[] = "Both schedule time and recurrence time cannot be provided simultaneously.";
+    }
+
+    // Rule 3: If recurrence is not 'None', recurrence time must be provided
+    if ($recurrence !== 'None' && empty($recurrenceTime)) {
+        $errors[] = "Recurrence time must be provided when recurrence is set.";
+    }
+
+    // Rule 4: If recurrence is 'None', recurrence time should not be set
+    if ($recurrence === 'None' && !empty($recurrenceTime)) {
+        $errors[] = "Recurrence time should not be provided when recurrence is set to 'None'.";
+    }
+
+    // Additional validations can be added here as needed
+
+    if (count($errors) > 0) {
+        // Concatenate all error messages
+        $errorMessage = implode("<br>", $errors);
+    } else {
+        try {
+            // Prepare the UPDATE statement
+            $stmt = $pdo->prepare("
+                UPDATE JOB_INSTANCE
+                SET Schedule_Time = :ScheduleTime,
+                    Recurrence = :Recurrence,
+                    Recurrence_Time = :RecurrenceTime,
+                    Triggered_By = :TriggeredBy
+                WHERE Job_Instance_ID = :InstanceID AND Creator_ID = :CreatorID
+            ");
+
+            // Bind parameters
+            $stmt->bindParam(':InstanceID', $instanceID, PDO::PARAM_INT);
+            $stmt->bindParam(':CreatorID', $user_id, PDO::PARAM_INT);
+            $stmt->bindValue(':ScheduleTime', $scheduleTime, $scheduleTime ? PDO::PARAM_STR : PDO::PARAM_NULL);
+            $stmt->bindValue(':Recurrence', $recurrence !== 'None' ? $recurrence : null, $recurrence !== 'None' ? PDO::PARAM_STR : PDO::PARAM_NULL);
+            $stmt->bindValue(':RecurrenceTime', $recurrenceTime, $recurrenceTime ? PDO::PARAM_STR : PDO::PARAM_NULL);
+            $stmt->bindParam(':TriggeredBy', $triggeredBy, PDO::PARAM_STR);
+
+            // Execute the statement
+            $stmt->execute();
+
+            // Update was successful
+            $successMessage = "Job instance updated successfully.";
+
+            // Redirect to the job_instance page after successful update
+            header("Location: job_instance.php?Job_Configuration_ID=" . urlencode($instance['Job_Configuration_ID']));
+            exit();
+        } catch (PDOException $e) {
+            $errorMessage = "Failed to update job instance: " . htmlspecialchars($e->getMessage());
+        }
     }
 }
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -94,13 +149,37 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             margin-left: 0;
         }
 
+        .config-container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .config-box {
+            background-color: #f9f9f9;
+            padding: 20px;
+            border-radius: 5px;
+        }
+
+        .config-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .config-table td {
+            padding: 10px;
+            vertical-align: top;
+        }
+
         .configure-button {
+            margin-top: 20px;
+            padding: 10px 20px;
             background-color: #28a745;
             color: white;
             border: none;
-            padding: 10px 15px;
             border-radius: 5px;
             cursor: pointer;
+            font-size: 16px;
         }
 
         .configure-button:hover {
@@ -108,15 +187,37 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
 
         .error-message {
-            color: red;
             margin-bottom: 15px;
+            color: red;
         }
 
         .success-message {
-            color: green;
             margin-bottom: 15px;
+            color: green;
         }
     </style>
+    <script>
+        // JavaScript to handle conditional display and clearing of recurrence_time
+        document.addEventListener('DOMContentLoaded', function() {
+            const recurrenceSelect = document.getElementById('recurrence');
+            const recurrenceTimeRow = document.getElementById('recurrence_time_row');
+            const recurrenceTimeInput = document.getElementById('recurrence_time');
+
+            function toggleRecurrenceTime() {
+                if (recurrenceSelect.value === 'None') {
+                    recurrenceTimeRow.style.display = 'none';
+                    recurrenceTimeInput.value = ''; // Clear the value
+                } else {
+                    recurrenceTimeRow.style.display = 'table-row';
+                }
+            }
+
+            recurrenceSelect.addEventListener('change', toggleRecurrenceTime);
+
+            // Initialize on page load
+            toggleRecurrenceTime();
+        });
+    </script>
 </head>
 <body>
     <div class="dashboard-container">
@@ -131,47 +232,49 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     <h1>Edit Job Instance</h1>
 
                     <?php if ($errorMessage): ?>
-                        <div class="error-message"><?= htmlspecialchars($errorMessage); ?></div>
+                        <div class="error-message"><?= $errorMessage; ?></div>
                     <?php endif; ?>
                     <?php if ($successMessage): ?>
                         <div class="success-message"><?= htmlspecialchars($successMessage); ?></div>
                     <?php endif; ?>
 
-                    <?php if ($instance): ?>
-                        <form action="edit_instance.php?Job_Instance_ID=<?= htmlspecialchars($instanceID); ?>" method="POST">
-                            <table class="config-table">
-                                <tr>
-                                    <td><label for="schedule_time">Schedule Time:</label></td>
-                                    <td><input type="datetime-local" id="schedule_time" name="schedule_time" value="<?= htmlspecialchars(date('Y-m-d\TH:i', strtotime($instance['Schedule_Time']))) ?>"></td>
-                                </tr>
-                                <tr>
-                                    <td><label for="recurrence">Recurrence:</label></td>
-                                    <td>
-                                        <select id="recurrence" name="recurrence">
-                                            <option value="None" <?= (empty($instance['Recurrence']) || $instance['Recurrence'] === 'None') ? 'selected' : ''; ?>>None</option>
-                                            <option value="Daily" <?= ($instance['Recurrence'] === 'Daily') ? 'selected' : ''; ?>>Daily</option>
-                                            <option value="Weekly" <?= ($instance['Recurrence'] === 'Weekly') ? 'selected' : ''; ?>>Weekly</option>
-                                            <option value="Monthly" <?= ($instance['Recurrence'] === 'Monthly') ? 'selected' : ''; ?>>Monthly</option>
-                                        </select>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td><label for="recurrence_time">Recurrence Time:</label></td>
-                                    <td><input type="datetime-local" id="recurrence_time" name="recurrence_time" value="<?= htmlspecialchars(date('Y-m-d\TH:i', strtotime($instance['Recurrence_Time']))) ?>"></td>
-                                </tr>
-                                <tr>
-                                    <td><label for="triggered_by">Triggered By:</label></td>
-                                    <td>
-                                        <select id="triggered_by" name="triggered_by" required>
-                                            <option value="System" <?= ($instance['Triggered_By'] === 'System') ? 'selected' : ''; ?>>System (Automatically)</option>
-                                            <option value="User" <?= ($instance['Triggered_By'] === 'User') ? 'selected' : ''; ?>>User (Manually)</option>
-                                        </select>
-                                    </td>
-                                </tr>
-                            </table>
-                            <button type="submit" class="configure-button">Update Job Instance</button>
-                        </form>
-                    <?php endif; ?>
+                    <form action="edit_instance.php?Job_Instance_ID=<?= htmlspecialchars($instanceID); ?>" method="POST">
+                        <table class="config-table">
+                            <tr>
+                                <td><label for="schedule_time">Schedule Time:</label></td>
+                                <td>
+                                    <input type="datetime-local" id="schedule_time" name="schedule_time" value="<?= htmlspecialchars(!empty($instance['Schedule_Time']) ? date('Y-m-d\TH:i', strtotime($instance['Schedule_Time'])) : ''); ?>">
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><label for="recurrence">Recurrence:</label></td>
+                                <td>
+                                    <select id="recurrence" name="recurrence">
+                                        <option value="None" <?= (empty($instance['Recurrence']) || $instance['Recurrence'] === 'None') ? 'selected' : ''; ?>>None</option>
+                                        <option value="Daily" <?= ($instance['Recurrence'] === 'Daily') ? 'selected' : ''; ?>>Daily</option>
+                                        <option value="Weekly" <?= ($instance['Recurrence'] === 'Weekly') ? 'selected' : ''; ?>>Weekly</option>
+                                        <option value="Monthly" <?= ($instance['Recurrence'] === 'Monthly') ? 'selected' : ''; ?>>Monthly</option>
+                                    </select>
+                                </td>
+                            </tr>
+                            <tr id="recurrence_time_row">
+                                <td><label for="recurrence_time">Recurrence Time:</label></td>
+                                <td>
+                                    <input type="datetime-local" id="recurrence_time" name="recurrence_time" value="<?= htmlspecialchars(!empty($instance['Recurrence_Time']) ? date('Y-m-d\TH:i', strtotime($instance['Recurrence_Time'])) : ''); ?>">
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><label for="triggered_by">Triggered By:</label></td>
+                                <td>
+                                    <select id="triggered_by" name="triggered_by" required>
+                                        <option value="System" <?= ($instance['Triggered_By'] === 'System') ? 'selected' : ''; ?>>System (Automatically)</option>
+                                        <option value="User" <?= ($instance['Triggered_By'] === 'User') ? 'selected' : ''; ?>>User (Manually)</option>
+                                    </select>
+                                </td>
+                            </tr>
+                        </table>
+                        <button type="submit" class="configure-button">Update Job Instance</button>
+                    </form>
                 </div>
             </div>
         </main>

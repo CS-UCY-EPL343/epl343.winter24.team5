@@ -19,9 +19,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['Job_Instance_ID'])) {
     $pdo = getDatabaseConnection();
 
     try {
-        // Generate a random result: 95% success, 5% failure
         $runSuccess = rand(1, 100) <= 95;
-
         $stmt = $pdo->prepare("
             UPDATE JOB_INSTANCE
             SET 
@@ -34,6 +32,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['Job_Instance_ID'])) {
         $stmt->bindParam(':Run_Status', $runStatus, PDO::PARAM_STR);
         $stmt->bindParam(':Job_Instance_ID', $instanceID, PDO::PARAM_INT);
         $stmt->execute();
+
+        insertJobInstanceLog($instanceID, "Instance Run", "The instance was run with status: $runStatus.");
 
         $_SESSION['run_message'] = $runSuccess ? 'Run Completed Successfully!' : 'Run Failed!';
         header("Location: job_instance.php?Job_Configuration_ID=" . htmlspecialchars($configurationID));
