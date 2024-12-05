@@ -526,19 +526,17 @@ p1 {
 .job-listing-table th,
 .job-listing-table td {
   padding: 1em;
-  border: 1px solid #444; /* Darker border for better contrast */
+  border: 1px solid #444;
   text-align: left;
 }
 
 .job-listing-table th {
-  background-color: #050b45;
+  background-color: #4186ce;
   color: white;
-  border-bottom: 3px solid #444; /* Add a thicker border under the header for separation */
-  border-right: 2px solid #333; /* Add a border to visually separate the columns */
 }
 
 .job-listing-table td {
-  border-right: 1px solid #333; /* Add border between table cells */
+  border-right: 1px solid #333;
 }
 
 .job-listing-table tr:nth-child(even) {
@@ -710,6 +708,7 @@ tr:hover {
   font-size: 0.9em;
   color: #333;
   margin-bottom: 15px;
+  margin-top: 2%;
 }
 .poll-button {
   display: inline-block;
@@ -719,7 +718,7 @@ tr:hover {
   left: 10px;
   font-size: 0.9em;
   padding: 10px 15px;
-  background-color: #007bff;
+  background-color: #020625;
   color: #fff;
   text-decoration: none;
   border-radius: 5px;

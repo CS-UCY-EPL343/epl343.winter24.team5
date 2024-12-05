@@ -177,6 +177,8 @@ $pendingApprovals = getPendingApprovals();
             </div>
         </main>
     </div>
+    <?php require_once 'footer.php'; ?>
+
 </body>
 
 </html>

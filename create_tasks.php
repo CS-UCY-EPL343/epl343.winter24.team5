@@ -139,8 +139,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['title'], $_POST['desc
                     </div>
                     <div class="form-group">
                         <label for="description">Description</label>
-                        <textarea name="description" id="description" class="form-control"
-                            required></textarea>
+                        <input type="text" name="description" id="description" class="form-control"
+                            style="height: 70px; padding-bottom: 45px;" required>
                     </div>
                     <div class="form-group">
                         <label for="date_due">Due Date</label>

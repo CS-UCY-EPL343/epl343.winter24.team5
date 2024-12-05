@@ -221,7 +221,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['poll_id'])) {
                                 <h3 class="poll-title"><?= htmlspecialchars($poll['Title']) ?></h3>
                                 <p class="poll-description"><?= htmlspecialchars($poll['Description']) ?></p>
                                 <p class="poll-votes">Expiration: <?= htmlspecialchars($poll['Expiration_Date']) ?></p>
-                                <span class="poll-status">Poll Finished. Result:
+                                <span class="poll-status">Poll Finished | Result:
                                     <?php if ($poll['Final_Verdict'] == 1): ?>
                                         Decision Will Go Through
                                     <?php else: ?>
