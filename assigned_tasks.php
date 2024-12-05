@@ -101,7 +101,11 @@ try {
     }
 
     .sidebar-links a.active {
-        background-color: #6db4ff;
+        background-color: #175494;
+    }
+
+    .sidebar-links a.active:hover {
+        background-color: #175494;
     }
 </style>
 
@@ -181,6 +185,8 @@ try {
             <?php endif; ?>
         </main>
     </div>
+    <?php require_once 'footer.php'; ?>
+
 </body>
 
 </html>

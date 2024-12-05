@@ -57,6 +57,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $_POST['action'] === 'create') {
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -103,6 +104,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $_POST['action'] === 'create') {
         }
     </style>
 </head>
+
 <body>
     <div class="dashboard-container">
         <main class="dashboard-main">
@@ -131,7 +133,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $_POST['action'] === 'create') {
                             </tr>
                             <tr>
                                 <td><label for="parameters">Parameters:</label></td>
-                                <td><textarea id="parameters" name="parameters" required></textarea></td>
+                                <td><input type="text" id="parameters" name="parameters" required></td>
                             </tr>
                         </table>
                         <button type="submit" class="configure-button">Submit Configuration</button>
@@ -161,7 +163,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $_POST['action'] === 'create') {
                                     <td><?= htmlspecialchars($config['Parameters']); ?></td>
                                     <td><?= htmlspecialchars($config['Created_At']); ?></td>
                                     <td><?= htmlspecialchars($config['Last_Modified']); ?></td>
-                                    <td>                            
+                                    <td>
                                         <form action="job_instance.php" method="GET" style="display:inline;">
                                             <input type="hidden" name="Job_Configuration_ID" value="<?= htmlspecialchars($config['Job_Configuration_ID']); ?>">
                                             <button type="submit">Job Instances</button>
@@ -181,5 +183,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $_POST['action'] === 'create') {
             </div>
         </main>
     </div>
+    <?php require_once 'footer.php'; ?>
+
 </body>
+
 </html>

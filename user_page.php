@@ -28,7 +28,11 @@ try {
 <html lang="en">
 <style>
     .sidebar-links a.active {
-        background-color: #6db4ff;
+        background-color: #175494;
+    }
+
+    .sidebar-links a.active:hover {
+        background-color: #175494;
     }
 </style>
 
@@ -88,7 +92,7 @@ try {
             <div class="dashboard-header">
                 <h1>Polls</h1>
             </div>
-            <div class="poll-container">
+            <div class="poll-container2">
                 <?php if (isset($error)): ?>
                     <div class="alert alert-danger" role="alert">
                         <?= htmlspecialchars($error) ?>
@@ -103,15 +107,17 @@ try {
                             <!-- <p class="poll-votes">Votes: Yes <?= htmlspecialchars($poll['Votes_For']) ?> | No
                                 <?= htmlspecialchars($poll['Votes_Against']) ?></p> -->
                             <?php if ($poll['Status'] === "Finished"): ?>
-                                <p class="poll-status">Poll has concluded. Final Result: <?php if ($poll['Final_Verdict'] == 1): ?>
+                                <p class="poll-status">Poll has concluded | Final Result: <?php if ($poll['Final_Verdict'] == 1): ?>
                                         Decision Will Go Through
                                     <?php else: ?>
                                         Decision Will Not Go Through
                                     <?php endif; ?> </p>
 
                             <?php else: ?>
-                                <a href="pollpage.php?poll_id=<?= htmlspecialchars($poll['Poll_ID']) ?>"
-                                    class="poll-button">Vote</a>
+                                <div class="poll-actions">
+                                    <a href="pollpage.php?poll_id=<?= htmlspecialchars($poll['Poll_ID']) ?>"
+                                        class="poll-button3">Vote</a>
+                                </div>
                             <?php endif; ?>
                         </div>
                     <?php endforeach; ?>

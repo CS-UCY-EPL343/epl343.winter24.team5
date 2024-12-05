@@ -213,7 +213,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['poll_id'])) {
                                         class="poll-button2">Edit</a>
                                     <form method="POST">
                                         <input type="hidden" name="poll_id" value="<?= htmlspecialchars($poll['Poll_ID']) ?>">
-                                        <button type="submit" class="poll-button-red">Finish Poll.
+                                        <button type="submit" class="poll-button-red">Finish Poll
                                         </button>
                                     </form>
                                 </div>
