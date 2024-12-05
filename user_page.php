@@ -27,9 +27,9 @@ try {
 <!DOCTYPE html>
 <html lang="en">
 <style>
-.sidebar-links a.active {
-    background-color: #6db4ff;
-}
+    .sidebar-links a.active {
+        background-color: #6db4ff;
+    }
 </style>
 
 <head>
@@ -90,31 +90,31 @@ try {
             </div>
             <div class="poll-container">
                 <?php if (isset($error)): ?>
-                <div class="alert alert-danger" role="alert">
-                    <?= htmlspecialchars($error) ?>
-                </div>
+                    <div class="alert alert-danger" role="alert">
+                        <?= htmlspecialchars($error) ?>
+                    </div>
                 <?php elseif (empty($polls)): ?>
-                <p>No polls available for this user.</p>
+                    <p>No polls available for this user.</p>
                 <?php else: ?>
-                <?php foreach ($polls as $poll): ?>
-                <div class="poll-card1">
-                    <h3 class="poll-title"><?= htmlspecialchars($poll['Title']) ?></h3>
-                    <p class="poll-description"><?= htmlspecialchars($poll['Description']) ?></p>
-                    <!-- <p class="poll-votes">Votes: Yes <?= htmlspecialchars($poll['Votes_For']) ?> | No
+                    <?php foreach ($polls as $poll): ?>
+                        <div class="poll-card2">
+                            <h3 class="poll-title"><?= htmlspecialchars($poll['Title']) ?></h3>
+                            <p class="poll-description"><?= htmlspecialchars($poll['Description']) ?></p>
+                            <!-- <p class="poll-votes">Votes: Yes <?= htmlspecialchars($poll['Votes_For']) ?> | No
                                 <?= htmlspecialchars($poll['Votes_Against']) ?></p> -->
-                    <?php if ($poll['Status'] === "Finished"): ?>
-                    <p class="poll-status">Poll has concluded. Final Result: <?php if ($poll['Final_Verdict'] == 1): ?>
-                        Decision Will Go Through
-                        <?php else: ?>
-                        Decision Will Not Go Through
-                        <?php endif; ?> </p>
+                            <?php if ($poll['Status'] === "Finished"): ?>
+                                <p class="poll-status">Poll has concluded. Final Result: <?php if ($poll['Final_Verdict'] == 1): ?>
+                                        Decision Will Go Through
+                                    <?php else: ?>
+                                        Decision Will Not Go Through
+                                    <?php endif; ?> </p>
 
-                    <?php else: ?>
-                    <a href="pollpage.php?poll_id=<?= htmlspecialchars($poll['Poll_ID']) ?>"
-                        class="poll-button">Vote</a>
-                    <?php endif; ?>
-                </div>
-                <?php endforeach; ?>
+                            <?php else: ?>
+                                <a href="pollpage.php?poll_id=<?= htmlspecialchars($poll['Poll_ID']) ?>"
+                                    class="poll-button">Vote</a>
+                            <?php endif; ?>
+                        </div>
+                    <?php endforeach; ?>
                 <?php endif; ?>
             </div>
         </main>

@@ -35,7 +35,11 @@ $pendingApprovals = getPendingApprovals();
 <html lang="en">
 <style>
     .sidebar-links a.active {
-        background-color: #6db4ff;
+        background-color: #175494;
+    }
+
+    .sidebar-links a.active:hover {
+        background-color: #175494;
     }
 </style>
 
@@ -48,8 +52,8 @@ $pendingApprovals = getPendingApprovals();
 
 <body>
     <div class="dashboard-container">
-    <aside class="sidebar">
-        <h3 class="sidebar-title"><?= $is_admin ? 'Admin Dashboard' : 'User Dashboard'; ?></h3>
+        <aside class="sidebar">
+            <h3 class="sidebar-title"><?= $is_admin ? 'Admin Dashboard' : 'User Dashboard'; ?></h3>
             <ul class="sidebar-links">
                 <!-- Common Links -->
                 <li>
@@ -61,12 +65,12 @@ $pendingApprovals = getPendingApprovals();
                         class="<?= basename($_SERVER['PHP_SELF']) == 'jobs.php' ? 'active' : ''; ?>">Jobs</a>
                 </li>
                 <?php if (!$is_admin): ?>
-                <li>
-                    <a href="assigned_tasks.php"
-                        class="<?= basename($_SERVER['PHP_SELF']) === 'assigned_tasks.php' ? 'active' : ''; ?>">
-                        Assigned Tasks
-                    </a>
-                </li>
+                    <li>
+                        <a href="assigned_tasks.php"
+                            class="<?= basename($_SERVER['PHP_SELF']) === 'assigned_tasks.php' ? 'active' : ''; ?>">
+                            Assigned Tasks
+                        </a>
+                    </li>
                 <?php endif; ?>
                 <li>
                     <a href="Tasks.php"
@@ -76,17 +80,17 @@ $pendingApprovals = getPendingApprovals();
 
                 <!-- Admin-Only Links -->
                 <?php if ($is_admin): ?>
-                <li>
-                    <a href="create_poll.php"
-                        class="<?= basename($_SERVER['PHP_SELF']) == 'create_poll.php' ? 'active' : ''; ?>">Create
-                        Poll</a>
-                </li>
+                    <li>
+                        <a href="create_poll.php"
+                            class="<?= basename($_SERVER['PHP_SELF']) == 'create_poll.php' ? 'active' : ''; ?>">Create
+                            Poll</a>
+                    </li>
 
-                <li>
-                    <a href="pending_user_approvals.php"
-                        class="<?= basename($_SERVER['PHP_SELF']) == 'pending_user_approvals.php' ? 'active' : ''; ?>">User
-                        Approvals</a>
-                </li>
+                    <li>
+                        <a href="pending_user_approvals.php"
+                            class="<?= basename($_SERVER['PHP_SELF']) == 'pending_user_approvals.php' ? 'active' : ''; ?>">User
+                            Approvals</a>
+                    </li>
                 <?php endif; ?>
                 <li>
                     <a href="create_tasks.php"

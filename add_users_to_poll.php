@@ -56,7 +56,11 @@ try {
 <html lang="en">
 <style>
     .sidebar-links a.active {
-        background-color: #6db4ff;
+        background-color: #175494;
+    }
+
+    .sidebar-links a.active:hover {
+        background-color: #175494;
     }
 </style>
 

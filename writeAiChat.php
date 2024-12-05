@@ -21,7 +21,11 @@ $is_admin = $user_role === 'Admin';
 <html lang="en">
 <style>
     .sidebar-links a.active {
-        background-color: #6db4ff;
+        background-color: #175494;
+    }
+
+    .sidebar-links a.active:hover {
+        background-color: #175494;
     }
 </style>
 
@@ -53,12 +57,12 @@ $is_admin = $user_role === 'Admin';
                     </a>
                 </li>
                 <?php if (!$is_admin): ?>
-                <li>
-                    <a href="assigned_tasks.php"
-                        class="<?= basename($_SERVER['PHP_SELF']) === 'assigned_tasks.php' ? 'active' : ''; ?>">
-                        Assigned Tasks
-                    </a>
-                </li>
+                    <li>
+                        <a href="assigned_tasks.php"
+                            class="<?= basename($_SERVER['PHP_SELF']) === 'assigned_tasks.php' ? 'active' : ''; ?>">
+                            Assigned Tasks
+                        </a>
+                    </li>
                 <?php endif; ?>
                 <li>
                     <a href="Tasks.php"
@@ -82,15 +86,15 @@ $is_admin = $user_role === 'Admin';
                             User Approvals
                         </a>
                     </li>
-                    <?php else: ?>
+                <?php else: ?>
 
                 <?php endif; ?>
                 <li>
-                        <a href="create_tasks.php"
-                            class="<?= basename($_SERVER['PHP_SELF']) === 'create_tasks.php' ? 'active' : ''; ?>">
-                            Create Task
-                        </a>
-                    </li>
+                    <a href="create_tasks.php"
+                        class="<?= basename($_SERVER['PHP_SELF']) === 'create_tasks.php' ? 'active' : ''; ?>">
+                        Create Task
+                    </a>
+                </li>
                 <li>
                     <a href="writeAiChat.php"
                         class="<?= basename($_SERVER['PHP_SELF']) === 'writeAiChat.php' ? 'active' : ''; ?>">
