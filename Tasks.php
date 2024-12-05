@@ -38,115 +38,115 @@ try {
 <html lang="en">
 
 <style>
-.dashboard-main {
-    padding: 20px;
-    background-color: #f4f4f9;
-}
+    .dashboard-main {
+        padding: 20px;
+        background-color: #f4f4f9;
+    }
 
-h1 {
-    text-align: center;
-    margin-bottom: 20px;
-    color: #333;
-}
+    h1 {
+        text-align: center;
+        margin-bottom: 20px;
+        color: #333;
+    }
 
-.search-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin-bottom: 20px;
-}
+    .search-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-bottom: 20px;
+    }
 
-.search-form {
-    justify-content: center;
-    align-items: center;
-    gap: 5px;
-    /* Spacing between input and button */
-    background-color: #f9f9f9;
-    /* Optional background for form container */
-    padding: 10px;
-    border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
+    .search-form {
+        justify-content: center;
+        align-items: center;
+        gap: 5px;
+        background-color: #f9f9f9;
+        padding: 15px;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
 
-.search-form input[type="text"] {
-    padding: 6px;
-    width: 200px;
-    /* Smaller input box width */
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    font-size: 14px;
-}
+    .search-form input[type="text"] {
+        padding: 6px;
+        width: 200px;
+        /* Smaller input box width */
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        font-size: 14px;
+    }
 
-.search-form button {
-    padding: 6px 12px;
-    /* Smaller button size */
-    border: none;
-    background-color: #007bff;
-    color: white;
-    border-radius: 5px;
-    font-size: 14px;
-    cursor: pointer;
-    transition: background-color 0.3s ease, transform 0.2s ease;
-}
+    .search-form button {
+        padding: 6px 12px;
+        /* Smaller button size */
+        border: none;
+        background-color: #020625;
+        color: white;
+        border-radius: 5px;
+        font-size: 14px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+    }
 
-.search-form button:hover {
-    background-color: #0056b3;
-    transform: scale(1.1);
-    /* Slight zoom effect on hover */
-}
+    .search-form button:hover {
+        background-color: #2d5591;
+    }
 
-.task-list {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 20px;
-}
+    .task-list {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 20px;
+    }
 
-.task-card {
-    background-color: #fff;
-    border: 1px solid #ccc;
-    border-radius: 10px;
-    width: 300px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
-}
+    .task-card {
+        background-color: #fff;
+        border: 1px solid #ccc;
+        border-radius: 10px;
+        width: 300px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
 
-.task-card:hover {
-    transform: scale(1.05);
-    box-shadow: 0 8px 12px rgba(0, 0, 0, 0.15);
-}
+    .task-card:hover {
+        transform: scale(1.05);
+        box-shadow: 0 8px 12px rgba(0, 0, 0, 0.15);
+    }
 
-.task-header {
-    background-color: #007bff;
-    color: white;
-    padding: 15px;
-    border-radius: 10px 10px 0 0;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
+    .task-header {
+        background-color: #4186ce;
+        color: white;
+        padding: 15px;
+        border-radius: 10px 10px 0 0;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
 
-.task-header h2 {
-    font-size: 1.2rem;
-    margin: 0;
-}
+    .task-header h2 {
+        font-size: 1.2rem;
+        margin: 0;
+    }
 
-.task-header .task-date {
-    font-size: 0.9rem;
-}
+    .task-header .task-date {
+        font-size: 0.9rem;
+    }
 
-.task-body {
-    padding: 15px;
-    color: #555;
-}
+    .task-body {
+        padding: 15px;
+        color: #555;
+    }
 
-.task-body p {
-    margin: 10px 0;
-}
+    .task-body p {
+        margin: 10px 0;
+    }
 
-.sidebar-links a.active {
-    background-color: #6db4ff;
-}
+    .sidebar-links a.active {
+        background-color: #175494;
+    }
+
+    .sidebar-links a.active:hover {
+        background-color: #175494;
+    }
 </style>
 
 <head>
@@ -174,13 +174,13 @@ h1 {
                         class="<?= basename($_SERVER['PHP_SELF']) == 'jobs.php' ? 'active' : ''; ?>">Jobs</a>
                 </li>
                 <?php if (!$is_admin): ?>
-                <li>
-                    <a href="assigned_tasks.php"
-                        class="<?= basename($_SERVER['PHP_SELF']) === 'assigned_tasks.php' ? 'active' : ''; ?>">
-                        Assigned Tasks
-                    </a>
-                </li>
-                <?php endif; ?> 
+                    <li>
+                        <a href="assigned_tasks.php"
+                            class="<?= basename($_SERVER['PHP_SELF']) === 'assigned_tasks.php' ? 'active' : ''; ?>">
+                            Assigned Tasks
+                        </a>
+                    </li>
+                <?php endif; ?>
                 <li>
                     <a href="Tasks.php"
                         class="<?= basename($_SERVER['PHP_SELF']) == 'Tasks.php' ? 'active' : ''; ?>">Tasks</a>
@@ -189,17 +189,17 @@ h1 {
 
                 <!-- Admin-Only Links -->
                 <?php if ($is_admin): ?>
-                <li>
-                    <a href="create_poll.php"
-                        class="<?= basename($_SERVER['PHP_SELF']) == 'create_poll.php' ? 'active' : ''; ?>">Create
-                        Poll</a>
-                </li>
+                    <li>
+                        <a href="create_poll.php"
+                            class="<?= basename($_SERVER['PHP_SELF']) == 'create_poll.php' ? 'active' : ''; ?>">Create
+                            Poll</a>
+                    </li>
 
-                <li>
-                    <a href="pending_user_approvals.php"
-                        class="<?= basename($_SERVER['PHP_SELF']) == 'pending_user_approvals.php' ? 'active' : ''; ?>">User
-                        Approvals</a>
-                </li>
+                    <li>
+                        <a href="pending_user_approvals.php"
+                            class="<?= basename($_SERVER['PHP_SELF']) == 'pending_user_approvals.php' ? 'active' : ''; ?>">User
+                            Approvals</a>
+                    </li>
                 <?php endif; ?>
                 <li>
                     <a href="create_tasks.php"
@@ -230,27 +230,27 @@ h1 {
             </div>
 
             <?php if (isset($error)): ?>
-            <div class="alert alert-danger" role="alert">
-                <?= htmlspecialchars($error) ?>
-            </div>
+                <div class="alert alert-danger" role="alert">
+                    <?= htmlspecialchars($error) ?>
+                </div>
             <?php endif; ?>
 
             <?php if (!empty($tasks)): ?>
-            <div class="task-list">
-                <?php foreach ($tasks as $task): ?>
-                <div class="task-card">
-                    <div class="task-header">
-                        <h2><?= htmlspecialchars($task['Title']) ?></h2>
-                        <span class="task-date">Due: <?= htmlspecialchars($task['Date_Due']) ?></span>
-                    </div>
-                    <div class="task-body">
-                        <p><strong>Description:</strong> <?= htmlspecialchars($task['Description']) ?></p>
-                    </div>
+                <div class="task-list">
+                    <?php foreach ($tasks as $task): ?>
+                        <div class="task-card">
+                            <div class="task-header">
+                                <h2><?= htmlspecialchars($task['Title']) ?></h2>
+                                <span class="task-date">Due: <?= htmlspecialchars($task['Date_Due']) ?></span>
+                            </div>
+                            <div class="task-body">
+                                <p><strong>Description:</strong> <?= htmlspecialchars($task['Description']) ?></p>
+                            </div>
+                        </div>
+                    <?php endforeach; ?>
                 </div>
-                <?php endforeach; ?>
-            </div>
             <?php else: ?>
-            <p>No tasks available.</p>
+                <p>No tasks available.</p>
             <?php endif; ?>
         </main>
     </div>

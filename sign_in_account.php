@@ -64,6 +64,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <a href="create_account.php">Create Account</a>
         </div>
     </div>
+    <?php require_once 'footer.php'; ?>
 </body>
 
 </html>

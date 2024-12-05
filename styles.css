@@ -183,7 +183,8 @@ footer {
 /* Login Container */
 .login-container {
   margin: 0 auto;
-  margin-top: 100px; /* Offset for fixed navbar */
+  margin-top: 100px;
+  margin-bottom: 12%;
   width: 300px;
   background-color: white;
   padding: 2em;
@@ -331,12 +332,12 @@ select:focus {
 }
 button {
   width: 100%;
-  padding: 10px;
+  padding: 10px 14px;
   background-color: #020625;
   color: #ffffff;
   border: none;
   border-radius: 5px;
-  font-size: 16px;
+  font-size: 0.9em;
   font-weight: bold;
   cursor: pointer;
 }
@@ -548,7 +549,7 @@ td {
   border: 1px solid #ddd;
   background-color: #f2f2f2;
   text-align: center; /* Center align text in the column headers */
-  padding: 10px;
+  padding: 9px;
 }
 
 .button-container button {
@@ -609,15 +610,12 @@ tr:hover {
 }
 
 /* user_page.php */
-/* Dashboard Layout */
-/* Dashboard Layout */
+
 .dashboard-container {
   display: flex;
   min-height: 100vh;
   background-color: #d7e0f7;
 }
-
-/* Sidebar */
 .sidebar {
   width: 130px;
   background-color: #020625;
@@ -630,26 +628,22 @@ tr:hover {
   top: 0;
   height: 100vh;
 }
-
 .sidebar-title {
   margin-left: 3px;
   font-size: 1.5em;
   margin-bottom: 20px;
   color: #92bbfa;
 }
-
 .sidebar-links {
   list-style: none;
   padding: 0;
   margin: 0;
   width: 100%;
 }
-
 .sidebar-links li {
   margin-bottom: 10px;
   width: 100%;
 }
-
 .sidebar-links a {
   color: white;
   text-decoration: none;
@@ -658,39 +652,31 @@ tr:hover {
   border-radius: 5px;
   transition: background-color 0.3s;
 }
-
 .sidebar-links a:hover {
-  background-color: #2d5591;
+  background-color: #175494;
 }
-
-/* Main Content */
 .dashboard-main {
   flex: 1;
   padding: 20px;
 }
-
 .dashboard-header {
   margin-bottom: 20px;
 }
-
 .dashboard-header h1 {
   font-size: 2em;
   color: #333;
 }
-
-/* Poll Cards */
 .poll-container {
   display: flex;
   flex-wrap: wrap;
   gap: 20px;
   justify-content: space-between;
 }
-
 .poll-card1 {
   background-color: white;
   border-radius: 15px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  width: calc(50% - 50px); /* Two cards per row */
+  width: calc(50% - 50px);
   padding: 20px 20px 10px 20px;
   height: 250px;
   display: flex;
@@ -698,42 +684,50 @@ tr:hover {
   align-items: flex-start;
   text-align: left;
 }
-
+.poll-card2 {
+  background-color: white;
+  border-radius: 15px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  width: calc(50% - 50px);
+  padding: 20px 20px 10px 20px;
+  height: 200px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  text-align: left;
+}
 .poll-title {
   font-size: 1.5em;
   color: #020625;
   margin-bottom: 10px;
 }
-
 .poll-description {
   font-size: 1em;
   margin-bottom: 15px;
   color: #555;
 }
-
 .poll-votes {
   font-size: 0.9em;
   color: #333;
   margin-bottom: 15px;
 }
-
 .poll-button {
-    align-self: center;
-    position: center; /* Position relative to the parent card */
-    bottom: 10px;       /* Place 10px from the bottom of the card */
-    left: 10px;         /* Optional: Adjust horizontal positioning */
-    padding: 10px 15px; /* Optional: Button padding */
-    background-color: #007bff; /* Optional: Button background color */
-    color: #fff;        /* Optional: Button text color */
-    text-decoration: none; /* Remove underline */
-    border-radius: 5px; /* Optional: Rounded corners */
+  display: inline-block;
+  align-self: center;
+  position: center;
+  bottom: 10px;
+  left: 10px;
+  font-size: 0.9em;
+  padding: 10px 15px;
+  background-color: #007bff;
+  color: #fff;
+  text-decoration: none;
+  border-radius: 5px;
 }
-
 .poll-button:hover {
   background-color: #2d5591;
 }
-
-.poll-button-yellow {
+.poll-button2 {
   display: inline-block;
   padding: 10px 15px;
   font-size: 0.9em;
@@ -744,20 +738,18 @@ tr:hover {
   color: #fff;
   border: none;
 }
-
-.poll-button-yellow:hover {
+.poll-button2:hover {
   background-color: #92bbfa;
 }
-
 .poll-button-red {
   align-self: flex-start;
-  margin-top:5px;
+  margin-top: 5px;
   background-color: #f61515;
   color: white;
   text-decoration: none;
   padding: 10px 20px;
   border-radius: 5px;
-  font-size: 1em;
+  font-size: 0.9em;
   transition: background-color 0.3s;
 }
 
@@ -870,7 +862,6 @@ tr:hover {
   background-color: #0056b3;
 }
 
-
 .poll-status {
   margin-top: 40px;
   color: gray;
@@ -879,4 +870,7 @@ tr:hover {
 
 @import url(https://fonts.googleapis.com/css?family=Raleway:400);
 
-h1{font: 400 1.75em/1.5em "Raleway", "Helvetica Neue", Helvetica, sans-serif; text-align:center;}
+h1 {
+  font: 400 1.75em/1.5em "Raleway", "Helvetica Neue", Helvetica, sans-serif;
+  text-align: center;
+}
