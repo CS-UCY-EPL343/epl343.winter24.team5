@@ -39,10 +39,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
     $scheduleTime = !empty($scheduleTime) ? date('Y-m-d H:i:s', strtotime($scheduleTime)) : null;
     $recurrenceTime = !empty($recurrenceTime) ? date('Y-m-d H:i:s', strtotime($recurrenceTime)) : null;
 
-    if (empty($scheduleTime) && empty($recurrenceTime)) {
-        $errorMessage = "Please provide either a schedule time or a recurrence time.";
+    if (empty($recurrence) && empty($recurrenceTime)) {
+        $errorMessage = "Please provide both the reccurunce rate and recurrence time.";
+    } elseif (!empty($scheduleTime) && !empty($recurrence)) {
+        $errorMessage = "Both Schedule Time and recurrence rate cannot be provided simultaneously.";
     } elseif (!empty($scheduleTime) && !empty($recurrenceTime)) {
-        $errorMessage = "Both Schedule_Time and Recurrence_Time cannot be provided simultaneously.";
+        $errorMessage = "Both schedule time and recurrence time cannot be provided simultaneously.";
     } else {
         try {
             $stmt = $pdo->prepare("EXEC InsertJobInstance :Job_Configuration_ID, :Creator_ID, :Schedule_Time, :Recurrence, :Recurrence_Time, :Triggered_By");
@@ -104,6 +106,37 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
         .go-back-container {
             margin-top: 10px;
             margin-left: 0;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 10px;
+        }
+
+        .edit-button, .run-button {
+            padding: 5px 10px;
+            font-size: 14px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            color: white;
+            text-decoration: none;
+        }
+
+        .edit-button {
+            background-color: #ffc107;
+        }
+
+        .edit-button:hover {
+            background-color: #e0a800;
+        }
+
+        .run-button {
+            background-color: #28a745;
+        }
+
+        .run-button:hover {
+            background-color: #218838;
         }
     </style>
 </head>
@@ -177,6 +210,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
                                 <th>Recurrence</th>
                                 <th>Recurrence Time</th>
                                 <th>Created At</th>
+                                <th>Actions</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -190,6 +224,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
                                     <td><?= htmlspecialchars($instance['Recurrence']); ?></td>
                                     <td><?= htmlspecialchars($instance['Recurrence_Time']); ?></td>
                                     <td><?= htmlspecialchars($instance['Created_At']); ?></td>
+                                    <td>
+                                        <div class="action-buttons">
+                                            <!-- Edit Button -->
+                                            <form action="edit_instance.php" method="GET" style="display:inline;">
+                                                <input type="hidden" name="Job_Instance_ID" value="<?= htmlspecialchars($instance['Job_Instance_ID']); ?>">
+                                                <button type="submit" class="edit-button">Edit</button>
+                                            </form>
+
+                                            <!-- Run Instance Button -->
+                                            <form action="run_instance.php" method="POST" style="display:inline;">
+                                                <input type="hidden" name="Job_Instance_ID" value="<?= htmlspecialchars($instance['Job_Instance_ID']); ?>">
+                                                <button type="submit" class="run-button">Run Instance</button>
+                                            </form>
+                                        </div>
+                                    </td>
                                 </tr>
                             <?php endforeach; ?>
                         </tbody>
