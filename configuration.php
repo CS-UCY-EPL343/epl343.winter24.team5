@@ -164,7 +164,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $_POST['action'] === 'create') {
                                     <td><?= htmlspecialchars($config['Created_At']); ?></td>
                                     <td><?= htmlspecialchars($config['Last_Modified']); ?></td>
                                     <td>
-                                        <form action="job_instance.php" method="GET" style="display:inline;">
+                                        <form action="job_instance.php" method="GET">
                                             <input type="hidden" name="Job_Configuration_ID" value="<?= htmlspecialchars($config['Job_Configuration_ID']); ?>">
                                             <button type="submit">Job Instances</button>
                                         </form>
