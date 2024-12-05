@@ -815,7 +815,7 @@ tr:hover {
 .config-box input,
 .config-box select {
   padding: 0.5em;
-  font-size: 1em;
+  font-size: 0.9em;
   border: 1px solid #ccc;
   border-radius: 5px;
   margin-top: 0.5em;

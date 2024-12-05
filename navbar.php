@@ -7,7 +7,7 @@ if (isset($_SESSION['role'])) {
     if ($_SESSION['role'] === 'User') {
         $homePage = 'user_page.php';
     } elseif ($_SESSION['role'] === 'Admin') {
-        $homePage = 'admin_base.php';
+        $homePage = 'admin_page.php';
     } else {
         $homePage = 'index.php'; // Default for unknown roles
     }
